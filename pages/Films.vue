@@ -151,8 +151,8 @@
         currentSelectedCategory: '00',
         currentSelectedYear: '全部',
         sortBy: 'imdbRates',
-        maxKey: 0,
-        nextKey: 0,
+        // maxKey: 0,
+        // nextKey: 0,
       }
     },
     components: {
@@ -257,17 +257,17 @@
       }
     },
     watch: {
-      allFilmsKeys(keys) {
-        if(keys) {
-          keys.forEach(item => {
-            this.maxKey = item > this.maxKey ? item : this.maxKey
-          });
-          this.nextKey = this.maxKey + 1;
-          if (this.nextKey < 100) {
-            this.nextKey = "0" + String(this.nextKey)
-          }
-        }
-      }
+      // allFilmsKeys(keys) {
+      //   if(keys) {
+      //     keys.forEach(item => {
+      //       this.maxKey = item > this.maxKey ? item : this.maxKey
+      //     });
+      //     this.nextKey = this.maxKey + 1;
+      //     if (this.nextKey < 100) {
+      //       this.nextKey = "0" + String(this.nextKey)
+      //     }
+      //   }
+      // }
     },
     methods: {
       rateStarWithEmpty(rates) {

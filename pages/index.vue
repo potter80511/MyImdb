@@ -2,7 +2,6 @@
   <div class="home">
     <BannerSlide
       :bannerData="indexBannerData"
-      :background="true"
       :paginationOn="true"
       :isLoading="bannerIsLoading"
     />

@@ -30,7 +30,7 @@
           v-for="(item, i) in bannerData"
           :key="i"
           >
-          <img :src="item" />
+          <img :src="item.url" />
         </div>
       </div>
     </div>
