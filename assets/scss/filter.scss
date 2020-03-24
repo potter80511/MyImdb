@@ -1,0 +1,137 @@
+@import 'color.scss';
+@import 'custom_animation.scss';
+
+.tools {
+  display: flex;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  .filter {
+    .conditions {
+      display: flex;
+      align-items: flex-start;
+      line-height: 1;
+      margin-bottom: 12px;
+      .label {
+        border-left: 3px solid $imdb-yellow;
+        padding-left: 10px;
+        margin-right: 30px;
+        font-size: 18px;
+        min-width: 75px;
+        span {
+          display: inline-block;
+          margin-right: 10px;
+        }
+      }
+      .contents {
+        display: flex;
+        flex-wrap: wrap;
+        span {
+          margin-bottom: 3px;
+          display: inline-block;
+          span {
+            font-size: 13px;
+            padding: 4px 6px;
+            margin-right: 5px;
+            cursor: pointer;
+            &:hover, &.active {
+              background: $confort-blue;
+              color: #fff;
+            }
+          }
+        }
+      }
+    }
+  }
+  .sort {
+    position: relative;
+    select, svg {
+      color: #888;
+    }
+    select {
+      border-radius: 0;
+      -webkit-appearance: none;
+      background: none;
+      padding: 5px 30px 0px 10px;
+      transition: none!important;
+      cursor: pointer;
+      border-color: #8a754d;
+      &:focus {
+        outline: none;
+      }
+      &:hover {
+        color: #aaa;
+        box-shadow: 0 0 8px #000;
+        border-color: #d0a554;
+        +svg {
+          color: #aaa;
+        }
+      }
+    }
+    svg {
+      position: absolute;
+      right: 10px;
+      top: 8px;
+      font-size: 14px;
+      transition: none!important;
+    }
+  }
+  @media (min-width: 992px) {
+    .filter {
+      &.mobile {
+        display: none;
+      }
+    }
+  }
+  @media (max-width: 991px) {
+    .sort, .sort select {
+      width: 100%;
+    }
+    .filter {
+      &.desktop {
+        display: none;
+      }
+      &.mobile {
+        width: 100%;
+        margin-bottom: 10px;
+        .tags {
+          display: flex;
+          justify-content: space-between;
+          button {
+            width: calc(100%/3);
+            background: $film-title;
+            border-color: $film-title;
+            padding: 8px 0 0;
+            &.active {
+              background: #a28020;
+              color: #fff;
+            }
+            &:not(:last-child) {
+              margin-right: 3px;
+            }
+          }
+        }
+        .filter_content {
+          .mobile_contents {
+            height: 0;
+            overflow: hidden;
+            background: #333;
+            visibility: hidden;
+            box-shadow: 0 0 8px #000;
+            li {
+              span {
+                padding-top: 8px;
+                display: block;
+                text-align: center;
+                cursor: pointer;
+                &.active {
+                  color: #fff;
+                  background: $dark-gray;
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,31 @@
+@import 'color.scss';
+
+footer {
+  background: $dark-gray;
+  margin-top: 20px;
+  .social {
+    display: flex;
+    justify-content: center;
+    padding: 20px 0;
+    >div {
+      &:not(:last-child) {
+        margin-right: 20px;
+      }
+    }
+    svg {
+      font-size: 40px;
+      color: #808080;
+      transition: all .3s;
+      &:hover {
+        color: #fff;
+      }
+    }
+  }
+  .copy_right {
+    text-align: center;
+    font-size: 13px;
+    background: #141414;
+    padding: 10px 0;
+    span {color: #808080;}
+  }
+}

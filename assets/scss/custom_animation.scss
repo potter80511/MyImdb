@@ -1,0 +1,22 @@
+$slide-content-height: 230px;
+
+@keyframes slide-down {
+  0% {
+    visibility: hidden;
+    height: 0;
+  }
+
+  95% {
+    visibility: visible;
+    height: $slide-content-height;
+  }
+
+  // 動畫結束時把高設成 auto
+  100% {
+    visibility: visible;
+    height: auto;
+  }
+}
+.slide-down {
+  animation: slide-down 0.3s linear both;
+}

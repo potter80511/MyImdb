@@ -1,0 +1,92 @@
+@import 'color.scss';
+
+#films {
+  * {transition: all .3s;}
+  div, h3, h4, p, a {
+    color: #9d9d9d;
+  }
+  .section-header {
+    h2 {
+      position: relative;
+      span {
+        text-transform: capitalize;
+      }
+      #show-btn {
+        position: absolute;
+        right: 0;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 13px;
+      }
+    }
+  }
+  .list_content {
+    .no_result {
+      padding: 0 15px;
+    }
+    .item {
+      margin-bottom: 20px;
+      >a {
+        display: flex;
+        border: 1px solid #333;
+        padding: 20px;
+        height: 100%;
+        &:hover {
+          border-color: #555;
+          box-shadow: 0 0 15px #000;
+          background: #222;
+          transform: scale(1.05);
+          * {text-shadow: 0 0 10px #000;}
+          img {box-shadow: 0 0 10px #000;}
+          div, h3, h4, p, a {
+            color: #fff;
+          }
+        }
+      }
+      .image {
+        flex: 0 0 33%;
+      }
+      .film_content {
+        margin-left: 20px;
+        .name {
+          font-size: 18px;
+          padding-bottom: 10px;
+          border-bottom: 1px dashed #555;
+        }
+        .director, .writers, .cast, .year, .area, .categories {
+          font-size: 13px;
+          margin-bottom: 5px;
+        }
+        .rates {
+          margin-bottom: 10px;
+          b:not(.title) {
+            margin-left: 10px;
+          }
+        }
+        .director, .writers, .cast, .categories {
+          display: flex;
+          b {
+            min-width: 39px;
+          }
+          >div {
+            display: inline-block;
+            span {
+              &:not(:last-child) {
+                &:after {
+                  content: "、";
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+  @media (max-width: 575px) {
+    .banner {
+      .swiper-slide {
+        height: 180px!important;
+      }
+    }
+  }
+}

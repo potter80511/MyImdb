@@ -1,0 +1,8 @@
+@mixin text_in_lines($lines_count){
+  display: -webkit-box;
+  display: block\0;
+  overflow: hidden;
+  text-overflow : ellipsis;
+  -webkit-line-clamp: $lines_count;
+  -webkit-box-orient: vertical;
+}

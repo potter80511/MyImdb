@@ -1,0 +1,104 @@
+.film_form_modal {
+  .form_modal {
+    label {
+      margin: 0;
+    }
+    .input-group, .group {
+      display: flex;
+      align-items: center;
+    }
+    .type-select, .area-select {
+      position: relative;
+      svg {
+        pointer-events: none;
+      }
+    }
+    .input-group {
+      margin-bottom: 10px;
+      .group {
+        width: 100%;
+      }
+      &.select-tool {
+        select, svg {
+          color: #888;
+        }
+        select {
+          border-radius: 0;
+          -webkit-appearance: none;
+          background: none;
+          padding: 5px 30px 0px 10px;
+          transition: none!important;
+          cursor: pointer;
+          border-color: #8a754d;
+          &:focus {
+            outline: none;
+          }
+          &:hover {
+            color: #aaa;
+            box-shadow: 0 0 8px #000;
+            border-color: #d0a554;
+            +svg {
+              color: #aaa;
+            }
+          }
+        }
+        svg {
+          position: absolute;
+          right: 10px;
+          top: 8px;
+          font-size: 14px;
+          transition: none!important;
+        }
+      }
+      .label-check {
+        width: 22px;
+        height: 22px;
+        display: inline-block;
+        background: #555;
+        border: 1px solid #111;
+        border-radius: 2px;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: all .3s;
+        &:before {
+          content: '';
+          display: block;
+          border: solid #fff;
+          border-width: 2px 0 0 2px;
+          width: 8px;
+          height: 14px;
+          transform: rotate(225deg) translate(-5px, 3px);
+          opacity: 0;
+          transition: all .3s;
+        }
+        &.is-checked {
+          background: #333;
+          border-color: #d0a554;
+          &:before {
+            opacity: 1;
+          }
+        }
+      }
+      &.film-categories {
+        .group {
+          flex-wrap: wrap;
+          >div {
+            display: flex;
+            width: calc(100%/9);
+          }
+        }
+      }
+    }
+    .add_seasons_group {
+      .seasons_group {
+        .title {
+          display: flex;
+          align-items: center;
+          h3 {
+            margin: 0 10px 0 0;
+          }
+        }
+      }
+    }
+  }
+}

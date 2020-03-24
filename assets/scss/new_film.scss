@@ -1,0 +1,73 @@
+#new_film {
+  margin-top: 130px;
+  #new_film_form {
+    label {
+      margin: 0;
+    }
+    .input-group, .group {
+      display: flex;
+      align-items: center;
+    }
+    .type-select, .area-select {
+      position: relative;
+      svg {
+        pointer-events: none;
+      }
+    }
+    .input-group {
+      margin-bottom: 10px;
+      .group {
+        width: 100%;
+      }
+      .label-check {
+        width: 22px;
+        height: 22px;
+        display: inline-block;
+        background: #555;
+        border: 1px solid #111;
+        border-radius: 2px;
+        margin-right: 10px;
+        cursor: pointer;
+        transition: all .3s;
+        &:before {
+          content: '';
+          display: block;
+          border: solid #fff;
+          border-width: 2px 0 0 2px;
+          width: 8px;
+          height: 14px;
+          transform: rotate(225deg) translate(-5px, 3px);
+          opacity: 0;
+          transition: all .3s;
+        }
+        &.is-checked {
+          background: #333;
+          border-color: #d0a554;
+          &:before {
+            opacity: 1;
+          }
+        }
+      }
+      &.film-categories {
+        .group {
+          flex-wrap: wrap;
+          >div {
+            display: flex;
+            width: calc(100%/9);
+          }
+        }
+      }
+    }
+    .add_seasons_group {
+      .seasons_group {
+        .title {
+          display: flex;
+          align-items: center;
+          h3 {
+            margin: 0 10px 0 0;
+          }
+        }
+      }
+    }
+  }
+}

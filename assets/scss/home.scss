@@ -1,0 +1,109 @@
+@import 'color.scss';
+@import 'mixin.scss';
+
+.home {
+
+  .banner {
+    position: relative;
+    .swiper-pagination {
+      display: flex;
+      width: 100%;
+      justify-content: center;
+      align-items: center;
+      margin-top: 20px;
+      bottom: 10%;
+      .swiper-pagination-bullet {
+        width: 12px;
+        height: 12px;
+        background: #666;
+        opacity: .5;
+        &:not(:last-child) {
+          margin-right: 10px;
+        }
+        &.swiper-pagination-bullet-active {
+          opacity: 1;
+          width: 18px;
+          height: 18px;
+          border: 3px solid #ccc;
+        }
+      }
+    }
+    .swiper-button {
+      background: rgba(136,136,136,.5);
+      width: 45px;
+      height: 45px;
+      border-radius: 50%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      opacity: .6;
+      transition: all .3s;
+      &:hover {
+        opacity: 1;
+      }
+      &:after {
+        display: none;
+      }
+      svg {
+        color: #fff;
+        font-size: 26px;
+        display: block;
+      }
+      &.swiper-button-prev {
+        border-width: 0 0 3px 3px;
+        left: 10px;
+      }
+      &.swiper-button-next {
+        border-width: 3px 3px 0 0;
+        right: 10px;
+      }
+    }
+  }
+  .more {
+    position: absolute;
+    right: 15px;
+    top: 10px;
+    color: $confort-blue;
+    transition: all .3s;
+    &:hover {
+      color: $confort-blue-hover;
+    }
+  }
+  .lists {
+    overflow: hidden;
+    position: relative;
+    margin-bottom: 30px;
+    >.container {
+      position: relative;
+    }
+    .swiper-container {
+      overflow: visible;
+    }
+    .list_content {
+      h2, p, a, b {
+        color: #fff;
+      }
+      h2 {
+        margin-bottom: 10px;
+        line-height: 1.2;
+        font-size: 22px;
+      }
+      .rates {
+        margin: 10px 0;
+        b {
+          margin-left: 10px;
+        }
+      }
+      .discription{
+        p {
+          @include text_in_lines(3);
+        }
+      }
+    }
+  }
+  @media (max-width: 575px) {
+    .more {
+      top: 0;
+    }
+  }
+}
