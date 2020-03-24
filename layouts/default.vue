@@ -19,9 +19,9 @@ export default {
     BackToTop,
   },
   created() {
-    this.$store.dispatch('loadedMovies')
-    this.$store.dispatch('loadedSeries')
-    this.$store.dispatch('loginState')
+    // this.$store.dispatch('loadedMovies')
+    // this.$store.dispatch('loadedSeries')
+    // this.$store.dispatch('loginState')
   },
 }
 </script>

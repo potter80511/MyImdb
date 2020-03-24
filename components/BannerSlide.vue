@@ -15,7 +15,7 @@
           class="swiper-slide"
           v-for="(item, i) in bannerData"
           :key="i"
-          :style="{backgroundImage: 'url(' + item + ')', height: 50 + 'vw'}"
+          :style="{backgroundImage: 'url(' + item.url + ')', height: 50 + 'vw'}"
         >
         </div>
       </div>

@@ -2,8 +2,9 @@
   <div class="home">
     <BannerSlide
       :bannerData="indexBannerData"
+      :background="true"
       :paginationOn="true"
-      :isLoading="seriesIsLoading"
+      :isLoading="bannerIsLoading"
     />
     <IndexList
       :blockId="'series'"
@@ -11,7 +12,7 @@
       :blockClass="'series_list'"
       :sectionTitle="'最愛影集'"
       :subTitle="'Favorite Series'"
-      :filmsData="seriesData"
+      :filmsData="[]"
       :isLoading="seriesIsLoading"
     />
     <IndexList
@@ -20,7 +21,7 @@
       :blockClass="'movies_list'"
       :sectionTitle="'最愛電影'"
       :subTitle="'Favorite Movies'"
-      :filmsData="moviesData"
+      :filmsData="[]"
       :isLoading="moviesIsLoading"
     />
   </div>
@@ -32,11 +33,21 @@
   import BannerSlide from '~/components/BannerSlide';
 
   export default {
+    created() {
+      this.$store.dispatch('loadedIndexBanners')
+    },
     components: {
       IndexList,
       BannerSlide,
     },
     computed: {
+      indexBannerData() {
+        console.log(this.$store.state.indexBanners)
+        return this.$store.state.indexBanners;
+      },
+      bannerIsLoading() {
+        return this.$store.state.indexBannersIsLoading
+      },
       moviesIsLoading() {
         return this.$store.state.moviesIsLoading
       },
@@ -44,17 +55,14 @@
         return this.$store.state.seriesIsLoading
       },
       moviesData() {
-        return this.$store.getters.filterFavoriteMovies.sort((a,b) => {
-          return b.rates - a.rates;
-        })
+        // return this.$store.getters.filterFavoriteMovies.sort((a,b) => {
+        //   return b.rates - a.rates;
+        // })
       },
       seriesData() {
-        return this.$store.getters.filterFavoriteSeries.sort((a,b) => {
-          return b.rates - a.rates;
-        })
-      },
-      indexBannerData() {
-        return this.$store.getters.filterIndexBanner;
+        // return this.$store.getters.filterFavoriteSeries.sort((a,b) => {
+        //   return b.rates - a.rates;
+        // })
       },
     },
     methods: {
