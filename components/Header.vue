@@ -72,40 +72,61 @@
       v-if="!isLogin"
       @login_submit="(name, password) => login(name, password)"
     />
+    <SuccessModal
+      :successTitle="successTitle"
+    />
   </header>
 </template>
 
 <script>
   import LoginModal from '~/components/admin/LoginModal';
+  import SuccessModal from '~/components/admin/SuccessModal';
   import * as firebase from 'firebase';
 
   export default {
+    data() {
+      return {
+        successTitle: '',
+      }
+    },
     components: {
       LoginModal,
+      SuccessModal,
     },
     methods: {
       login(name, password) {
-        firebase.auth().signInWithEmailAndPassword(name, password).then(cred => {
+        firebase.auth().signInWithEmailAndPassword(name, password)
+        .then(cred => {
           const loginUser = cred.user.email;
           console.log(`${loginUser} is login`);
+          this.successTitle = '登入成功';
+          this.$bvModal.show('success-modal');
+        })
+        .catch(error => {
+          console.log(error);
+          this.successTitle = '登入失敗';
+          this.$bvModal.show('success-modal')
         });
       },
       logout() {
         firebase.auth().signOut().then((cred) => {
           console.log(`Admin is logout`)
-        });
+          this.successTitle = '登出成功';
+          this.$bvModal.show('success-modal')
+        })
+        .catch(error => {
+          console.log(error);
+          this.successTitle = '登出失敗';
+          this.$bvModal.show('success-modal')
+        });;
       },
     },
     computed: {
       isLogin() {
         return this.$store.state.isLogin;
       },
-      // loginUser() {
-      //   return this.$store.state.loginUser;
-      // }
     },
     mounted() {
-
       // header 滾動時 fixed
       if(document.body.clientWidth > 991) {
         document.addEventListener('scroll', () => {

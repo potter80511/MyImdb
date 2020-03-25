@@ -110,8 +110,22 @@ img {
   }
 }
 .modal-dialog {
+  .btn-primary {
+    background-color: $imdb-yellow;
+    color: $iron-gray;
+    border: none;
+    border-radius: 0;
+    width: 80px;
+    transition: all .3s;
+    &:hover {
+      color: #fff;
+    }
+  }
   .modal-content {
     background: #333;
+    .modal-header, .modal-footer {
+      border-color: #595959;
+    }
     .input-group, .add_item_btn, .title {
       svg {
         color: #666;

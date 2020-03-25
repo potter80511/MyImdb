@@ -2,22 +2,23 @@ import Vuex from 'vuex';
 import * as firebase from 'firebase';
 // modules
 import banners from './modules/banners';
+import admin from './modules/admin';
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
+      ...JSON.parse(JSON.stringify(banners.state)),
+      ...JSON.parse(JSON.stringify(admin.state)),
       movies: [],
       series: [],
       currentFilm: null,
       allFilmsKeys: [],
       moviesIsLoading: true,
       seriesIsLoading: true,
-      isLogin: false,
-      loginUser: '',
-      ...JSON.parse(JSON.stringify(banners.state)),
     },
     mutations: { //更改狀態
       ...banners.mutations,
+      ...admin.mutations,
       // setLoadedMovies(state, payload) {
       //   state.movies = payload
       //   state.moviesIsLoading = false
@@ -32,29 +33,10 @@ const createStore = () => {
       // setAllFilmsKeys(state, payload) {
       //   state.allFilmsKeys = payload
       // },
-      setIsLogin(state, payload) {
-        state.isLogin = payload
-      },
-      setLoginUser(state, payload) {
-        state.loginUser = payload
-      },
     },
     actions: {
       ...banners.actions,
-      loginState({commit}) {
-        firebase.auth().onAuthStateChanged(user => {
-          const isLogin = user ? true : false;
-          commit('setIsLogin', isLogin)
-          if (user) {
-            const email = user.email;
-            commit('setLoginUser', email)
-            console.log(`login ${isLogin}, `, `Admin is ${email}`)
-          } else {
-            commit('setLoginUser', '')
-            console.log(`login ${isLogin}, `, `Admin not login`)
-          }
-        });
-      },
+      ...admin.actions,
       // loadedMovies({commit}) {
       //   firebase.database().ref('movies').orderByChild('type').equalTo('movies').once('value')
       //     .then((data) => {
@@ -143,9 +125,7 @@ const createStore = () => {
       // },
     },
     getters: {
-      // getLoginState(state) {
-      //   return state.isLogin
-      // },
+      ...admin.getters,
       // filterFavoriteMovies(state) {
       //   const filterData = state.movies.filter((o) => {
       //     return o.favorite === true
@@ -157,36 +137,6 @@ const createStore = () => {
       //     return o.favorite === true
       //   });
       //   return filterData;
-      // },
-      // filterIndexBanner(state) {
-      //   const filterData = state.series.filter((o) => {
-      //     // console.log(o.index_banner)
-      //     return o.index_banner !== "" && o.index_banner !== undefined
-      //   });
-      //   const bannerArray = filterData.map((obj)=> {
-      //     return obj.index_banner
-      //   })
-      //   return bannerArray;
-      // },
-      // moviesBanner(state) {
-      //   const filterData = state.movies.filter((o) => {
-      //     // console.log(o.list_banner)
-      //     return o.list_banner !== undefined && o.list_banner !== ""
-      //   });
-      //   const bannerArray = filterData.map((obj)=> {
-      //     return obj.list_banner
-      //   })
-      //   return bannerArray;
-      // },
-      // seriesBanner(state) {
-      //   const filterData = state.series.filter((o) => {
-      //     // console.log(o.list_banner)
-      //     return o.list_banner !== undefined && o.list_banner !== ""
-      //   });
-      //   const bannerArray = filterData.map((obj)=> {
-      //     return obj.list_banner
-      //   })
-      //   return bannerArray;
       // },
       // allFilmsKeys(state) {
       //   return state.allFilmsKeys;
