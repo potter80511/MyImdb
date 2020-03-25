@@ -3,7 +3,7 @@
     <BannerSlide
       :bannerData="bannerData"
       :background="true"
-      :isLoading="isLoading"
+      :isLoading="listBannersIsLoading"
     />
     <div class="film_list">
       <div class="container">
@@ -162,7 +162,13 @@
     },
     created() {
       this.filmsListType = this.$route.name === 'movies' ? '電影' : '影集';
-      this.$store.dispatch('loadedAllFilmsKeys');
+      const { filmsListType } = this;
+      if (filmsListType === "電影") {
+        this.$store.dispatch('loadedMoviesListBanners')
+      }  else if (filmsListType === "影集") {
+        this.$store.dispatch('loadedSeriesListBanners');
+      }
+      // this.$store.dispatch('loadedAllFilmsKeys');
     },
     computed: {
       isLogin() {
@@ -246,15 +252,20 @@
       bannerData() {
         const routeType = this.$route.name
         if(routeType === 'movies') {
-          return this.$store.getters.moviesBanner
+          return this.$store.state.moviesListBanners
         } else if (routeType === 'series') {
-          return this.$store.getters.seriesBanner
+          return this.$store.state.seriesListBanners
         }
         return []
       },
+      listBannersIsLoading() {
+        const { filmsListType } = this;
+        return this.$store.state.listBannersIsLoading;
+      },
       isLoading() {
+        const { filmsListType } = this;
         return this.filmsListType === '電影' ? this.$store.state.moviesIsLoading : this.$store.state.seriesIsLoading
-      }
+      },
     },
     watch: {
       // allFilmsKeys(keys) {

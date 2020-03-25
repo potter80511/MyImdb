@@ -1,25 +1,23 @@
 import Vuex from 'vuex';
 import * as firebase from 'firebase';
+// modules
+import banners from './modules/banners';
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
-      indexBanners: [],
       movies: [],
       series: [],
       currentFilm: null,
       allFilmsKeys: [],
-      indexBannersIsLoading: true,
       moviesIsLoading: true,
       seriesIsLoading: true,
       isLogin: false,
       loginUser: '',
+      ...JSON.parse(JSON.stringify(banners.state)),
     },
     mutations: { //更改狀態
-      setIndexBanners(state, payload) {
-        state.indexBanners = payload
-        state.indexBannersIsLoading = false
-      },
+      ...banners.mutations,
       // setLoadedMovies(state, payload) {
       //   state.movies = payload
       //   state.moviesIsLoading = false
@@ -34,35 +32,29 @@ const createStore = () => {
       // setAllFilmsKeys(state, payload) {
       //   state.allFilmsKeys = payload
       // },
-      // setIsLogin(state, payload) {
-      //   state.isLogin = payload
-      // },
-      // setLoginUser(state, payload) {
-      //   state.loginUser = payload
-      // },
+      setIsLogin(state, payload) {
+        state.isLogin = payload
+      },
+      setLoginUser(state, payload) {
+        state.loginUser = payload
+      },
     },
     actions: {
-      loadedIndexBanners({commit}) {
-        firebase.database().ref('index_banner').once('value')
-          .then((data) => {
-            const banners = data.val()
-            commit('setIndexBanners', banners)
-          })
+      ...banners.actions,
+      loginState({commit}) {
+        firebase.auth().onAuthStateChanged(user => {
+          const isLogin = user ? true : false;
+          commit('setIsLogin', isLogin)
+          if (user) {
+            const email = user.email;
+            commit('setLoginUser', email)
+            console.log(`login ${isLogin}, `, `Admin is ${email}`)
+          } else {
+            commit('setLoginUser', '')
+            console.log(`login ${isLogin}, `, `Admin not login`)
+          }
+        });
       },
-      // loginState({commit}) {
-      //   firebase.auth().onAuthStateChanged(user => {
-      //     const isLogin = user ? true : false;
-      //     commit('setIsLogin', isLogin)
-      //     if (user) {
-      //       const email = user.email;
-      //       commit('setLoginUser', email)
-      //       console.log(`login ${isLogin}, `, `Admin is ${email}`)
-      //     } else {
-      //       commit('setLoginUser', '')
-      //       console.log(`login ${isLogin}, `, `Admin not login`)
-      //     }
-      //   });
-      // },
       // loadedMovies({commit}) {
       //   firebase.database().ref('movies').orderByChild('type').equalTo('movies').once('value')
       //     .then((data) => {

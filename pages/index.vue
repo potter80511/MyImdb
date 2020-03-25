@@ -41,7 +41,6 @@
     },
     computed: {
       indexBannerData() {
-        console.log(this.$store.state.indexBanners)
         return this.$store.state.indexBanners;
       },
       bannerIsLoading() {
