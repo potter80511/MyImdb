@@ -30,6 +30,7 @@
           <div class="related-select">
             <select v-model="newFilmData.relatedId">
               <option value="" selected hidden>請選擇</option>
+              <option value="">無</option>
               <option
                 v-for="(item, i) in relatedDatas"
                 :value="item.id"
@@ -47,25 +48,25 @@
           </span>
           <label>是否為最愛影劇？</label>
         </div>
-        <!--
         <div class="input-group">
           <label>IMDB 評分：</label>
-          <input id="filmImdbRate" type="text" />
+          <input id="filmImdbRate" type="text" v-model="newFilmData.imdbRates" />
         </div>
         <div class="input-group film-area select-tool">
           <label>地區：</label>
           <div class="area-select">
-            <select v-model="filmArea">
+            <select v-model="newFilmData.area">
               <option value="" selected hidden>請選擇</option>
               <option
-                v-for="(area, i) in areaDatas"
-                :value="area"
+                v-for="(area, i) in areasData"
+                :value="area.id"
                 :key="i"
-              >{{area}}</option>
+              >{{area.name}}</option>
             </select>
             <font-awesome-icon icon="chevron-down" />
           </div>
         </div>
+        <!--
         <div class="input-group">
           <label>年份：</label>
           <input id="filmYear" type="text" />
@@ -184,6 +185,10 @@ export default {
       type: Array,
       required: true,
     },
+    areasData: {
+      type: Array,
+      required: true,
+    },
     add_film: {
       type: Function,
     },
@@ -191,6 +196,8 @@ export default {
   data () {
     return {
       newFilmData: {
+        area: '',
+        imdbRates: '',
         name: '',
         relatedId: '',
         tw_name: '',
@@ -198,15 +205,15 @@ export default {
       favoriteCheck: false,
       endCheck: false,
       isCheckedClass: 'is-checked',
-      areaDatas: [
-        '美國',
-        '英國',
-        '韓國',
-        '泰國',
-        '日本',
-        '印度',
-        '西班牙'
-      ],
+      // areaDatas: [
+      //   '美國',
+      //   '英國',
+      //   '韓國',
+      //   '泰國',
+      //   '日本',
+      //   '印度',
+      //   '西班牙'
+      // ],
       castInputs: [],
       categoriesName: [
         {
@@ -336,13 +343,6 @@ export default {
         categoriesName,
         seasonsInputs,
       } = this;
-
-      let favorite = this.favoriteCheck;
-
-      // let related = document.getElementById("filmSeries").value;
-      // let imdbRate = document.getElementById("filmImdbRate").value;
-      // let brief = document.getElementById("filmBrief").value;
-      // let director = document.getElementById("filmDirector").value;
 
       // let castNameArray = [];
       // castInputs.forEach((item, index) => {  // 先做出[{01: a}, {02: b}]

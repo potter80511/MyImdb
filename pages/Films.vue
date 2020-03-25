@@ -117,6 +117,7 @@
     <NewFilmModal
       :filmsListType="filmsListType"
       :relatedDatas="relatedDatas"
+      :areasData="areasData"
       @add_film_submit="(newFilmData) => add_film(newFilmData)"
     />
   </div>
@@ -172,6 +173,7 @@
 
       // 讀取相關續作資料
       this.$store.dispatch('loadedRelatedDatas');
+      this.$store.dispatch('loadedAreasData');
       // this.$store.dispatch('loadedAllFilmsKeys');
     },
     computed: {
@@ -264,6 +266,9 @@
       },
       relatedDatas() {
         return this.$store.state.relatedData
+      },
+      areasData() {
+        return this.$store.state.areasData
       },
       listBannersIsLoading() {
         const { filmsListType } = this;
