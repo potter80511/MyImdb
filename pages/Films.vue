@@ -153,8 +153,8 @@
         currentSelectedCategory: '00',
         currentSelectedYear: '全部',
         sortBy: 'imdbRates',
-        // maxKey: 0,
-        // nextKey: 0,
+        maxKey: 0,
+        nextKey: 0,
       }
     },
     components: {
@@ -174,14 +174,14 @@
       // 讀取相關續作資料
       this.$store.dispatch('loadedRelatedDatas');
       this.$store.dispatch('loadedAreasData');
-      // this.$store.dispatch('loadedAllFilmsKeys');
+      this.$store.dispatch('loadedAllFilmsKeys');
     },
     computed: {
       isLogin() {
         return this.$store.state.isLogin;
       },
       allFilmsKeys() {
-        return this.$store.getters.allFilmsKeys
+        return this.$store.state.allFilmsKeys
       },
       filmsData() {
         const routeType = this.$route.name
@@ -280,17 +280,21 @@
       },
     },
     watch: {
-      // allFilmsKeys(keys) {
-      //   if(keys) {
-      //     keys.forEach(item => {
-      //       this.maxKey = item > this.maxKey ? item : this.maxKey
-      //     });
-      //     this.nextKey = this.maxKey + 1;
-      //     if (this.nextKey < 100) {
-      //       this.nextKey = "0" + String(this.nextKey)
-      //     }
-      //   }
-      // }
+      allFilmsKeys(keys) {
+        if(keys.length > 0) {
+          const emptyIndex = keys.findIndex(item => item === undefined)
+          if (emptyIndex > -1) {
+            console.log('hasEmptyFilm')
+            this.nextKey = emptyIndex;
+          } else {
+            keys.forEach(item => {
+              this.maxKey = item > this.maxKey ? item : this.maxKey
+            });
+            this.nextKey = this.maxKey + 1;
+          }
+        }
+        console.log('The next new film key is',this.nextKey)
+      }
     },
     methods: {
       rateStarWithEmpty(rates) {
@@ -312,14 +316,14 @@
       },
       add_film(newFilmData) {
         const nextKey = this.nextKey;
-        console.log(newFilmData)
-        // firebase.database().ref(`movies/${nextKey}`).set(
-        //   newFilmData
-        // ).then(() => {
-        //   alert('success');
-        // }).catch(() => {
-        //   alert('error');
-        // });
+        firebase.database().ref(`films/${nextKey}`).set(
+          newFilmData
+        ).then(() => {
+          alert('success');
+          location.reload()
+        }).catch((error) => {
+          console.log(error)
+        });
       }
       // bannerRWD() {
       //   const bannerWidth = this.$refs.bannerSlide.clientWidth;

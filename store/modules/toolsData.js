@@ -25,7 +25,6 @@ export default {
       firebase.database().ref('areas').once('value')
         .then((data) => {
           const datas = data.val();
-          console.log(datas)
           commit('setAreasData', datas)
         }).catch(error => {
           console.log(error)

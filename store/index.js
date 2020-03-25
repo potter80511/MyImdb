@@ -8,17 +8,20 @@ import toolsData from './modules/toolsData';
 const createStore = () => {
   return new Vuex.Store({
     state: {
+      allFilmsKeys: [],
       ...JSON.parse(JSON.stringify(banners.state)),
       ...JSON.parse(JSON.stringify(admin.state)),
       ...JSON.parse(JSON.stringify(toolsData.state)),
       movies: [],
       series: [],
       currentFilm: null,
-      allFilmsKeys: [],
       moviesIsLoading: true,
       seriesIsLoading: true,
     },
     mutations: { //更改狀態
+      setAllFilmsKeys(state, payload) {
+        state.allFilmsKeys = payload
+      },
       ...banners.mutations,
       ...admin.mutations,
       ...toolsData.mutations,
@@ -33,11 +36,16 @@ const createStore = () => {
       // setCurrentFilm(state, payload) {
       //   state.currentFilm = payload
       // },
-      // setAllFilmsKeys(state, payload) {
-      //   state.allFilmsKeys = payload
-      // },
     },
     actions: {
+      loadedAllFilmsKeys({commit}) {
+        firebase.database().ref('films/').once('value')
+          .then((data) => {
+            const filmDatas = data.val()
+            const filmKeys = filmDatas ? filmDatas.map((item, index) => (index)) : [];
+            commit('setAllFilmsKeys', filmKeys)
+          })
+      },
       ...banners.actions,
       ...admin.actions,
       ...toolsData.actions,
@@ -113,20 +121,6 @@ const createStore = () => {
       //       commit('setCurrentFilm', film_data)
       //     })
       // },
-      // loadedAllFilmsKeys({commit}) {
-      //   firebase.database().ref('movies').once('value')
-      //     .then((data) => {
-      //       const filmKeys = []
-      //       const obj = data.val()
-
-      //       for (let key in obj) {
-      //         filmKeys.push(
-      //           Number(key)
-      //         )
-      //       }
-      //       commit('setAllFilmsKeys', filmKeys)
-      //     })
-      // },
     },
     getters: {
       ...admin.getters,
@@ -142,9 +136,6 @@ const createStore = () => {
       //   });
       //   return filterData;
       // },
-      // allFilmsKeys(state) {
-      //   return state.allFilmsKeys;
-      // }
     }
   })
 }

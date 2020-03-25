@@ -199,7 +199,7 @@ export default {
         area: '',
         imdbRates: '',
         name: '',
-        relatedId: '',
+        related_Id: '',
         tw_name: '',
       },
       favoriteCheck: false,
