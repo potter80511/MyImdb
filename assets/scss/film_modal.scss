@@ -19,6 +19,9 @@
         width: 100%;
       }
       &.select-tool {
+        >div {
+          position: relative;
+        }
         select, svg {
           color: #888;
         }
@@ -48,6 +51,7 @@
           top: 8px;
           font-size: 14px;
           transition: none!important;
+          pointer-events: none;
         }
       }
       .label-check {

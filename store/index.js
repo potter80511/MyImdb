@@ -3,12 +3,14 @@ import * as firebase from 'firebase';
 // modules
 import banners from './modules/banners';
 import admin from './modules/admin';
+import toolsData from './modules/toolsData';
 
 const createStore = () => {
   return new Vuex.Store({
     state: {
       ...JSON.parse(JSON.stringify(banners.state)),
       ...JSON.parse(JSON.stringify(admin.state)),
+      ...JSON.parse(JSON.stringify(toolsData.state)),
       movies: [],
       series: [],
       currentFilm: null,
@@ -19,6 +21,7 @@ const createStore = () => {
     mutations: { //更改狀態
       ...banners.mutations,
       ...admin.mutations,
+      ...toolsData.mutations,
       // setLoadedMovies(state, payload) {
       //   state.movies = payload
       //   state.moviesIsLoading = false
@@ -37,6 +40,7 @@ const createStore = () => {
     actions: {
       ...banners.actions,
       ...admin.actions,
+      ...toolsData.actions,
       // loadedMovies({commit}) {
       //   firebase.database().ref('movies').orderByChild('type').equalTo('movies').once('value')
       //     .then((data) => {

@@ -116,6 +116,7 @@
     </div>
     <NewFilmModal
       :filmsListType="filmsListType"
+      :relatedDatas="relatedDatas"
       @add_film_submit="(newFilmData) => add_film(newFilmData)"
     />
   </div>
@@ -168,6 +169,9 @@
       }  else if (filmsListType === "影集") {
         this.$store.dispatch('loadedSeriesListBanners');
       }
+
+      // 讀取相關續作資料
+      this.$store.dispatch('loadedRelatedDatas');
       // this.$store.dispatch('loadedAllFilmsKeys');
     },
     computed: {
@@ -258,6 +262,9 @@
         }
         return []
       },
+      relatedDatas() {
+        return this.$store.state.relatedData
+      },
       listBannersIsLoading() {
         const { filmsListType } = this;
         return this.$store.state.listBannersIsLoading;
@@ -300,14 +307,14 @@
       },
       add_film(newFilmData) {
         const nextKey = this.nextKey;
-        // console.log(newFilmData)
-        firebase.database().ref(`movies/${nextKey}`).set(
-          newFilmData
-        ).then(() => {
-          alert('success');
-        }).catch(() => {
-          alert('error');
-        });
+        console.log(newFilmData)
+        // firebase.database().ref(`movies/${nextKey}`).set(
+        //   newFilmData
+        // ).then(() => {
+        //   alert('success');
+        // }).catch(() => {
+        //   alert('error');
+        // });
       }
       // bannerRWD() {
       //   const bannerWidth = this.$refs.bannerSlide.clientWidth;
