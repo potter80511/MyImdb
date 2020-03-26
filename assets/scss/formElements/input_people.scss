@@ -1,0 +1,13 @@
+.input-people, .group {
+  display: flex;
+  align-items: center;
+}
+.input-people {
+  margin-bottom: 10px;
+  .group {
+    width: 100%;
+  }
+  svg {
+    color: #888!important;
+  }
+}

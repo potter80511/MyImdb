@@ -90,42 +90,28 @@
           <label>電影簡述：</label>
           <input id="filmBrief" type="textarea" v-model="newFilmData.brief" />
         </div>
-        <div class="input-group directors">
-          <div class="add_item_btn">
-            <label>導演</label>
-            <font-awesome-icon icon="plus" @click="addDirectorHandler" />
-          </div>
-          <div v-if="directorInputs.length > 0">
-            <div
-              v-for="(directorInput, i) in directorInputs"
-              :key="i"
-            >
-              <input
-                type="text"
-                v-model="directorInput.name"
-              />
-              <font-awesome-icon icon="times" @click="deleteDirectorHandler(i)" />
-            </div>
-          </div>
-        </div>
-        <div class="input-group cast">
-          <div class="add_item_btn">
-            <label>演員</label>
-            <font-awesome-icon icon="plus" @click="addCastHandler" />
-          </div>
-          <div v-if="castInputs.length > 0">
-            <div
-              v-for="(castInput, i) in castInputs"
-              :key="i"
-            >
-              <input
-                type="text"
-                v-model="castInput.name"
-              />
-              <font-awesome-icon icon="times" @click="deleteCastHandler(i)" />
-            </div>
-          </div>
-        </div>
+        <inputPeople
+          title="導演"
+          className="directors"
+          :inputsData="directorInputs"
+          :addHandler="addDirectorHandler"
+          :deleteHandler="deleteDirectorHandler"
+        />
+        <inputPeople
+          title="編劇"
+          className="writers"
+          :inputsData="writerInputs"
+          v-model="writerInputs.name"
+          :addHandler="addWriterHandler"
+          :deleteHandler="deleteWriterHandler"
+        />
+        <inputPeople
+          title="演員"
+          className="cast"
+          :inputsData="castInputs"
+          :addHandler="addCastHandler"
+          :deleteHandler="deleteCastHandler"
+        />
         <!--
         <div class="input-group">
           <label>IMDB ID：</label>
@@ -189,8 +175,12 @@
 
 <script>
   import { capitalize, addInputHandler, deleteInputHandler, inputPeaple } from '~/plugins/helper';
+  import inputPeople from '~/components/formElements/inputPeople';
 
   export default {
+    components: {
+      inputPeople,
+    },
     props: {
       filmsListType: {
         type: String,
@@ -226,6 +216,7 @@
         endCheck: false,
         isCheckedClass: 'is-checked',
         castInputs: [],
+        writerInputs: [],
         directorInputs: [],
         // seasonsInputs: [],
       }
@@ -238,6 +229,14 @@
       deleteCastHandler(inputIndex) {
         const castInputs = this.castInputs;
         deleteInputHandler(castInputs, inputIndex)
+      },
+      addWriterHandler() {
+        const writerInputs = this.writerInputs;
+        addInputHandler(writerInputs)
+      },
+      deleteWriterHandler(inputIndex) {
+        const writerInputs = this.writerInputs;
+        deleteInputHandler(writerInputs, inputIndex)
       },
       addDirectorHandler() {
         const directorInputs = this.directorInputs;
@@ -277,8 +276,9 @@
           endCheck,
           favoriteCheck,
           filmsListType,
-          castInputs,
           directorInputs,
+          writerInputs,
+          castInputs,
           categoriesData,
           seasonsInputs,
         } = this;
@@ -296,6 +296,8 @@
 
         // directors result  導演的結果
         const directors = inputPeaple(directorInputs);
+        // cast writers  編劇的結果
+        const writers = inputPeaple(writerInputs);
         // cast result  演員的結果
         const cast = inputPeaple(castInputs);
 
@@ -335,6 +337,7 @@
           categories,
           cast,
           directors,
+          writers,
         };
 
         this.$emit('add_film_submit', newFilmData);
