@@ -75,14 +75,38 @@ export const capitalize = (str) => {
   
     return newItem;
   }
-  console.log(factory('abs'))
   
-  const splitArray = str.split(' ');
-  const newArray = splitArray.map(item => (factory(item)));
-  
-  let result = ''
-  newArray.forEach(item => {
-    result = result + item
+  if (str) {
+    const splitArray = str.split(' ');
+    const newArray = splitArray.map(item => (factory(item)));
+    let result = ''
+    newArray.forEach(item => {
+      result = result + item
+    });
+    return result
+  } else {
+    return ''
+  }
+}
+
+export const addInputHandler = (inputs) => {
+  const inputId = inputs.length + 1;
+  inputs.push({
+    id: inputId,
+    name: '',
   });
-  return result
+}
+
+export const deleteInputHandler = (inputs, inputIndex) => {
+  inputs.splice(inputIndex, 1);
+}
+
+export const inputPeaple = (inputs) => {
+  const result = inputs.map(item => (
+    {
+      ...item,
+      id: capitalize(item.name),
+    }
+  ));
+  return result;
 }

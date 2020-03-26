@@ -90,9 +90,23 @@
           <label>電影簡述：</label>
           <input id="filmBrief" type="textarea" v-model="newFilmData.brief" />
         </div>
-        <div class="input-group">
-          <label>導演：</label>
-          <input id="filmDirector" type="text" />
+        <div class="input-group directors">
+          <div class="add_item_btn">
+            <label>導演</label>
+            <font-awesome-icon icon="plus" @click="addDirectorHandler" />
+          </div>
+          <div v-if="directorInputs.length > 0">
+            <div
+              v-for="(directorInput, i) in directorInputs"
+              :key="i"
+            >
+              <input
+                type="text"
+                v-model="directorInput.name"
+              />
+              <font-awesome-icon icon="times" @click="deleteDirectorHandler(i)" />
+            </div>
+          </div>
         </div>
         <div class="input-group cast">
           <div class="add_item_btn">
@@ -108,7 +122,7 @@
                 type="text"
                 v-model="castInput.name"
               />
-              <font-awesome-icon icon="times" @click="deleteCastHandler(castInput.id, i)" />
+              <font-awesome-icon icon="times" @click="deleteCastHandler(i)" />
             </div>
           </div>
         </div>
@@ -174,7 +188,7 @@
 </template>
 
 <script>
-  import { capitalize } from '~/plugins/helper';
+  import { capitalize, addInputHandler, deleteInputHandler, inputPeaple } from '~/plugins/helper';
 
   export default {
     props: {
@@ -212,17 +226,26 @@
         endCheck: false,
         isCheckedClass: 'is-checked',
         castInputs: [],
+        directorInputs: [],
         // seasonsInputs: [],
       }
     },
     methods: {
       addCastHandler() {
         const castInputs = this.castInputs;
-        const castInputId = castInputs.length + 1;
-        castInputs.push({
-          id: castInputId,
-          name: '',
-        });
+        addInputHandler(castInputs)
+      },
+      deleteCastHandler(inputIndex) {
+        const castInputs = this.castInputs;
+        deleteInputHandler(castInputs, inputIndex)
+      },
+      addDirectorHandler() {
+        const directorInputs = this.directorInputs;
+        addInputHandler(directorInputs)
+      },
+      deleteDirectorHandler(inputIndex) {
+        const directorInputs = this.directorInputs;
+        deleteInputHandler(directorInputs, inputIndex)
       },
       // addSeasonsHandler() {
       //   const seasonsInputs = this.seasonsInputs;
@@ -234,10 +257,6 @@
       //     trailer: '',
       //   });
       // },
-      deleteCastHandler(id, inputIndex) {
-        const castInputs = this.castInputs;
-        castInputs.splice(inputIndex, 1);
-      },
       endCheckHandler() {
         this.endCheck = !this.endCheck;
       },
@@ -259,6 +278,7 @@
           favoriteCheck,
           filmsListType,
           castInputs,
+          directorInputs,
           categoriesData,
           seasonsInputs,
         } = this;
@@ -274,13 +294,10 @@
             )
           );
 
+        // directors result  導演的結果
+        const directors = inputPeaple(directorInputs);
         // cast result  演員的結果
-        const cast = castInputs.map(item => (
-          {
-            ...item,
-            id: capitalize(item.name),
-          }
-        ));
+        const cast = inputPeaple(castInputs);
 
         // let castNameArray = [];
         // castInputs.forEach((item, index) => {  // 先做出[{01: a}, {02: b}]
@@ -317,6 +334,7 @@
           favorite: favoriteCheck,
           categories,
           cast,
+          directors,
         };
 
         this.$emit('add_film_submit', newFilmData);
