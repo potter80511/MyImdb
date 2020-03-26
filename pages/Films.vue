@@ -118,6 +118,7 @@
       :filmsListType="filmsListType"
       :relatedDatas="relatedDatas"
       :areasData="areasData"
+      :categoriesData="categoriesData"
       @add_film_submit="(newFilmData) => add_film(newFilmData)"
     />
   </div>
@@ -155,6 +156,7 @@
         sortBy: 'imdbRates',
         maxKey: 0,
         nextKey: 0,
+        categoriesData: [],
       }
     },
     components: {
@@ -175,6 +177,7 @@
       this.$store.dispatch('loadedRelatedDatas');
       this.$store.dispatch('loadedAreasData');
       this.$store.dispatch('loadedAllFilmsKeys');
+      this.$store.dispatch('loadedCategoriesData');
     },
     computed: {
       isLogin() {
@@ -264,15 +267,18 @@
         }
         return []
       },
+      listBannersIsLoading() {
+        const { filmsListType } = this;
+        return this.$store.state.listBannersIsLoading;
+      },
       relatedDatas() {
         return this.$store.state.relatedData
       },
       areasData() {
         return this.$store.state.areasData
       },
-      listBannersIsLoading() {
-        const { filmsListType } = this;
-        return this.$store.state.listBannersIsLoading;
+      categoriesInDb() {
+        return this.$store.state.categoriesData
       },
       isLoading() {
         const { filmsListType } = this;
@@ -294,7 +300,18 @@
           }
         }
         console.log('The next new film key is',this.nextKey)
-      }
+      },
+      categoriesInDb(datas) {
+        if (datas) {
+          this.categoriesData = datas.map((item) => (
+              {
+                ...item,
+                checked: false,
+              }
+            )
+          );
+        }
+      },
     },
     methods: {
       rateStarWithEmpty(rates) {
@@ -316,14 +333,15 @@
       },
       add_film(newFilmData) {
         const nextKey = this.nextKey;
-        firebase.database().ref(`films/${nextKey}`).set(
-          newFilmData
-        ).then(() => {
-          alert('success');
-          location.reload()
-        }).catch((error) => {
-          console.log(error)
-        });
+        console.log(newFilmData)
+        // firebase.database().ref(`films/${nextKey}`).set(
+        //   newFilmData
+        // ).then(() => {
+        //   alert('success');
+        //   location.reload()
+        // }).catch((error) => {
+        //   console.log(error)
+        // });
       }
       // bannerRWD() {
       //   const bannerWidth = this.$refs.bannerSlide.clientWidth;

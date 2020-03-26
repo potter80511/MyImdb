@@ -28,7 +28,7 @@
         <div class="input-group film-related select-tool">
           <label>系列：</label>
           <div class="related-select">
-            <select v-model="newFilmData.relatedId">
+            <select v-model="newFilmData.related_id">
               <option value="" selected hidden>請選擇</option>
               <option value="">無</option>
               <option
@@ -50,7 +50,7 @@
         </div>
         <div class="input-group">
           <label>IMDB 評分：</label>
-          <input id="filmImdbRate" type="text" v-model="newFilmData.imdbRates" />
+          <input id="filmImdbRate" type="text" v-model="newFilmData.imdb_rates" />
         </div>
         <div class="input-group film-area select-tool">
           <label>地區：</label>
@@ -66,27 +66,27 @@
             <font-awesome-icon icon="chevron-down" />
           </div>
         </div>
-        <!--
         <div class="input-group">
           <label>年份：</label>
-          <input id="filmYear" type="text" />
+          <input id="filmYear" type="text" v-model="newFilmData.year" />
         </div>
         <div class="input-group film-categories">
           <label>電影類型：</label>
           <div class="group">
             <div
-              v-for="(categorieName, i) in categoriesName"
+              v-for="(category, i) in categoriesData"
               :key="i"
             >
               <span
-                :class="[categorieName.checked ? isCheckedClass : '', 'category-check label-check']"
-                @click="categoiesCheckedHandler(categorieName.id)"
+                :class="[category.checked ? isCheckedClass : '', 'category-check label-check']"
+                @click="categoriesCheckedHandler(category.id)"
               >
               </span>
-              <label>{{ categorieName.name }}</label>
+              <label>{{ category.name }}</label>
             </div>
           </div>
         </div>
+        <!--
         <div class="input-group">
           <label>電影簡述：</label>
           <input id="filmBrief" type="textarea" />
@@ -189,6 +189,10 @@ export default {
       type: Array,
       required: true,
     },
+    categoriesData: {
+      type: Array,
+      required: true,
+    },
     add_film: {
       type: Function,
     },
@@ -197,101 +201,16 @@ export default {
     return {
       newFilmData: {
         area: '',
-        imdbRates: '',
+        imdb_rates: '',
         name: '',
-        related_Id: '',
+        related_id: '',
         tw_name: '',
+        year: '',
       },
       favoriteCheck: false,
       endCheck: false,
       isCheckedClass: 'is-checked',
-      // areaDatas: [
-      //   '美國',
-      //   '英國',
-      //   '韓國',
-      //   '泰國',
-      //   '日本',
-      //   '印度',
-      //   '西班牙'
-      // ],
       castInputs: [],
-      categoriesName: [
-        {
-          id: '01',
-          name: '動作',
-          checked: false,
-        },
-        {
-          id: '02',
-          name: '犯罪',
-          checked: false,
-        },
-        {
-          id: '03',
-          name: '愛情',
-          checked: false,
-        },
-        {
-          id: '04',
-          name: '科幻',
-          checked: false,
-        },
-        {
-          id: '05',
-          name: '驚悚',
-          checked: false,
-        },
-        {
-          id: '06',
-          name: '恐怖',
-          checked: false,
-        },
-        {
-          id: '07',
-          name: '劇情',
-          checked: false,
-        },
-        {
-          id: '08',
-          name: '喜劇',
-          checked: false,
-        },
-        {
-          id: '09',
-          name: '家庭',
-          checked: false,
-        },
-        {
-          id: '10',
-          name: '戰爭',
-          checked: false,
-        },
-        {
-          id: '11',
-          name: '傳記',
-          checked: false,
-        },
-        {
-          id: '12',
-          name: '動畫',
-          checked: false,
-        },
-        {
-          id: '13',
-          name: '音樂',
-          checked: false,
-        },
-        {
-          id: '14',
-          name: '奇幻',
-          checked: false,
-        },
-        {
-          id: '15',
-          name: '溫馨',
-          checked: false,
-        },
-      ],
       seasonsInputs: [],
     }
   },
@@ -326,13 +245,14 @@ export default {
     favoriteCheckHandler() {
       this.favoriteCheck = !this.favoriteCheck;
     },
-    categoiesCheckedHandler(id) {
-      const categoriesName = this.categoriesName;
-      categoriesName.forEach(item => {
+    categoriesCheckedHandler(id) {
+      const categoriesData = this.categoriesData;
+      categoriesData.forEach(item => {
         if(item.id === id) {
           item.checked = !item.checked
         }
       });
+      this.$emit('categoiesCheckedHandler',categoriesData);
     },
     add_film_submit() {
       const {
@@ -340,9 +260,19 @@ export default {
         favoriteCheck,
         filmsListType,
         castInputs,
-        categoriesName,
+        categoriesData,
         seasonsInputs,
       } = this;
+
+      const categories = categoriesData
+        .filter(item => (item.checked === true))
+        .map(item => (
+            {
+              id: item.id,
+              name: item.name
+            }
+          )
+        );
 
       // let castNameArray = [];
       // castInputs.forEach((item, index) => {  // 先做出[{01: a}, {02: b}]
@@ -373,26 +303,11 @@ export default {
 
       // const type = filmsListType === '影集' ? 'series' : 'movies';
 
-
-      // const checkedCategories = categoriesName.filter(item => ( // 先篩選被勾選的
-      //   item.checked === true
-      // )).map(item => { //再組出[{01: name1}, {02: name2}]
-      //   const id = item.id;
-      //   return {
-      //     [id]: item.name,
-      //   }
-      // });
-      // const filmCategories = checkedCategories.reduce((result, item) => { // 再轉成{01:name1, 02:name2}
-      //   const key = Object.keys(item)[0]; // key name 01, 02, ...
-      //   result[key] = item[key];
-      //   return result;
-      // }, {});
-      // console.log(area);
-
       const newFilmData = {
         ...this.newFilmData,
         ends: endCheck,
         favorite: favoriteCheck,
+        categories,
       };
 
       this.$emit('add_film_submit', newFilmData);
