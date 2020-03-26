@@ -10,34 +10,18 @@
         v-for="(input, i) in inputsData"
         :key="i"
       >
-        <InputPeopleInput
-          :name="input.name"
-          :deleteHandler="deleteHandler"
-          :inputIndex="i"
-          v-model="input.name"
-        />
-      </div>
-      <!-- <div
-        class="input-people-input-group"
-        v-for="(input, i) in inputsData"
-        :key="i"
-      >
         <input
           type="text"
           v-model="input.name"
         />
         <font-awesome-icon icon="times" @click="deleteHandler(i)" />
-      </div> -->
+      </div>
     </div>
   </div>
 </template>
 
 <script>
-  import InputPeopleInput from '~/components/formElements/InputPeopleInput';
   export default {
-    components: {
-      InputPeopleInput,
-    },
     props: {
       title: {
         type: String,
