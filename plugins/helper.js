@@ -66,3 +66,23 @@ export const bannerRWD = (w) => {
   let bannerHeight = 0.5625 * bannerWidth;
   return bannerHeight;
 }
+
+export const capitalize = (str) => {
+  const factory = (item) => {
+
+    const cap = item[0].toUpperCase()
+    const newItem = cap + item.substring(1)
+  
+    return newItem;
+  }
+  console.log(factory('abs'))
+  
+  const splitArray = str.split(' ');
+  const newArray = splitArray.map(item => (factory(item)));
+  
+  let result = ''
+  newArray.forEach(item => {
+    result = result + item
+  });
+  return result
+}

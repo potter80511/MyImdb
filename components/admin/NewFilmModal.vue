@@ -86,10 +86,9 @@
             </div>
           </div>
         </div>
-        <!--
         <div class="input-group">
           <label>電影簡述：</label>
-          <input id="filmBrief" type="textarea" />
+          <input id="filmBrief" type="textarea" v-model="newFilmData.brief" />
         </div>
         <div class="input-group">
           <label>導演：</label>
@@ -106,14 +105,14 @@
               :key="i"
             >
               <input
-                :id="`cast_${castInput.id}`"
                 type="text"
-                v-model="castInput.castName"
+                v-model="castInput.name"
               />
               <font-awesome-icon icon="times" @click="deleteCastHandler(castInput.id, i)" />
             </div>
           </div>
         </div>
+        <!--
         <div class="input-group">
           <label>IMDB ID：</label>
           <input id="filmImdbId" type="text" />
@@ -175,145 +174,155 @@
 </template>
 
 <script>
+  import { capitalize } from '~/plugins/helper';
 
-export default {
-  props: {
-    filmsListType: {
-      type: String,
-    },
-    relatedDatas: {
-      type: Array,
-      required: true,
-    },
-    areasData: {
-      type: Array,
-      required: true,
-    },
-    categoriesData: {
-      type: Array,
-      required: true,
-    },
-    add_film: {
-      type: Function,
-    },
-  },
-  data () {
-    return {
-      newFilmData: {
-        area: '',
-        imdb_rates: '',
-        name: '',
-        related_id: '',
-        tw_name: '',
-        year: '',
+  export default {
+    props: {
+      filmsListType: {
+        type: String,
       },
-      favoriteCheck: false,
-      endCheck: false,
-      isCheckedClass: 'is-checked',
-      castInputs: [],
-      seasonsInputs: [],
-    }
-  },
-  methods: {
-    addCastHandler() {
-      const castInputs = this.castInputs;
-      const castInputId = castInputs.length + 1;
-      castInputs.push({
-        id: castInputId
-      });
+      relatedDatas: {
+        type: Array,
+        required: true,
+      },
+      areasData: {
+        type: Array,
+        required: true,
+      },
+      categoriesData: {
+        type: Array,
+        required: true,
+      },
+      add_film: {
+        type: Function,
+      },
     },
-    addSeasonsHandler() {
-      const seasonsInputs = this.seasonsInputs;
-      const seasonsInputId = seasonsInputs.length + 1;
-      seasonsInputs.push({
-        id: seasonsInputId,
-        name: '',
-        sum: '',
-        trailer: '',
-      });
+    data () {
+      return {
+        newFilmData: {
+          area: '',
+          brief: '',
+          imdb_rates: '',
+          name: '',
+          related_id: '',
+          tw_name: '',
+          year: '',
+        },
+        favoriteCheck: false,
+        endCheck: false,
+        isCheckedClass: 'is-checked',
+        castInputs: [],
+        // seasonsInputs: [],
+      }
     },
-    deleteCastHandler(id, inputIndex) {
-      const castInputs = this.castInputs;
-      castInputs.splice(inputIndex, 1);
-      castInputs.forEach((item, index) => {
-        item.id = index + 1;
-      });
-    },
-    endCheckHandler() {
-      this.endCheck = !this.endCheck;
-    },
-    favoriteCheckHandler() {
-      this.favoriteCheck = !this.favoriteCheck;
-    },
-    categoriesCheckedHandler(id) {
-      const categoriesData = this.categoriesData;
-      categoriesData.forEach(item => {
-        if(item.id === id) {
-          item.checked = !item.checked
-        }
-      });
-      this.$emit('categoiesCheckedHandler',categoriesData);
-    },
-    add_film_submit() {
-      const {
-        endCheck,
-        favoriteCheck,
-        filmsListType,
-        castInputs,
-        categoriesData,
-        seasonsInputs,
-      } = this;
-
-      const categories = categoriesData
-        .filter(item => (item.checked === true))
-        .map(item => (
-            {
-              id: item.id,
-              name: item.name
-            }
-          )
-        );
-
-      // let castNameArray = [];
-      // castInputs.forEach((item, index) => {  // 先做出[{01: a}, {02: b}]
-      //   let keyName = 0;
-      //   if (index < 9) {
-      //     keyName = '0' + (index + 1);
-      //   } else {
-      //     keyName = index + 1;
-      //   }
-      //   castNameArray.push({
-      //     [keyName]: item.castName
+    methods: {
+      addCastHandler() {
+        const castInputs = this.castInputs;
+        const castInputId = castInputs.length + 1;
+        castInputs.push({
+          id: castInputId,
+          name: '',
+        });
+      },
+      // addSeasonsHandler() {
+      //   const seasonsInputs = this.seasonsInputs;
+      //   const seasonsInputId = seasonsInputs.length + 1;
+      //   seasonsInputs.push({
+      //     id: seasonsInputId,
+      //     name: '',
+      //     sum: '',
+      //     trailer: '',
       //   });
-      // });
-      // const filmCasts = castNameArray.reduce((result, item) => { // 再轉成{01:a, 02:b}
-      //   const key = Object.keys(item)[0]; // key name 01, 02, ...
-      //   result[key] = item[key];
-      //   return result;
-      // }, {});
-      // result是前一個（初始為空物件{}），item是當前
-      // 原本長這樣[{01: a}, {02: b}]
-      // 第一次 Object.keys(item) = ['01']，所以const key = '01'
-      // result 原本是 {}，result['01'] = item['01']就是 a ，所以就變成{'01': a,}
-      // 第二次 Object.keys(item) = ['02']，所以const key = '02'
-      // result 原本是 {'01': a,}，result['02'] = item['02']就是 b ，所以就變成{'01': a,'02': b,}
+      // },
+      deleteCastHandler(id, inputIndex) {
+        const castInputs = this.castInputs;
+        castInputs.splice(inputIndex, 1);
+      },
+      endCheckHandler() {
+        this.endCheck = !this.endCheck;
+      },
+      favoriteCheckHandler() {
+        this.favoriteCheck = !this.favoriteCheck;
+      },
+      categoriesCheckedHandler(id) {
+        const categoriesData = this.categoriesData;
+        categoriesData.forEach(item => {
+          if(item.id === id) {
+            item.checked = !item.checked
+          }
+        });
+        this.$emit('categoiesCheckedHandler',categoriesData);
+      },
+      add_film_submit() {
+        const {
+          endCheck,
+          favoriteCheck,
+          filmsListType,
+          castInputs,
+          categoriesData,
+          seasonsInputs,
+        } = this;
+
+        // categories result  分類的結果
+        const categories = categoriesData
+          .filter(item => (item.checked === true))
+          .map(item => (
+              {
+                id: item.id,
+                name: item.name
+              }
+            )
+          );
+
+        // cast result  演員的結果
+        const cast = castInputs.map(item => (
+          {
+            ...item,
+            id: capitalize(item.name),
+          }
+        ));
+
+        // let castNameArray = [];
+        // castInputs.forEach((item, index) => {  // 先做出[{01: a}, {02: b}]
+        //   let keyName = 0;
+        //   if (index < 9) {
+        //     keyName = '0' + (index + 1);
+        //   } else {
+        //     keyName = index + 1;
+        //   }
+        //   castNameArray.push({
+        //     [keyName]: item.castName
+        //   });
+        // });
+        // const filmCasts = castNameArray.reduce((result, item) => { // 再轉成{01:a, 02:b}
+        //   const key = Object.keys(item)[0]; // key name 01, 02, ...
+        //   result[key] = item[key];
+        //   return result;
+        // }, {});
+        // result是前一個（初始為空物件{}），item是當前
+        // 原本長這樣[{01: a}, {02: b}]
+        // 第一次 Object.keys(item) = ['01']，所以const key = '01'
+        // result 原本是 {}，result['01'] = item['01']就是 a ，所以就變成{'01': a,}
+        // 第二次 Object.keys(item) = ['02']，所以const key = '02'
+        // result 原本是 {'01': a,}，result['02'] = item['02']就是 b ，所以就變成{'01': a,'02': b,}
 
 
-      // const summary = filmsListType === '電影' ? document.getElementById("filmSummary").value : '';
+        // const summary = filmsListType === '電影' ? document.getElementById("filmSummary").value : '';
 
-      // const type = filmsListType === '影集' ? 'series' : 'movies';
+        // const type = filmsListType === '影集' ? 'series' : 'movies';
 
-      const newFilmData = {
-        ...this.newFilmData,
-        ends: endCheck,
-        favorite: favoriteCheck,
-        categories,
-      };
+        const newFilmData = {
+          ...this.newFilmData,
+          ends: endCheck,
+          favorite: favoriteCheck,
+          categories,
+          cast,
+        };
 
-      this.$emit('add_film_submit', newFilmData);
+        this.$emit('add_film_submit', newFilmData);
+      }
     }
   }
-}
 </script>
 
 <style lang="scss">
