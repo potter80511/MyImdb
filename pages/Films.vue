@@ -340,17 +340,18 @@
       add_film(newFilmData) {
         const nextKey = this.nextKey;
         console.log(newFilmData)
-        firebase.database().ref(`films/${nextKey}`).set(
-          newFilmData
-        ).then(() => {
-          this.successTitle = '新增影片成功'
-          this.$bvModal.show('success-modal')
-          location.reload()
-        }).catch((error) => {
-          this.successTitle = '新增影片失敗'
-          this.$bvModal.show('success-modal')
-          console.log(error)
-        });
+
+        // firebase.database().ref(`films/${nextKey}`).set(
+        //   newFilmData
+        // ).then(() => {
+        //   this.successTitle = '新增影片成功'
+        //   this.$bvModal.show('success-modal')
+        //   location.reload()
+        // }).catch((error) => {
+        //   this.successTitle = '新增影片失敗'
+        //   this.$bvModal.show('success-modal')
+        //   console.log(error)
+        // });
       }
       // bannerRWD() {
       //   const bannerWidth = this.$refs.bannerSlide.clientWidth;

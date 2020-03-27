@@ -94,10 +94,12 @@
             </div>
           </div>
         </div>
-        <div class="input-group">
-          <label>電影簡述：</label>
-          <input id="filmBrief" type="textarea" v-model="newFilmData.brief" />
-        </div>
+        <SingleInput
+          title="電影簡述"
+          id="filmBrief"
+          :inputData="newFilmData.brief"
+          v-model="newFilmData.brief"
+        />
         <InputMultiple
           dataType="people"
           title="導演"
