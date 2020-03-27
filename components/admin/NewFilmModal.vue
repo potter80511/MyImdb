@@ -91,6 +91,7 @@
           <input id="filmBrief" type="textarea" v-model="newFilmData.brief" />
         </div>
         <inputPeople
+          dataType="people"
           title="導演"
           className="directors"
           :inputsData="directorInputs"
@@ -98,6 +99,7 @@
           :deleteHandler="deleteDirectorHandler"
         />
         <inputPeople
+          dataType="people"
           title="編劇"
           className="writers"
           :inputsData="writerInputs"
@@ -105,6 +107,7 @@
           :deleteHandler="deleteWriterHandler"
         />
         <inputPeople
+          dataType="people"
           title="演員"
           className="cast"
           :inputsData="castInputs"
@@ -142,9 +145,15 @@
           :inputData="newFilmData.summary"
           v-model="newFilmData.summary"
         />
-        <!--
-        <div
-          v-else-if="filmsListType === '影集'"
+        <inputPeople
+          dataType="seasons"
+          title="新增季"
+          :inputsData="seasonsInputs"
+          :addHandler="addSeasonsHandler"
+          :deleteHandler="deleteSeasonHandler"
+        />
+        <!-- <div
+          v-if="filmsListType === '影集'"
           class="add_seasons_group"
         >
           <div class="add_item_btn">
@@ -176,8 +185,7 @@
               <input id="seasonSummary" type="textarea" v-model="item.sum" />
             </div>
           </div>
-        </div>
-         -->
+        </div> -->
       </div>
     </div>
   </b-modal>
@@ -235,7 +243,7 @@
         castInputs: [],
         writerInputs: [],
         directorInputs: [],
-        // seasonsInputs: [],
+        seasonsInputs: [],
       }
     },
     methods: {
@@ -263,16 +271,20 @@
         const directorInputs = this.directorInputs;
         deleteInputHandler(directorInputs, inputIndex)
       },
-      // addSeasonsHandler() {
-      //   const seasonsInputs = this.seasonsInputs;
-      //   const seasonsInputId = seasonsInputs.length + 1;
-      //   seasonsInputs.push({
-      //     id: seasonsInputId,
-      //     name: '',
-      //     sum: '',
-      //     trailer: '',
-      //   });
-      // },
+      addSeasonsHandler() {
+        const seasonsInputs = this.seasonsInputs;
+        const seasonsInputId = seasonsInputs.length + 1;
+        seasonsInputs.push({
+          id: seasonsInputId,
+          name: '',
+          sum: '',
+          trailer: '',
+        });
+      },
+      deleteSeasonHandler(inputIndex) {
+        const seasonsInputs = this.seasonsInputs;
+        deleteInputHandler(seasonsInputs, inputIndex)
+      },
       endCheckHandler() {
         this.endCheck = !this.endCheck;
       },
@@ -318,35 +330,6 @@
         // cast result  演員的結果
         const cast = inputPeaple(castInputs);
 
-        // let castNameArray = [];
-        // castInputs.forEach((item, index) => {  // 先做出[{01: a}, {02: b}]
-        //   let keyName = 0;
-        //   if (index < 9) {
-        //     keyName = '0' + (index + 1);
-        //   } else {
-        //     keyName = index + 1;
-        //   }
-        //   castNameArray.push({
-        //     [keyName]: item.castName
-        //   });
-        // });
-        // const filmCasts = castNameArray.reduce((result, item) => { // 再轉成{01:a, 02:b}
-        //   const key = Object.keys(item)[0]; // key name 01, 02, ...
-        //   result[key] = item[key];
-        //   return result;
-        // }, {});
-        // result是前一個（初始為空物件{}），item是當前
-        // 原本長這樣[{01: a}, {02: b}]
-        // 第一次 Object.keys(item) = ['01']，所以const key = '01'
-        // result 原本是 {}，result['01'] = item['01']就是 a ，所以就變成{'01': a,}
-        // 第二次 Object.keys(item) = ['02']，所以const key = '02'
-        // result 原本是 {'01': a,}，result['02'] = item['02']就是 b ，所以就變成{'01': a,'02': b,}
-
-
-        // const summary = filmsListType === '電影' ? document.getElementById("filmSummary").value : '';
-
-        // const type = filmsListType === '影集' ? 'series' : 'movies';
-
         const newFilmData = {
           ...this.newFilmData,
           ends: endCheck,
@@ -355,6 +338,7 @@
           cast,
           directors,
           writers,
+          seasonsInputs,
         };
 
         this.$emit('add_film_submit', newFilmData);

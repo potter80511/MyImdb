@@ -125,6 +125,11 @@ img {
     .modal-header, .modal-footer {
       border-color: #595959;
     }
+    .add_people_group {
+      input {
+        margin-right: 10px;
+      }
+    }
     .input-group, .add_item_btn, .title {
       svg {
         color: #666;
