@@ -121,6 +121,9 @@
       :categoriesData="categoriesData"
       @add_film_submit="(newFilmData) => add_film(newFilmData)"
     />
+    <SuccessModal
+      :successTitle="successTitle"
+    />
   </div>
 </template>
 
@@ -131,6 +134,7 @@
   import BannerSlide from '~/components/BannerSlide';
   import FilterTools from '~/components/FilterTools';
   import NewFilmModal from '~/components/admin/NewFilmModal';
+  import SuccessModal from '~/components/admin/SuccessModal';
 
   export default {
     data () {
@@ -157,12 +161,14 @@
         maxKey: 0,
         nextKey: 0,
         categoriesData: [],
+        successTitle: '',
       }
     },
     components: {
       BannerSlide,
       FilterTools,
       NewFilmModal,
+      SuccessModal,
     },
     created() {
       this.filmsListType = this.$route.name === 'movies' ? '電影' : '影集';
@@ -334,14 +340,17 @@
       add_film(newFilmData) {
         const nextKey = this.nextKey;
         console.log(newFilmData)
-        // firebase.database().ref(`films/${nextKey}`).set(
-        //   newFilmData
-        // ).then(() => {
-        //   alert('success');
-        //   location.reload()
-        // }).catch((error) => {
-        //   console.log(error)
-        // });
+        firebase.database().ref(`films/${nextKey}`).set(
+          newFilmData
+        ).then(() => {
+          this.successTitle = '新增影片成功'
+          this.$bvModal.show('success-modal')
+          location.reload()
+        }).catch((error) => {
+          this.successTitle = '新增影片失敗'
+          this.$bvModal.show('success-modal')
+          console.log(error)
+        });
       }
       // bannerRWD() {
       //   const bannerWidth = this.$refs.bannerSlide.clientWidth;

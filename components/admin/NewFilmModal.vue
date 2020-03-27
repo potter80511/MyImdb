@@ -9,14 +9,18 @@
   >
     <div class="container">
       <div id="new_film_form" class="form_modal">
-        <div class="input-group">
-          <label>劇名稱（原文）：</label>
-          <input id="filmName" type="text" v-model="newFilmData.name" />
-        </div>
-        <div class="input-group">
-          <label>劇名稱（中文）：</label>
-          <input id="filmTwName" type="text" v-model="newFilmData.tw_name" />
-        </div>
+        <SingleInput
+          title="劇名稱（原文）"
+          id="filmName"
+          :inputData="newFilmData.name"
+          v-model="newFilmData.name"
+        />
+        <SingleInput
+          title="劇名稱（中文）"
+          id="filmTwName"
+          :inputData="newFilmData.tw_name"
+          v-model="newFilmData.tw_name"
+        />
         <div class="input-group" v-show="filmsListType === '影集'">
           <span
             :class="[endCheck ? isCheckedClass : '', 'endCheck-check label-check']"
@@ -48,10 +52,12 @@
           </span>
           <label>是否為最愛影劇？</label>
         </div>
-        <div class="input-group">
-          <label>IMDB 評分：</label>
-          <input id="filmImdbRate" type="text" v-model="newFilmData.imdb_rates" />
-        </div>
+        <SingleInput
+          title="IMDB 評分"
+          id="filmImdbRate"
+          :inputData="newFilmData.imdb_rates"
+          v-model="newFilmData.imdb_rates"
+        />
         <div class="input-group film-area select-tool">
           <label>地區：</label>
           <div class="area-select">
@@ -66,10 +72,12 @@
             <font-awesome-icon icon="chevron-down" />
           </div>
         </div>
-        <div class="input-group">
-          <label>年份：</label>
-          <input id="filmYear" type="text" v-model="newFilmData.year" />
-        </div>
+        <SingleInput
+          title="年份"
+          id="filmYear"
+          :inputData="newFilmData.year"
+          v-model="newFilmData.year"
+        />
         <div class="input-group film-categories">
           <label>電影類型：</label>
           <div class="group">
@@ -131,6 +139,7 @@
           id="filmTrailer"
           :inputData="newFilmData.trailer"
           v-model="newFilmData.trailer"
+          v-show="filmsListType === '電影'"
         />
         <SingleInput
           title="海報連結"
@@ -146,6 +155,7 @@
           v-model="newFilmData.summary"
         />
         <InputMultiple
+          v-show="filmsListType === '影集'"
           dataType="seasons"
           title="新增季"
           :inputsData="seasonsInputs"

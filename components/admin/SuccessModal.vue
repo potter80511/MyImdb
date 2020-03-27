@@ -1,6 +1,6 @@
 <template>
   <b-modal
-    id="success-modal"
+    :id="id ? `${id}-success-modal` : 'success-modal'"
     modal-class="success"
     title=""
     ok-title="ok"
@@ -16,6 +16,10 @@
 <script>
   export default {
     props: {
+      id: {
+        type: String,
+        default: '',
+      },
       successTitle: {
         type: String,
         required: true,
