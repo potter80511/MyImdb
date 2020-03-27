@@ -101,7 +101,6 @@
           title="編劇"
           className="writers"
           :inputsData="writerInputs"
-          v-model="writerInputs.name"
           :addHandler="addWriterHandler"
           :deleteHandler="deleteWriterHandler"
         />
@@ -112,27 +111,38 @@
           :addHandler="addCastHandler"
           :deleteHandler="deleteCastHandler"
         />
+        <SingleInput
+          title="IMDB ID"
+          id="filmImdbId"
+          :inputData="newFilmData.imdb_id"
+          v-model="newFilmData.imdb_id"
+        />
+        <SingleInput
+          title="我的評分"
+          id="filmMyRate"
+          :inputData="newFilmData.my_rate"
+          v-model="newFilmData.my_rate"
+        />
+        <SingleInput
+          title="預告ID"
+          id="filmTrailer"
+          :inputData="newFilmData.trailer"
+          v-model="newFilmData.trailer"
+        />
+        <SingleInput
+          title="海報連結"
+          id="filmWallpaper"
+          :inputData="newFilmData.wallpaper"
+          v-model="newFilmData.wallpaper"
+        />
+        <SingleInput
+          title="劇情大綱"
+          id="filmSummary"
+          inputType="textarea"
+          :inputData="newFilmData.summary"
+          v-model="newFilmData.summary"
+        />
         <!--
-        <div class="input-group">
-          <label>IMDB ID：</label>
-          <input id="filmImdbId" type="text" />
-        </div>
-        <div class="input-group">
-          <label>我的評分：</label>
-          <input id="filmMyRate" type="text" />
-        </div>
-        <div class="input-group">
-          <label>預告ID：</label>
-          <input id="filmTrailer" type="text" />
-        </div>
-        <div class="input-group">
-          <label>海報連結：</label>
-          <input id="filmWallpaper" type="text" />
-        </div>
-        <div class="input-group" v-if="filmsListType === '電影'">
-          <label>劇情大綱：</label>
-          <input id="filmSummary" type="textarea" />
-        </div>
         <div
           v-else-if="filmsListType === '影集'"
           class="add_seasons_group"
@@ -175,11 +185,13 @@
 
 <script>
   import { capitalize, addInputHandler, deleteInputHandler, inputPeaple } from '~/plugins/helper';
-  import inputPeople from '~/components/formElements/inputPeople';
+  import InputPeople from '~/components/formElements/InputPeople';
+  import SingleInput from '~/components/formElements/SingleInput';
 
   export default {
     components: {
-      inputPeople,
+      InputPeople,
+      SingleInput,
     },
     props: {
       filmsListType: {
@@ -206,10 +218,15 @@
         newFilmData: {
           area: '',
           brief: '',
+          imdb_id: '',
           imdb_rates: '',
+          my_rate: '',
           name: '',
           related_id: '',
+          summary: '',
+          trailer: '',
           tw_name: '',
+          wallpaper: '',
           year: '',
         },
         favoriteCheck: false,
