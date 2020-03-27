@@ -90,7 +90,7 @@
           <label>電影簡述：</label>
           <input id="filmBrief" type="textarea" v-model="newFilmData.brief" />
         </div>
-        <inputPeople
+        <InputMultiple
           dataType="people"
           title="導演"
           className="directors"
@@ -98,7 +98,7 @@
           :addHandler="addDirectorHandler"
           :deleteHandler="deleteDirectorHandler"
         />
-        <inputPeople
+        <InputMultiple
           dataType="people"
           title="編劇"
           className="writers"
@@ -106,7 +106,7 @@
           :addHandler="addWriterHandler"
           :deleteHandler="deleteWriterHandler"
         />
-        <inputPeople
+        <InputMultiple
           dataType="people"
           title="演員"
           className="cast"
@@ -145,47 +145,13 @@
           :inputData="newFilmData.summary"
           v-model="newFilmData.summary"
         />
-        <inputPeople
+        <InputMultiple
           dataType="seasons"
           title="新增季"
           :inputsData="seasonsInputs"
           :addHandler="addSeasonsHandler"
           :deleteHandler="deleteSeasonHandler"
         />
-        <!-- <div
-          v-if="filmsListType === '影集'"
-          class="add_seasons_group"
-        >
-          <div class="add_item_btn">
-            <label>新增季</label>
-            <font-awesome-icon icon="plus" @click="addSeasonsHandler" />
-          </div>
-          <div
-            class="seasons_group"
-            v-for="(item, i) in seasonsInputs"
-            :key="i">
-            <div class="title">
-              <h3>第 {{i+1}} 季</h3>
-              <font-awesome-icon icon="times" @click="deleteSeasonHandler(seasonsInput.id, i)" />
-            </div>
-            <div class="input-group">
-              <label>季名稱：</label>
-              <input
-                id="seasonSummary"
-                type="textarea"
-                v-model="item.name"
-              />
-            </div>
-            <div class="input-group">
-              <label>預告：</label>
-              <input id="seasonTrailer" type="text" v-model="item.trailer" />
-            </div>
-            <div class="input-group">
-              <label>劇情大綱：</label>
-              <input id="seasonSummary" type="textarea" v-model="item.sum" />
-            </div>
-          </div>
-        </div> -->
       </div>
     </div>
   </b-modal>
@@ -193,12 +159,12 @@
 
 <script>
   import { capitalize, addInputHandler, deleteInputHandler, inputPeaple } from '~/plugins/helper';
-  import InputPeople from '~/components/formElements/InputPeople';
+  import InputMultiple from '~/components/formElements/InputMultiple';
   import SingleInput from '~/components/formElements/SingleInput';
 
   export default {
     components: {
-      InputPeople,
+      InputMultiple,
       SingleInput,
     },
     props: {
