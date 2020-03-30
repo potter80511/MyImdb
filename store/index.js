@@ -4,6 +4,7 @@ import * as firebase from 'firebase';
 import banners from './modules/banners';
 import admin from './modules/admin';
 import toolsData from './modules/toolsData';
+import films from './modules/films';
 
 const createStore = () => {
   return new Vuex.Store({
@@ -12,11 +13,8 @@ const createStore = () => {
       ...JSON.parse(JSON.stringify(banners.state)),
       ...JSON.parse(JSON.stringify(admin.state)),
       ...JSON.parse(JSON.stringify(toolsData.state)),
-      movies: [],
-      series: [],
+      ...JSON.parse(JSON.stringify(films.state)),
       currentFilm: null,
-      moviesIsLoading: true,
-      seriesIsLoading: true,
     },
     mutations: { //更改狀態
       setAllFilmsKeys(state, payload) {
@@ -25,14 +23,7 @@ const createStore = () => {
       ...banners.mutations,
       ...admin.mutations,
       ...toolsData.mutations,
-      // setLoadedMovies(state, payload) {
-      //   state.movies = payload
-      //   state.moviesIsLoading = false
-      // },
-      // setLoadedSeries(state, payload) {
-      //   state.series = payload
-      //   state.seriesIsLoading = false
-      // },
+      ...films.mutations,
       // setCurrentFilm(state, payload) {
       //   state.currentFilm = payload
       // },
@@ -49,37 +40,7 @@ const createStore = () => {
       ...banners.actions,
       ...admin.actions,
       ...toolsData.actions,
-      // loadedMovies({commit}) {
-      //   firebase.database().ref('movies').orderByChild('type').equalTo('movies').once('value')
-      //     .then((data) => {
-      //       const movies = []
-      //       const obj = data.val()
-
-      //       for (let key in obj) { // key剛好等於每包電影物件的key name
-      //         movies.push({
-      //           id: key,
-      //           area: obj[key].area,
-      //           name: obj[key].name,
-      //           brief: obj[key].brief,
-      //           categories: obj[key].categories,
-      //           cast: obj[key].cast,
-      //           director: obj[key].director,
-      //           wallpaper: obj[key].wallpaper,
-      //           rates: obj[key].rates,
-      //           related: obj[key].related,
-      //           favorite: obj[key].favorite,
-      //           my_rate: obj[key].my_rate,
-      //           imdb_id: obj[key].imdb_id,
-      //           tw_name: obj[key].tw_name,
-      //           type: obj[key].type,
-      //           list_banner: obj[key].list_banner,
-      //           year: obj[key].year,
-      //         })
-      //       }
-      //       // console.log(movies, 'store')
-      //       commit('setLoadedMovies', movies)
-      //     })
-      // },
+      ...films.actions,
       // loadedSeries({commit}) {
       //   firebase.database().ref('movies').orderByChild('type').equalTo('series').once('value')
       //     .then((data) => {

@@ -180,6 +180,9 @@
       SingleInput,
     },
     props: {
+      nextKey: {
+        type: Number,
+      },
       filmsListType: {
         type: String,
       },
@@ -280,6 +283,7 @@
       },
       add_film_submit() {
         const {
+          nextKey,
           endCheck,
           favoriteCheck,
           filmsListType,
@@ -308,6 +312,8 @@
         // cast result  演員的結果
         const cast = inputPeaple(castInputs);
 
+        const type = filmsListType === '電影' ? 'movies' : 'series';
+
         const newFilmData = {
           ...this.newFilmData,
           ends: endCheck,
@@ -317,6 +323,8 @@
           directors,
           writers,
           seasonsInputs,
+          type,
+          current_key: nextKey,
         };
 
         this.$emit('add_film_submit', newFilmData);

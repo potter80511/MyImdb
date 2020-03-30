@@ -8,9 +8,6 @@
     <div class="film_list">
       <div class="container">
         <FilterTools
-          :currentSelectedArea="currentSelectedArea"
-          :currentSelectedCategory="currentSelectedCategory"
-          :currentSelectedYear="currentSelectedYear"
           :sortBy="sortBy"
           v-model="sortBy"
           :filterAreaMethod="filterAreaMethod"
@@ -46,19 +43,19 @@
                 <img :src="item.wallpaper" />
               </div>
               <div class="film_content">
-                <div style="display: none;">{{item.id}}</div>
+                <div style="display: none;">{{item.current_key}}</div>
                 <h3 class="name">{{item.tw_name}}</h3>
-                <div class="rates" v-if="sortBy === 'imdbRates'">
+                <div class="rates" v-if="item.imdb_rates && sortBy === 'imdbRates'">
                   <b class="title">IMDB：</b>
-                  <span v-for="(star, j) in rateStarWithEmpty(item.rates)"
+                  <span v-for="(star, j) in rateStarWithEmpty(item.imdb_rates)"
                       :key="j">
                     <font-awesome-icon v-if="star==='star'" icon="star" />
                     <font-awesome-icon v-if="star==='half'" icon="star-half-alt" />
                     <font-awesome-icon v-if="star==='empty'" :icon="['far', 'star']"/>
                   </span>
-                  <b>{{item.rates.toFixed(1)}}</b>
+                  <b>{{item.imdb_rates.toFixed(1)}}</b>
                 </div>
-                <div class="rates" v-else>
+                <div class="rates" v-else-if="item.my_rate && sortBy === 'myRates'">
                   <b class="title">我的評分：</b>
                   <span v-for="(star, j) in rateStarWithEmpty(item.my_rate)"
                       :key="j">
@@ -68,6 +65,7 @@
                   </span>
                   <b v-if="item.my_rate">{{item.my_rate.toFixed(1)}}</b>
                 </div>
+                <!--
                 <div class="area">
                   <b>地區：</b>{{item.area}}
                 </div>
@@ -104,7 +102,7 @@
                     {{c}}
                     </span>
                   </div>
-                </div>
+                </div> -->
               </div>
             </nuxt-link>
           </div>
@@ -115,6 +113,7 @@
       </div>
     </div>
     <NewFilmModal
+      :nextKey="nextKey"
       :filmsListType="filmsListType"
       :relatedDatas="relatedDatas"
       :areasData="areasData"
@@ -154,9 +153,9 @@
         },
         filmsListType: '',
         directorData: [],
-        currentSelectedArea: '全部',
-        currentSelectedCategory: '00',
-        currentSelectedYear: '全部',
+        // currentSelectedArea: '全部',
+        // currentSelectedCategory: '00',
+        // currentSelectedYear: '全部',
         sortBy: 'imdbRates',
         maxKey: 0,
         nextKey: 0,
@@ -175,8 +174,10 @@
       const { filmsListType } = this;
       if (filmsListType === "電影") {
         this.$store.dispatch('loadedMoviesListBanners')
+        this.$store.dispatch('loadedMovies')
       }  else if (filmsListType === "影集") {
         this.$store.dispatch('loadedSeriesListBanners');
+        this.$store.dispatch('loadedSeries');
       }
 
       // 讀取相關續作資料
@@ -196,73 +197,75 @@
         const routeType = this.$route.name
         let data = []
         const sortBy = this.sortBy
+
         if(routeType === 'movies') {
-          data = this.$store.state.movies.sort((a,b) => {
-            return sortBy === 'imdbRates' ? b.rates - a.rates : b.my_rate - a.my_rate;
+          data = this.$store.state.movies.filter(item=> item !==null).sort((a,b) => {
+            return sortBy === 'imdbRates' ? b.imdb_rates - a.imdb_rates : b.my_rate - a.my_rate;
           })
         } else if (routeType === 'series') {
-          data = this.$store.state.series.sort((a,b) => {
-            return sortBy === 'imdbRates' ? b.rates - a.rates : b.my_rate - a.my_rate;
+          data = this.$store.state.series.filter(item=> item !==null).sort((a,b) => {
+            return sortBy === 'imdbRates' ? b.imdb_rates - a.imdb_rates : b.my_rate - a.my_rate;
           })
         }
 
-        const currentSelectedArea = this.currentSelectedArea;
-        const currentSelectedCategory = this.currentSelectedCategory;
-        const currentSelectedYear = this.currentSelectedYear;
+        return(data)
 
-        if(currentSelectedArea !== '全部' && currentSelectedCategory !== '00' && currentSelectedYear !== '全部' ) { // 如果都不是選全部
-          const filteredData = data.filter(f => {
-            return f.area.search(currentSelectedArea) !== -1
-          }).filter(c => {
-            const categoriesKey = Object.keys(c.categories || {})
-            return categoriesKey.includes(currentSelectedCategory)
-          }).filter(y => {
-            return y.year === currentSelectedYear
-          })
-          return filteredData
-        } else if(currentSelectedArea === '全部' && currentSelectedCategory !== '00' && currentSelectedYear !== '全部') {
-          const filteredData = data.filter(c => {
-            const categoriesKey = Object.keys(c.categories || {})
-            return categoriesKey.includes(currentSelectedCategory)
-          }).filter(y => {
-            return y.year === currentSelectedYear
-          })
-          return filteredData
-        } else if (currentSelectedArea !== '全部' && currentSelectedCategory === '00' && currentSelectedYear !== '全部') {
-          const filteredData = data.filter(f => {
-            return f.area.search(currentSelectedArea) !== -1
-          }).filter(y => {
-            return y.year === currentSelectedYear
-          })
-          return filteredData
-        } else if (currentSelectedArea !== '全部' && currentSelectedCategory !== '00' && currentSelectedYear === '全部') {
-          const filteredData = data.filter(f => {
-            return f.area.search(currentSelectedArea) !== -1
-          }).filter(c => {
-            const categoriesKey = Object.keys(c.categories || {})
-            return categoriesKey.includes(currentSelectedCategory)
-          })
-          return filteredData
-        } else if (currentSelectedArea !== '全部' && currentSelectedCategory === '00' && currentSelectedYear === '全部' ) {
-          const filteredData = data.filter(f => {
-            return f.area.search(currentSelectedArea) !== -1
-          })
-          return filteredData
-        } else if (currentSelectedArea === '全部' && currentSelectedCategory !== '00' && currentSelectedYear === '全部' ) {
-          const filteredData = data.filter(c => {
-            const categoriesKey = Object.keys(c.categories || {})
-            return categoriesKey.includes(currentSelectedCategory)
-          })
-          return filteredData
-        } else if (currentSelectedArea === '全部' && currentSelectedCategory === '00' && currentSelectedYear !== '全部' ) {
-          const filteredData = data.filter(y => {
-            return y.year === currentSelectedYear
-          })
-          return filteredData
-        } else {
-          return data
-        }
-        // console.log()
+        // const currentSelectedArea = this.currentSelectedArea;
+        // const currentSelectedCategory = this.currentSelectedCategory;
+        // const currentSelectedYear = this.currentSelectedYear;
+
+        // if(currentSelectedArea !== '全部' && currentSelectedCategory !== '00' && currentSelectedYear !== '全部' ) { // 如果都不是選全部
+        //   const filteredData = data.filter(f => {
+        //     return f.area.search(currentSelectedArea) !== -1
+        //   }).filter(c => {
+        //     const categoriesKey = Object.keys(c.categories || {})
+        //     return categoriesKey.includes(currentSelectedCategory)
+        //   }).filter(y => {
+        //     return y.year === currentSelectedYear
+        //   })
+        //   return filteredData
+        // } else if(currentSelectedArea === '全部' && currentSelectedCategory !== '00' && currentSelectedYear !== '全部') {
+        //   const filteredData = data.filter(c => {
+        //     const categoriesKey = Object.keys(c.categories || {})
+        //     return categoriesKey.includes(currentSelectedCategory)
+        //   }).filter(y => {
+        //     return y.year === currentSelectedYear
+        //   })
+        //   return filteredData
+        // } else if (currentSelectedArea !== '全部' && currentSelectedCategory === '00' && currentSelectedYear !== '全部') {
+        //   const filteredData = data.filter(f => {
+        //     return f.area.search(currentSelectedArea) !== -1
+        //   }).filter(y => {
+        //     return y.year === currentSelectedYear
+        //   })
+        //   return filteredData
+        // } else if (currentSelectedArea !== '全部' && currentSelectedCategory !== '00' && currentSelectedYear === '全部') {
+        //   const filteredData = data.filter(f => {
+        //     return f.area.search(currentSelectedArea) !== -1
+        //   }).filter(c => {
+        //     const categoriesKey = Object.keys(c.categories || {})
+        //     return categoriesKey.includes(currentSelectedCategory)
+        //   })
+        //   return filteredData
+        // } else if (currentSelectedArea !== '全部' && currentSelectedCategory === '00' && currentSelectedYear === '全部' ) {
+        //   const filteredData = data.filter(f => {
+        //     return f.area.search(currentSelectedArea) !== -1
+        //   })
+        //   return filteredData
+        // } else if (currentSelectedArea === '全部' && currentSelectedCategory !== '00' && currentSelectedYear === '全部' ) {
+        //   const filteredData = data.filter(c => {
+        //     const categoriesKey = Object.keys(c.categories || {})
+        //     return categoriesKey.includes(currentSelectedCategory)
+        //   })
+        //   return filteredData
+        // } else if (currentSelectedArea === '全部' && currentSelectedCategory === '00' && currentSelectedYear !== '全部' ) {
+        //   const filteredData = data.filter(y => {
+        //     return y.year === currentSelectedYear
+        //   })
+        //   return filteredData
+        // } else {
+        //   return data
+        // }
       },
       bannerData() {
         const routeType = this.$route.name
@@ -341,17 +344,17 @@
         const nextKey = this.nextKey;
         console.log(newFilmData)
 
-        // firebase.database().ref(`films/${nextKey}`).set(
-        //   newFilmData
-        // ).then(() => {
-        //   this.successTitle = '新增影片成功'
-        //   this.$bvModal.show('success-modal')
-        //   location.reload()
-        // }).catch((error) => {
-        //   this.successTitle = '新增影片失敗'
-        //   this.$bvModal.show('success-modal')
-        //   console.log(error)
-        // });
+        firebase.database().ref(`films/${nextKey}`).set(
+          newFilmData
+        ).then(() => {
+          this.successTitle = '新增影片成功'
+          this.$bvModal.show('success-modal')
+          location.reload()
+        }).catch((error) => {
+          this.successTitle = '新增影片失敗'
+          this.$bvModal.show('success-modal')
+          console.log(error)
+        });
       }
       // bannerRWD() {
       //   const bannerWidth = this.$refs.bannerSlide.clientWidth;
