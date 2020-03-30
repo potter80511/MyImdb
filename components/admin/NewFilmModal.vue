@@ -55,8 +55,16 @@
         <SingleInput
           title="IMDB 評分"
           id="filmImdbRate"
-          :inputData="newFilmData.imdb_rates"
-          v-model="newFilmData.imdb_rates"
+          inputType="number"
+          :inputData="imdb_rates"
+          v-model="imdb_rates"
+        />
+        <SingleInput
+          title="我的評分"
+          id="filmMyRate"
+          inputType="number"
+          :inputData="my_rate"
+          v-model="my_rate"
         />
         <div class="input-group film-area select-tool">
           <label>地區：</label>
@@ -97,6 +105,7 @@
         <SingleInput
           title="電影簡述"
           id="filmBrief"
+          inputType="textarea"
           :inputData="newFilmData.brief"
           v-model="newFilmData.brief"
         />
@@ -129,12 +138,6 @@
           id="filmImdbId"
           :inputData="newFilmData.imdb_id"
           v-model="newFilmData.imdb_id"
-        />
-        <SingleInput
-          title="我的評分"
-          id="filmMyRate"
-          :inputData="newFilmData.my_rate"
-          v-model="newFilmData.my_rate"
         />
         <SingleInput
           title="預告ID"
@@ -208,8 +211,6 @@
           area: '',
           brief: '',
           imdb_id: '',
-          imdb_rates: '',
-          my_rate: '',
           name: '',
           related_id: '',
           summary: '',
@@ -221,6 +222,8 @@
         favoriteCheck: false,
         endCheck: false,
         isCheckedClass: 'is-checked',
+        imdb_rates: '',
+        my_rate: '',
         castInputs: [],
         writerInputs: [],
         directorInputs: [],
@@ -287,6 +290,8 @@
           endCheck,
           favoriteCheck,
           filmsListType,
+          imdb_rates,
+          my_rate,
           directorInputs,
           writerInputs,
           castInputs,
@@ -318,6 +323,8 @@
           ...this.newFilmData,
           ends: endCheck,
           favorite: favoriteCheck,
+          imdb_rates: Number(imdb_rates),
+          my_rate: Number(my_rate),
           categories,
           cast,
           directors,

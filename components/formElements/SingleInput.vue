@@ -1,7 +1,12 @@
 <template>
   <div class="input-group">
     <label>{{title}}：</label>
-    <input :id="id" :type="inputType" :value="inputData"  @input="$emit('input', $event.target.value)" />
+    <input
+      :id="id"
+      :type="inputType"
+      :value="inputData"
+      @input="$emit('input', $event.target.value)"
+    />
   </div>
 </template>
 

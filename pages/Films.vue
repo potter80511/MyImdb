@@ -37,7 +37,7 @@
           <div class="item col-lg-4 col-sm-6"
             v-for="(item, i) in filmsData"
             :key="i"
-            >
+          >
             <nuxt-link :to="{ name: 'filmDetails-id', params: {id: item.imdb_id}}">
               <div class="image">
                 <img :src="item.wallpaper" />
@@ -344,17 +344,17 @@
         const nextKey = this.nextKey;
         console.log(newFilmData)
 
-        firebase.database().ref(`films/${nextKey}`).set(
-          newFilmData
-        ).then(() => {
-          this.successTitle = '新增影片成功'
-          this.$bvModal.show('success-modal')
-          location.reload()
-        }).catch((error) => {
-          this.successTitle = '新增影片失敗'
-          this.$bvModal.show('success-modal')
-          console.log(error)
-        });
+        // firebase.database().ref(`films/${nextKey}`).set(
+        //   newFilmData
+        // ).then(() => {
+        //   this.successTitle = '新增影片成功'
+        //   this.$bvModal.show('success-modal')
+        //   location.reload()
+        // }).catch((error) => {
+        //   this.successTitle = '新增影片失敗'
+        //   this.$bvModal.show('success-modal')
+        //   console.log(error)
+        // });
       }
       // bannerRWD() {
       //   const bannerWidth = this.$refs.bannerSlide.clientWidth;
