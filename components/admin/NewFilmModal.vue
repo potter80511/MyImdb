@@ -66,18 +66,21 @@
           :inputData="my_rate"
           v-model="my_rate"
         />
-        <div class="input-group film-area select-tool">
+        <div class="input-group film-area film-check">
           <label>地區：</label>
-          <div class="area-select">
-            <select v-model="newFilmData.area">
-              <option value="" selected hidden>請選擇</option>
-              <option
-                v-for="(area, i) in areasData"
-                :value="area.id"
-                :key="i"
-              >{{area.name}}</option>
-            </select>
-            <font-awesome-icon icon="chevron-down" />
+          <div class="group">
+            <div
+              class="check-group"
+              v-for="(area, i) in areasData"
+              :key="i"
+            >
+              <span
+                :class="[area.checked ? isCheckedClass : '', 'area-check label-check']"
+                @click="areasCheckedHandler(area.id)"
+              >
+              </span>
+              <label>{{ area.name }}</label>
+            </div>
           </div>
         </div>
         <SingleInput
@@ -86,10 +89,11 @@
           :inputData="newFilmData.year"
           v-model="newFilmData.year"
         />
-        <div class="input-group film-categories">
+        <div class="input-group film-categories film-check">
           <label>電影類型：</label>
           <div class="group">
             <div
+              class="check-group"
               v-for="(category, i) in categoriesData"
               :key="i"
             >
@@ -173,7 +177,7 @@
 </template>
 
 <script>
-  import { capitalize, addInputHandler, deleteInputHandler, inputPeaple } from '~/plugins/helper';
+  import { capitalize, addInputHandler, deleteInputHandler, inputPeaple, inputArray } from '~/plugins/helper';
   import InputMultiple from '~/components/formElements/InputMultiple';
   import SingleInput from '~/components/formElements/SingleInput';
 
@@ -208,7 +212,6 @@
     data () {
       return {
         newFilmData: {
-          area: '',
           brief: '',
           imdb_id: '',
           name: '',
@@ -275,6 +278,15 @@
       favoriteCheckHandler() {
         this.favoriteCheck = !this.favoriteCheck;
       },
+      areasCheckedHandler(id) {
+        const areasData = this.areasData;
+        areasData.forEach(item => {
+          if(item.id === id) {
+            item.checked = !item.checked
+          }
+        });
+        this.$emit('areasCheckedHandler', areasData);
+      },
       categoriesCheckedHandler(id) {
         const categoriesData = this.categoriesData;
         categoriesData.forEach(item => {
@@ -295,20 +307,16 @@
           directorInputs,
           writerInputs,
           castInputs,
+          areasData,
           categoriesData,
           seasonsInputs,
         } = this;
 
+        // areas result  地區的結果
+        const area = inputArray(areasData);
+
         // categories result  分類的結果
-        const categories = categoriesData
-          .filter(item => (item.checked === true))
-          .map(item => (
-              {
-                id: item.id,
-                name: item.name
-              }
-            )
-          );
+        const categories = inputArray(categoriesData);
 
         // directors result  導演的結果
         const directors = inputPeaple(directorInputs);
@@ -325,6 +333,7 @@
           favorite: favoriteCheck,
           imdb_rates: Number(imdb_rates),
           my_rate: Number(my_rate),
+          area,
           categories,
           cast,
           directors,

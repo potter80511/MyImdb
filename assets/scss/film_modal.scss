@@ -12,6 +12,20 @@
       .group {
         width: 100%;
       }
+      &.film-check {
+        >label {
+          margin-bottom: 10px!important;
+        }
+        .group {
+          display: flex;
+          flex-wrap: wrap;
+          .check-group {
+            display: flex;
+            width: calc(100%/7);
+            margin-bottom: 10px;
+          }
+        }
+      }
       &.select-tool {
         >div {
           position: relative;
@@ -74,15 +88,6 @@
           border-color: #d0a554;
           &:before {
             opacity: 1;
-          }
-        }
-      }
-      &.film-categories {
-        .group {
-          flex-wrap: wrap;
-          >div {
-            display: flex;
-            width: calc(100%/9);
           }
         }
       }

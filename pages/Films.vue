@@ -159,6 +159,7 @@
         sortBy: 'imdbRates',
         maxKey: 0,
         nextKey: 0,
+        areasData: [],
         categoriesData: [],
         successTitle: '',
       }
@@ -283,7 +284,7 @@
       relatedDatas() {
         return this.$store.state.relatedData
       },
-      areasData() {
+      areasDataInDb() {
         return this.$store.state.areasData
       },
       categoriesInDb() {
@@ -313,6 +314,17 @@
       categoriesInDb(datas) {
         if (datas) {
           this.categoriesData = datas.map((item) => (
+              {
+                ...item,
+                checked: false,
+              }
+            )
+          );
+        }
+      },
+      areasDataInDb(datas) {
+        if (datas) {
+          this.areasData = datas.map((item) => (
               {
                 ...item,
                 checked: false,

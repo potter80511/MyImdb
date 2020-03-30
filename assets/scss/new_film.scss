@@ -42,15 +42,6 @@
           }
         }
       }
-      &.film-categories {
-        .group {
-          flex-wrap: wrap;
-          >div {
-            display: flex;
-            width: calc(100%/9);
-          }
-        }
-      }
     }
     .add_seasons_group {
       .seasons_group {

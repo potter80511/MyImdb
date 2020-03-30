@@ -72,10 +72,10 @@ export const capitalize = (str) => {
 
     const cap = item[0].toUpperCase()
     const newItem = cap + item.substring(1)
-  
+
     return newItem;
   }
-  
+
   if (str) {
     const splitArray = str.split(' ');
     const newArray = splitArray.map(item => (factory(item)));
@@ -101,6 +101,18 @@ export const deleteInputHandler = (inputs, inputIndex) => {
   inputs.splice(inputIndex, 1);
 }
 
+export const inputArray = (items) => {
+  const result = items
+    .filter(item => (item.checked === true))
+    .map(item => (
+        {
+          id: item.id,
+          name: item.name
+        }
+      )
+    );
+  return result;
+}
 export const inputPeaple = (inputs) => {
   const result = inputs.map(item => (
     {
