@@ -66,46 +66,24 @@
           :inputData="my_rate"
           v-model="my_rate"
         />
-        <div class="input-group film-area film-check">
-          <label>地區：</label>
-          <div class="group">
-            <div
-              class="check-group"
-              v-for="(area, i) in areasData"
-              :key="i"
-            >
-              <span
-                :class="[area.checked ? isCheckedClass : '', 'area-check label-check']"
-                @click="areasCheckedHandler(area.id)"
-              >
-              </span>
-              <label>{{ area.name }}</label>
-            </div>
-          </div>
-        </div>
+        <CheckItems
+          title="地區"
+          className="film-area"
+          :inputsData="areasData"
+          @checkHandler="(inputsData) => areasCheckedHandler(inputsData)"
+        />
         <SingleInput
           title="年份"
           id="filmYear"
           :inputData="newFilmData.year"
           v-model="newFilmData.year"
         />
-        <div class="input-group film-categories film-check">
-          <label>電影類型：</label>
-          <div class="group">
-            <div
-              class="check-group"
-              v-for="(category, i) in categoriesData"
-              :key="i"
-            >
-              <span
-                :class="[category.checked ? isCheckedClass : '', 'category-check label-check']"
-                @click="categoriesCheckedHandler(category.id)"
-              >
-              </span>
-              <label>{{ category.name }}</label>
-            </div>
-          </div>
-        </div>
+        <CheckItems
+          title="電影類型"
+          className="film-categories"
+          :inputsData="categoriesData"
+          @checkHandler="(inputsData) => categoriesCheckedHandler(inputsData)"
+        />
         <SingleInput
           title="電影簡述"
           id="filmBrief"
@@ -180,11 +158,13 @@
   import { capitalize, addInputHandler, deleteInputHandler, inputPeaple, inputArray } from '~/plugins/helper';
   import InputMultiple from '~/components/formElements/InputMultiple';
   import SingleInput from '~/components/formElements/SingleInput';
+  import CheckItems from '~/components/formElements/CheckItems';
 
   export default {
     components: {
       InputMultiple,
       SingleInput,
+      CheckItems,
     },
     props: {
       nextKey: {
@@ -278,22 +258,10 @@
       favoriteCheckHandler() {
         this.favoriteCheck = !this.favoriteCheck;
       },
-      areasCheckedHandler(id) {
-        const areasData = this.areasData;
-        areasData.forEach(item => {
-          if(item.id === id) {
-            item.checked = !item.checked
-          }
-        });
+      areasCheckedHandler(areasData) {
         this.$emit('areasCheckedHandler', areasData);
       },
-      categoriesCheckedHandler(id) {
-        const categoriesData = this.categoriesData;
-        categoriesData.forEach(item => {
-          if(item.id === id) {
-            item.checked = !item.checked
-          }
-        });
+      categoriesCheckedHandler(categoriesData) {
         this.$emit('categoiesCheckedHandler',categoriesData);
       },
       add_film_submit() {
