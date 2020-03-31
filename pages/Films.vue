@@ -65,44 +65,51 @@
                   </span>
                   <b v-if="item.my_rate">{{item.my_rate.toFixed(1)}}</b>
                 </div>
-                <!--
-                <div class="area">
-                  <b>地區：</b>{{item.area}}
-                </div>
-                <div class="categories">
-                  <b>種類</b>
+                <div class="area items" v-if="item.area && item.area.length > 0">
+                  <b>地區：</b>
                   <div>
-                    <span v-for="(cate, i) in objToArray(item.categories)"
+                    <span v-for="(a, i) in item.area"
                       :key="i">
-                    {{cate}}
+                    {{a.name}}
                     </span>
                   </div>
                 </div>
-                <div class="director" v-if="item.type === 'movies' && item.director">
+                <div class="categories items" v-if="item.categories && item.categories.length > 0">
+                  <b>種類：</b>
+                  <div>
+                    <span v-for="(cate, i) in item.categories"
+                      :key="i">
+                    {{cate.name}}
+                    </span>
+                  </div>
+                </div>
+                <div class="director items" v-if="item.director && item.director.length > 0">
                   <b>導演：</b>
                   <div>
-                    <span>{{item.director}}</span>
+                    <span v-for="(d, i) in item.director"
+                      :key="i">
+                    {{d.name}}
+                    </span>
                   </div>
                 </div>
-                <div class="writers" v-else-if="item.type === 'series' && item.writers">
+                <div class="writers items" v-if="item.writers && item.writers.length > 0">
                   <b>編劇：</b>
                   <div>
-                    <span v-for="(w, i) in objToArray(item.writers).slice(0, 3)"
+                    <span v-for="(w, i) in item.writers"
                       :key="i">
-                    {{w}}
+                    {{w.name}}
                     </span>
-                    <span v-if="objToArray(item.writers).length > 3">...</span>
                   </div>
                 </div>
-                <div class="cast" v-if="objToArray(item.cast)">
+                <div class="cast items" v-if="item.cast && item.cast.length > 0">
                   <b>主演：</b>
                   <div>
-                    <span v-for="(c, i) in objToArray(item.cast).slice(0,3)"
+                    <span v-for="(c, i) in item.cast.slice(0,3)"
                       :key="i">
-                    {{c}}
+                    {{c.name}}
                     </span>
                   </div>
-                </div> -->
+                </div>
               </div>
             </nuxt-link>
           </div>
