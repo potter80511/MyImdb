@@ -27,7 +27,7 @@
             @click="endCheckHandler"
           >
           </span>
-          <label>是否完結？</label>
+          <label>完結</label>
         </div>
         <div class="input-group film-related select-tool">
           <label>系列：</label>
@@ -50,7 +50,7 @@
             @click="favoriteCheckHandler"
           >
           </span>
-          <label>是否為最愛影劇？</label>
+          <label>最愛影劇</label>
         </div>
         <SingleInput
           title="IMDB 評分"
@@ -65,6 +65,14 @@
           inputType="number"
           :inputData="my_rate"
           v-model="my_rate"
+        />
+        <InputMultiple
+          dataType="banner"
+          title="內頁主圖"
+          className="page_banner"
+          :inputsData="pageBannersInputs"
+          :addHandler="addPageBanner"
+          :deleteHandler="deletePageBanner"
         />
         <CheckItems
           title="地區"
@@ -207,6 +215,7 @@
         isCheckedClass: 'is-checked',
         imdb_rates: '',
         my_rate: '',
+        pageBannersInputs: [],
         castInputs: [],
         writerInputs: [],
         directorInputs: [],
@@ -221,6 +230,14 @@
       deleteCastHandler(inputIndex) {
         const castInputs = this.castInputs;
         deleteInputHandler(castInputs, inputIndex)
+      },
+      addPageBanner() {
+        const pageBannersInputs = this.pageBannersInputs;
+        addInputHandler(pageBannersInputs, true)
+      },
+      deletePageBanner(inputIndex) {
+        const pageBannersInputs = this.pageBannersInputs;
+        deleteInputHandler(pageBannersInputs, inputIndex)
       },
       addWriterHandler() {
         const writerInputs = this.writerInputs;
@@ -272,6 +289,7 @@
           filmsListType,
           imdb_rates,
           my_rate,
+          pageBannersInputs,
           directorInputs,
           writerInputs,
           castInputs,
@@ -286,6 +304,8 @@
         // categories result  分類的結果
         const categories = inputArray(categoriesData);
 
+        // page banners result  內頁主圖的結果
+        const page_banners = pageBannersInputs;
         // directors result  導演的結果
         const directors = inputPeaple(directorInputs);
         // cast writers  編劇的結果
@@ -304,6 +324,7 @@
           area,
           categories,
           cast,
+          page_banners,
           directors,
           writers,
           seasonsInputs,

@@ -375,10 +375,6 @@
         //   console.log(error)
         // });
       }
-      // bannerRWD() {
-      //   const bannerWidth = this.$refs.bannerSlide.clientWidth;
-      //   return bannerRWD(bannerWidth);
-      // }
     }
   };
 </script>

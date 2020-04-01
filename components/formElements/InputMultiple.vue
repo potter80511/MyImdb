@@ -6,14 +6,20 @@
     </div>
     <div v-if="inputsData.length > 0">
       <div
-        v-show="dataType === 'people'"
+        v-show="dataType === 'people' || dataType === 'banner'"
         class="input-people-input-group input-group"
         v-for="(input, i) in inputsData"
         :key="className + '_' +i"
       >
         <input
+          v-if="dataType === 'people'"
           type="text"
           v-model="input.name"
+        />
+        <input
+          v-else-if="dataType === 'banner'"
+          type="text"
+          v-model="input.url"
         />
         <font-awesome-icon icon="times" @click="deleteHandler(i)" />
       </div>

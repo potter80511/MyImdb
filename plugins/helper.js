@@ -89,12 +89,19 @@ export const capitalize = (str) => {
   }
 }
 
-export const addInputHandler = (inputs) => {
+export const addInputHandler = (inputs, isBanner) => {
   const inputId = inputs.length + 1;
-  inputs.push({
-    id: inputId,
-    name: '',
-  });
+  if (isBanner) {
+    inputs.push({
+      id: inputId,
+      url: '',
+    });
+  } else {
+    inputs.push({
+      id: inputId,
+      name: '',
+    });
+  }
 }
 
 export const deleteInputHandler = (inputs, inputIndex) => {
