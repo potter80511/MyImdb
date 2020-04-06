@@ -11,7 +11,7 @@
       :blockClass="'series_list'"
       :sectionTitle="'最愛影集'"
       :subTitle="'Favorite Series'"
-      :filmsData="[]"
+      :filmsData="seriesData"
       :isLoading="seriesIsLoading"
     />
     <IndexList
@@ -20,7 +20,7 @@
       :blockClass="'movies_list'"
       :sectionTitle="'最愛電影'"
       :subTitle="'Favorite Movies'"
-      :filmsData="[]"
+      :filmsData="moviesData"
       :isLoading="moviesIsLoading"
     />
   </div>
@@ -33,7 +33,9 @@
 
   export default {
     created() {
-      this.$store.dispatch('loadedIndexBanners')
+      this.$store.dispatch('loadedIndexBanners');
+      this.$store.dispatch('loadedMovies');
+      this.$store.dispatch('loadedSeries');
     },
     components: {
       IndexList,
@@ -53,14 +55,14 @@
         return this.$store.state.seriesIsLoading
       },
       moviesData() {
-        // return this.$store.getters.filterFavoriteMovies.sort((a,b) => {
-        //   return b.rates - a.rates;
-        // })
+        return this.$store.getters.favoriteMovies.sort((a,b) => {
+          return b.imdb_rates - a.imdb_rates;
+        })
       },
       seriesData() {
-        // return this.$store.getters.filterFavoriteSeries.sort((a,b) => {
-        //   return b.rates - a.rates;
-        // })
+        return this.$store.getters.favoriteSeries.sort((a,b) => {
+          return b.imdb_rates - a.imdb_rates;
+        })
       },
     },
     methods: {

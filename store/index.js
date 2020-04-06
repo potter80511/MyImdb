@@ -41,38 +41,6 @@ const createStore = () => {
       ...admin.actions,
       ...toolsData.actions,
       ...films.actions,
-      // loadedSeries({commit}) {
-      //   firebase.database().ref('movies').orderByChild('type').equalTo('series').once('value')
-      //     .then((data) => {
-      //       const series = []
-      //       const obj = data.val()
-
-      //       for (let key in obj) {
-      //         series.push({
-      //           id: key,
-      //           name: obj[key].name,
-      //           area: obj[key].area,
-      //           brief: obj[key].brief,
-      //           categories: obj[key].categories,
-      //           cast: obj[key].cast,
-      //           wallpaper: obj[key].wallpaper,
-      //           rates: obj[key].rates,
-      //           favorite: obj[key].favorite,
-      //           my_rate: obj[key].my_rate,
-      //           index_banner: obj[key].index_banner,
-      //           banner: obj[key].banner,
-      //           imdb_id: obj[key].imdb_id,
-      //           tw_name: obj[key].tw_name,
-      //           type: obj[key].type,
-      //           list_banner: obj[key].list_banner,
-      //           writers: obj[key].writers,
-      //           year: obj[key].year,
-      //         })
-      //       }
-      //       // console.log(series, 'store')
-      //       commit('setLoadedSeries', series)
-      //     })
-      // },
       // loadedFilm({commit}, imdb_id) {
       //   firebase.database().ref('movies').orderByChild('imdb_id').equalTo(imdb_id).once('value')
       //     .then((data) => {
@@ -85,6 +53,7 @@ const createStore = () => {
     },
     getters: {
       ...admin.getters,
+      ...films.getters,
       // filterFavoriteMovies(state) {
       //   const filterData = state.movies.filter((o) => {
       //     return o.favorite === true

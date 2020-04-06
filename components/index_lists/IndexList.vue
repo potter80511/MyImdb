@@ -29,7 +29,7 @@
             <IndexListSwiperSlide
               :imdbId="item.imdb_id"
               :wallpaper="item.wallpaper"
-              :rates="item.rates"
+              :rates="item.imdb_rates"
               :name="item.tw_name"
               :brief="item.brief"
               :id="item.id"

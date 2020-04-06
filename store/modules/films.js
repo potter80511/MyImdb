@@ -40,5 +40,17 @@ export default {
     },
   },
   getters: {
+    favoriteMovies(state) {
+      const filterData = state.movies.filter(item => {
+        return item.favorite === true
+      });
+      return filterData;
+    },
+    favoriteSeries(state) {
+      const filterData = state.series.filter(item => {
+        return item.favorite === true
+      });
+      return filterData;
+    },
   }
 }
