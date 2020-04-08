@@ -29,23 +29,16 @@
           </span>
           <label>完結</label>
         </div>
-        <div class="input-group film-related select-tool">
-          <label>系列：</label>
-          <div class="related-select">
-            <select v-model="newFilmData.related_id">
-              <option value="" selected hidden>請選擇</option>
-              <option value="">無</option>
-              <option
-                v-for="(item, i) in relatedDatas"
-                :value="item.id"
-                :key="i"
-              >{{item.tw_name}}</option>
-            </select>
-            <font-awesome-icon icon="chevron-down" />
-          </div>
-        </div>
+        <SelectTool
+          title="系列"
+          className="film-related"
+          :data_id="newFilmData.related_id"
+          v-model="newFilmData.related_id"
+          :optionDatas="relatedDatas"
+        />
         <SelectTool
           title="影視發行"
+          className="film-enter"
           :data_id="newFilmData.et_id"
           v-model="newFilmData.et_id"
           :optionDatas="entertainmentData"

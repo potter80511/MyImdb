@@ -1,5 +1,5 @@
 <template>
-  <div class="input-group select-tool film-related">
+  <div :class="`input-group select-tool ${className}`">
     <label>{{title}}：</label>
     <div class="related-select">
       <select :value="data_id" @input="$emit('input', $event.target.value)">
@@ -19,6 +19,9 @@
 <script>
   export default {
     props: {
+      className: {
+        type: String,
+      },
       title: {
         type: String,
       },
