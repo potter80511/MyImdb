@@ -19,7 +19,7 @@ export default {
   },
   actions: {
     loadedMovies({commit}) {
-      firebase.database().ref('films').orderByChild('type').equalTo('movies').once('value')
+      firebase.database().ref('movies').once('value')
         .then((data) => {
           let movies = [];
           if (data.val()) {
@@ -29,7 +29,7 @@ export default {
         })
     },
     loadedSeries({commit}) {
-      firebase.database().ref('films').orderByChild('type').equalTo('series').once('value')
+      firebase.database().ref('series').once('value')
         .then((data) => {
           let series = [];
           if (data.val()) {

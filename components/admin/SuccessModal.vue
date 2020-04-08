@@ -6,6 +6,7 @@
     ok-title="ok"
     :hide-header="true"
     :ok-only="true"
+    @ok="okSubmit"
   >
     <div class="success-content">
       <p>{{successTitle}}！</p>
@@ -24,8 +25,14 @@
         type: String,
         required: true,
       },
+      // okSubmit: {
+      //   type: Function,
+      // },
     },
     methods: {
+      okSubmit() {
+        this.$emit('okSubmit');
+      },
     }
   }
 </script>

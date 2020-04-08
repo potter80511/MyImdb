@@ -89,6 +89,19 @@ export const capitalize = (str) => {
   }
 }
 
+export const underlineId = (str) => {
+  if (str) {
+    const splitArray = str.split(' ');
+    let result = ''
+    splitArray.forEach((item, index) => {
+      result = index !== 0 ? result + '_' + item : result + item
+    });
+    return result
+  } else {
+    return ''
+  }
+}
+
 export const addInputHandler = (inputs, isBanner) => {
   const inputId = inputs.length + 1;
   if (isBanner) {
@@ -124,7 +137,7 @@ export const inputPeaple = (inputs) => {
   const result = inputs.map(item => (
     {
       ...item,
-      id: capitalize(item.name),
+      id: underlineId(item.name),
     }
   ));
   return result;

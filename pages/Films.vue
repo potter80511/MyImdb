@@ -123,12 +123,14 @@
       :nextKey="nextKey"
       :filmsListType="filmsListType"
       :relatedDatas="relatedDatas"
+      :entertainmentData="entertainmentDatas"
       :areasData="areasData"
       :categoriesData="categoriesData"
       @add_film_submit="(newFilmData) => add_film(newFilmData)"
     />
     <SuccessModal
       :successTitle="successTitle"
+      @okSubmit="() => reload()"
     />
   </div>
 </template>
@@ -183,15 +185,17 @@
       if (filmsListType === "電影") {
         this.$store.dispatch('loadedMoviesListBanners')
         this.$store.dispatch('loadedMovies')
+        this.$store.dispatch('loadedAllMoviesKeys');
       }  else if (filmsListType === "影集") {
         this.$store.dispatch('loadedSeriesListBanners');
         this.$store.dispatch('loadedSeries');
+        this.$store.dispatch('loadedAllSeriesKeys');
       }
 
       // 讀取相關續作資料
       this.$store.dispatch('loadedRelatedDatas');
+      this.$store.dispatch('loadedEntertainmentData');
       this.$store.dispatch('loadedAreasData');
-      this.$store.dispatch('loadedAllFilmsKeys');
       this.$store.dispatch('loadedCategoriesData');
     },
     computed: {
@@ -199,7 +203,8 @@
         return this.$store.state.isLogin;
       },
       allFilmsKeys() {
-        return this.$store.state.allFilmsKeys
+        const routeType = this.$route.name
+        return routeType === 'series' ? this.$store.state.allSeriesKeys : this.$store.state.allMoviesKeys
       },
       filmsData() {
         const routeType = this.$route.name
@@ -207,11 +212,11 @@
         const sortBy = this.sortBy
 
         if(routeType === 'movies') {
-          data = this.$store.state.movies.filter(item=> item !==null).sort((a,b) => {
+          data = this.$store.state.movies.filter(item => item !== null).sort((a,b) => {
             return sortBy === 'imdbRates' ? b.imdb_rates - a.imdb_rates : b.my_rate - a.my_rate;
           })
         } else if (routeType === 'series') {
-          data = this.$store.state.series.filter(item=> item !==null).sort((a,b) => {
+          data = this.$store.state.series.filter(item => item !== null).sort((a,b) => {
             return sortBy === 'imdbRates' ? b.imdb_rates - a.imdb_rates : b.my_rate - a.my_rate;
           })
         }
@@ -291,6 +296,9 @@
       relatedDatas() {
         return this.$store.state.relatedData
       },
+      entertainmentDatas() {
+        return this.$store.state.entertainmentData
+      },
       areasDataInDb() {
         return this.$store.state.areasData
       },
@@ -360,20 +368,29 @@
         this.currentSelectedYear = key
       },
       add_film(newFilmData) {
-        const nextKey = this.nextKey;
-        console.log(newFilmData)
+        const {
+          nextKey,
+          filmsListType,
+        } = this;
+        const routeType = this.$route.name
+        console.log(newFilmData, routeType, filmsListType)
 
-        // firebase.database().ref(`films/${nextKey}`).set(
-        //   newFilmData
-        // ).then(() => {
-        //   this.successTitle = '新增影片成功'
-        //   this.$bvModal.show('success-modal')
-        //   location.reload()
-        // }).catch((error) => {
-        //   this.successTitle = '新增影片失敗'
-        //   this.$bvModal.show('success-modal')
-        //   console.log(error)
-        // });
+        firebase.database().ref(`${routeType}/${nextKey}`).set(
+          newFilmData
+        ).then(() => {
+          this.successTitle = `新增${filmsListType}成功`
+          this.$bvModal.show('success-modal')
+          setTimeout(() => {
+            location.reload();
+          }, 3000);
+        }).catch((error) => {
+          this.successTitle = `新增${filmsListType}失敗`
+          this.$bvModal.show('success-modal')
+          console.log(error)
+        });
+      },
+      reload() {
+        location.reload();
       }
     }
   };

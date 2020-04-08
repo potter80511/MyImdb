@@ -5,6 +5,7 @@ export default {
     relatedData: [],
     areasData: [],
     categoriesData: [],
+    entertainmentData: [],
   },
   mutations: { //更改狀態
     setRelatedData(state, payload) {
@@ -15,6 +16,9 @@ export default {
     },
     setCategoriesData(state, payload) {
       state.categoriesData = payload
+    },
+    setEntertainmentData(state, payload) {
+      state.entertainmentData = payload
     },
   },
   actions: {
@@ -39,6 +43,15 @@ export default {
         .then((data) => {
           const datas = data.val();
           commit('setCategoriesData', datas)
+        }).catch(error => {
+          console.log(error)
+        });
+    },
+    loadedEntertainmentData({commit}) {
+      firebase.database().ref('entertainment').once('value')
+        .then((data) => {
+          const datas = data.val();
+          commit('setEntertainmentData', datas)
         }).catch(error => {
           console.log(error)
         });

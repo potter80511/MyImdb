@@ -41,6 +41,10 @@
           />
         </div>
         <div class="input-group">
+          <label>年份：</label>
+          <input :id="`seasonYear${i}`" type="text" v-model="item.year" />
+        </div>
+        <div class="input-group">
           <label>預告：</label>
           <input :id="`seasonTrailer${i}`" type="text" v-model="item.trailer" />
         </div>

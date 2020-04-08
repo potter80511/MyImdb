@@ -9,7 +9,8 @@ import films from './modules/films';
 const createStore = () => {
   return new Vuex.Store({
     state: {
-      allFilmsKeys: [],
+      allSeriesKeys: [],
+      allMoviesKeys: [],
       ...JSON.parse(JSON.stringify(banners.state)),
       ...JSON.parse(JSON.stringify(admin.state)),
       ...JSON.parse(JSON.stringify(toolsData.state)),
@@ -17,8 +18,11 @@ const createStore = () => {
       currentFilm: null,
     },
     mutations: { //更改狀態
-      setAllFilmsKeys(state, payload) {
-        state.allFilmsKeys = payload
+      setAllSeriesKeys(state, payload) {
+        state.allSeriesKeys = payload
+      },
+      setAllMoviesKeys(state, payload) {
+        state.allMoviesKeys = payload
       },
       ...banners.mutations,
       ...admin.mutations,
@@ -29,12 +33,20 @@ const createStore = () => {
       // },
     },
     actions: {
-      loadedAllFilmsKeys({commit}) {
-        firebase.database().ref('films/').once('value')
+      loadedAllSeriesKeys({commit}) {
+        firebase.database().ref('series/').once('value')
           .then((data) => {
             const filmDatas = data.val()
             const filmKeys = filmDatas ? filmDatas.map((item, index) => (index)) : [];
-            commit('setAllFilmsKeys', filmKeys)
+            commit('setAllSeriesKeys', filmKeys)
+          })
+      },
+      loadedAllMoviesKeys({commit}) {
+        firebase.database().ref('movies/').once('value')
+          .then((data) => {
+            const filmDatas = data.val()
+            const filmKeys = filmDatas ? filmDatas.map((item, index) => (index)) : [];
+            commit('setAllMoviesKeys', filmKeys)
           })
       },
       ...banners.actions,

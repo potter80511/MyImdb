@@ -44,6 +44,12 @@
             <font-awesome-icon icon="chevron-down" />
           </div>
         </div>
+        <SelectTool
+          title="影視發行"
+          :data_id="newFilmData.et_id"
+          v-model="newFilmData.et_id"
+          :optionDatas="entertainmentData"
+        />
         <div class="input-group">
           <span
             :class="[favoriteCheck ? isCheckedClass : '', 'favorite-check label-check']"
@@ -163,16 +169,18 @@
 </template>
 
 <script>
-  import { capitalize, addInputHandler, deleteInputHandler, inputPeaple, inputArray } from '~/plugins/helper';
+  import { addInputHandler, deleteInputHandler, inputPeaple, inputArray } from '~/plugins/helper';
   import InputMultiple from '~/components/formElements/InputMultiple';
   import SingleInput from '~/components/formElements/SingleInput';
   import CheckItems from '~/components/formElements/CheckItems';
+  import SelectTool from '~/components/formElements/SelectTool';
 
   export default {
     components: {
       InputMultiple,
       SingleInput,
       CheckItems,
+      SelectTool,
     },
     props: {
       nextKey: {
@@ -182,6 +190,10 @@
         type: String,
       },
       relatedDatas: {
+        type: Array,
+        required: true,
+      },
+      entertainmentData: {
         type: Array,
         required: true,
       },
@@ -204,6 +216,7 @@
           imdb_id: '',
           name: '',
           related_id: '',
+          et_id: '',
           summary: '',
           trailer: '',
           tw_name: '',
@@ -263,6 +276,7 @@
           name: '',
           sum: '',
           trailer: '',
+          year: '',
         });
       },
       deleteSeasonHandler(inputIndex) {
@@ -327,7 +341,7 @@
           page_banners,
           directors,
           writers,
-          seasonsInputs,
+          seasons: seasonsInputs,
           type,
           current_key: nextKey,
         };
