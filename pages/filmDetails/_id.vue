@@ -10,8 +10,8 @@
             <div class="wallpaper col-md-4">
               <div class="film_title mobile">
                 <h1>
-                  <div class="favorite_crown" v-if="filmData.rates >= 8">
-                    <font-awesome-icon icon="crown" />{{filmData.rates}}
+                  <div class="favorite_crown" v-if="filmData.imdb_rates >= 8">
+                    <font-awesome-icon icon="crown" />{{filmData.imdb_rates}}
                   </div>
                   {{filmData.name}}
                 </h1>
@@ -36,15 +36,15 @@
                 </h2>
               </div>
               <div class="film_info">
-                <div class="rates">
+                <div class="rates label_data">
                   <b>IMDB 評分：</b>
-                  <span v-for="(star, j) in rateTenStar(filmData.rates)"
+                  <span v-for="(star, j) in rateTenStar(filmData.imdb_rates)"
                         :key="j">
                     <font-awesome-icon v-if="star==='star'" icon="star" />
                     <font-awesome-icon v-if="star==='half'" icon="star-half-alt" />
                     <font-awesome-icon v-if="star==='empty'" :icon="['far', 'star']"/>
                   </span>
-                  <b>{{filmData.rates.toFixed(1)}} 分</b>
+                  <b>{{filmData.imdb_rates.toFixed(1)}} 分</b>
                   <a
                     class="go_imdb"
                     :href="`https://www.imdb.com/title/${filmData.imdb_id}`"
@@ -54,7 +54,7 @@
                     <font-awesome-icon :icon="['fab', 'imdb']" />
                   </a>
                 </div>
-                <div class="my_rate" v-if="filmData.my_rate">
+                <div class="my_rate label_data" v-if="filmData.my_rate">
                   <font-awesome-icon icon="check" />
                   <b>我的評分：</b>
                   <span v-for="(star, j) in rateTenStar(filmData.my_rate)"
@@ -65,53 +65,47 @@
                   </span>
                   <b>{{filmData.my_rate.toFixed(1)}} 分</b>
                 </div>
-                <div class="type">
+                <div class="type label_data">
                   <b>類型：</b>
                   <router-link :to="'/series'" v-if="filmData.type === 'series'">影集</router-link>
                   <router-link :to="'/movies'" v-else-if="filmData.type === 'movies'">電影</router-link>
                 </div>
-                <div class="area" v-if="filmData.area !== ''">
-                  <b>地區：</b>
-                  <div>
-                    <span>{{filmData.area}}</span>
-                  </div>
-                </div>
-                <div class="director" v-if="filmData.type === 'movies' && filmData.director">
-                  <b>導演：</b>
-                  <div>
-                    <span>{{filmData.director}}</span>
-                  </div>
-                </div>
-                <div class="writers"
-                  v-else-if="filmData.type === 'series' && writersData.length > 0"
-                >
-                  <b>編劇：</b>
-                  <div>
-                    <span v-for="(item, i) in writersData"
-                          :key="i"
-                    >{{item}}</span>
-                  </div>
-                </div>
-                <div class="categories" v-if="cateData.length > 0">
-                  <b>種類：</b>
-                  <div>
-                    <span v-for="(item, i) in cateData"
-                          :key="i"
-                    >{{item}}</span>
-                  </div>
-                </div>
-                <div class="casts" v-if="castData">
-                  <b>主演：</b>
-                  <div>
-                    <span v-for="(item, i) in castData"
-                          :key="i"
-                    >{{item}}</span>
-                  </div>
-                </div>
-                <div class="year" v-if="filmData.year">
-                  <b>年份：</b>
-                  <span>{{filmData.year}} 年</span>
-                </div>
+                <LabelData
+                  v-if="filmData.area.length > 0"
+                  className="area"
+                  title="地區"
+                  :multipleDatas="filmData.area"
+                />
+                <LabelData
+                  v-if="filmData.directors.length > 0"
+                  className="directors"
+                  title="導演"
+                  :multipleDatas="filmData.directors"
+                />
+                <LabelData
+                  v-if="filmData.writers.length > 0"
+                  className="writers"
+                  title="編劇"
+                  :multipleDatas="filmData.writers"
+                />
+                <LabelData
+                  v-if="filmData.categories.length > 0"
+                  className="categories"
+                  title="種類"
+                  :multipleDatas="filmData.categories"
+                />
+                <LabelData
+                  v-if="filmData.cast.length > 0"
+                  className="cast"
+                  title="主演"
+                  :multipleDatas="filmData.cast"
+                />
+                <LabelData
+                  v-if="filmData.year"
+                  className="year"
+                  title="年份"
+                  :singleData="filmData.year + ' 年'"
+                />
                 <div class="end" v-if="filmData.type === 'series'">
                   <span class="still" v-if="filmData.still">
                     未完結
@@ -122,7 +116,7 @@
                     <span class="total" v-if="filmData.seasons.length > 0">，共 <b>{{filmData.seasons.length}}</b> 季</span>
                   </span>
                 </div>
-                <div class="brief" v-if="filmData.brief">
+                <div class="brief label_data" v-if="filmData.brief">
                   <b>簡述：</b>
                   <p>{{filmData.brief}}</p>
                 </div>
@@ -228,27 +222,29 @@
   import BannerSlide from '~/components/BannerSlide';
   import RelatedFilmsSwiper from '~/components/relatedFilmSwiper/RelatedFilmsSwiper';
   import FilmModal from '~/components/admin/FilmModal';
+  import LabelData from '~/components/page/LabelData';
 
   export default {
     components: {
       BannerSlide,
       RelatedFilmsSwiper,
       FilmModal,
+      LabelData,
     },
     data() {
       return {
         filmData: {
           area: "",
           brief: "",
-          categories: {},
-          cast: {},
-          director: "",
+          categories: [],
+          cast: [],
+          directors: [],
           favorite: false,
           imdb_id: "",
           my_rate: 0,
           name: "",
           page_banners: {},
-          rates: 0,
+          imdb_rates: 0,
           related: "",
           still: false,
           summary: "",
@@ -256,6 +252,7 @@
           tw_name: "",
           type: "",
           wallpaper: "",
+          writers: [],
           year: 0
         },
         areaDatas: [
@@ -345,9 +342,6 @@
           },
         ],
         bannerData: [],
-        writersData: [],
-        castData: [],
-        cateData: [],
         relatedData: [],
         sameDirectorData: [],
         showCrown: false,
@@ -361,7 +355,7 @@
         return this.$store.state.isLogin;
       },
       getFilmData() {
-        return this.$store.state.currentFilm //獲取電影資料
+        return this.$store.state.currentMovieFilm //獲取電影資料
       },
     },
     methods: {
@@ -382,7 +376,7 @@
       },
     },
     created() {
-      this.$store.dispatch('loadedFilm', this.$route.params.id)
+      this.$store.dispatch('loadedMovieFilm', this.$route.params.id)
     },
     watch: {
       getFilmData(val) {
@@ -410,35 +404,18 @@
             this.bannerData = objToArray(val.page_banners)
           }
 
-          //導演資料
-          if (val.writers){
-            this.writersData = objToArray(val.writers)
-          }
-
-          // 地區資料
-          if (val.area) {
-            this.area = val.area;
-          }
-
-          //種類資料
-          if(val.categories) {
-            this.cateData = objToArray(val.categories)
-          }
           //是否顯示皇冠
-          const cateData = this.cateData;
-          if (cateData.includes('動畫') && val.rates >= 7) {
+          const cateData = val.categories.map(item => (item.name));
+          if (cateData.includes('動畫') && val.imdb_rates >= 7) {
             this.showCrown = true;
           } else if (cateData.includes('喜劇') && !cateData.includes('動畫')) {
             this.showCrown = true;
-          } else if (cateData.includes('恐怖') && val.rates >= 6) {
+          } else if (cateData.includes('恐怖') && val.imdb_rates >= 6) {
             this.showCrown = true;
-          } else if (val.rates >= 8) {
+          } else if (val.imdb_rates >= 8) {
             this.showCrown = true;
           }
           //filmData.rates >= 8 || cateData.includes('恐怖') || cateData.includes('喜劇') && filmData.rates >= 6.5 || cateData.includes('動畫') && filmData.rates >= 7
-
-          //演員資料
-          this.castData = objToArray(val.cast)
 
           //季數
           if(val.seasons) {

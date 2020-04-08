@@ -6,6 +6,7 @@ export default {
     series: [],
     moviesIsLoading: true,
     seriesIsLoading: true,
+    currentMovieFilm: null,
   },
   mutations: { //更改狀態
     setLoadedMovies(state, payload) {
@@ -15,6 +16,9 @@ export default {
     setLoadedSeries(state, payload) {
       state.series = payload
       state.seriesIsLoading = false
+    },
+    setCurrentMovieFilm(state, payload) {
+      state.currentMovieFilm = payload
     },
   },
   actions: {
@@ -36,6 +40,15 @@ export default {
             series = data.val();
           }
           commit('setLoadedSeries', series)
+        })
+    },
+    loadedMovieFilm({commit}, imdb_id) {
+      firebase.database().ref('movies').orderByChild('imdb_id').equalTo(imdb_id).once('value')
+        .then((data) => {
+          const obj = data.val()
+          const film_data = obj[Object.keys(obj)[0]]
+
+          commit('setCurrentMovieFilm', film_data)
         })
     },
   },

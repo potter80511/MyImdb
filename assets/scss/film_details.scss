@@ -65,16 +65,18 @@
           bottom: 0;
           right: 0;
         }
-        .director, .area, .type, .rates, .my_rate, .casts, .writers, .year, .categories, .end, .brief {
-          margin-bottom: 10px;
-        }
-        .casts, .director, .area, .writers, .categories, .brief {
+        .label_data {
           display: flex;
+          margin-bottom: 10px;
           b{
             min-width: 48px;
           }
+          >div {
+            display: flex;
+            flex-wrap: wrap;
+          }
         }
-        .director, .writers, .casts, .categories {
+        .multiple_items {
           span {
             &:not(:last-child) {
               &:after {
@@ -150,7 +152,7 @@
           span {
             display: inline-block;
             background: #000;
-            padding: 8px 15px 3px;
+            padding: 8px 15px;
             line-height: 1;
             border: 1px solid #555;
           }
