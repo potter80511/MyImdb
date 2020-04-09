@@ -77,7 +77,7 @@
                   :multipleDatas="filmData.area"
                 />
                 <LabelData
-                  v-if="filmData.directors.length > 0"
+                  v-if="filmData.directors && filmData.directors.length > 0"
                   className="directors"
                   title="導演"
                   :multipleDatas="filmData.directors"
@@ -107,13 +107,13 @@
                   :singleData="filmData.year + ' 年'"
                 />
                 <div class="end" v-if="filmData.type === 'series'">
-                  <span class="still" v-if="filmData.still">
-                    未完結
-                    <span class="total" v-if="filmData.seasons.length > 0">，目前季數 <b>{{filmData.seasons.length}}</b> 季</span>
-                  </span>
-                  <span v-else>
+                  <span v-if="filmData.ends">
                     已完結
-                    <span class="total" v-if="filmData.seasons.length > 0">，共 <b>{{filmData.seasons.length}}</b> 季</span>
+                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，共 <b>{{filmData.seasons.length}}</b> 季</span>
+                  </span>
+                  <span class="still" v-else>
+                    未完結
+                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，目前季數 <b>{{filmData.seasons.length}}</b> 季</span>
                   </span>
                 </div>
                 <div class="brief label_data" v-if="filmData.brief">
@@ -146,7 +146,7 @@
             </div>
           </div>
         </div>
-        <div class="series_intro" v-if="filmData.type === 'series'">
+        <div class="series_intro" v-if="filmData.type === 'series' && filmData.seasons">
           <div class="season_tag">
             <a
               v-for="(item, i) in filmData.seasons"
@@ -230,6 +230,12 @@
       RelatedFilmsSwiper,
       FilmModal,
       LabelData,
+    },
+    props: {
+      filmType: {
+        type: String,
+        required: true,
+      }
     },
     data() {
       return {
@@ -350,6 +356,9 @@
         favoriteCheck: false,
       }
     },
+    created() {
+      this.$store.dispatch('loadedMovieFilm', [this.filmType, this.$route.params.id])
+    },
     computed: {
       isLogin() {
         return this.$store.state.isLogin;
@@ -374,9 +383,6 @@
       switchSeasonHandler(target) {
         this.seasonShowTarget = target;
       },
-    },
-    created() {
-      this.$store.dispatch('loadedMovieFilm', this.$route.params.id)
     },
     watch: {
       getFilmData(val) {

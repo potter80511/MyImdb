@@ -42,8 +42,8 @@ export default {
           commit('setLoadedSeries', series)
         })
     },
-    loadedMovieFilm({commit}, imdb_id) {
-      firebase.database().ref('movies').orderByChild('imdb_id').equalTo(imdb_id).once('value')
+    loadedMovieFilm({commit}, [route_type, imdb_id]) {
+      firebase.database().ref(route_type).orderByChild('imdb_id').equalTo(imdb_id).once('value')
         .then((data) => {
           const obj = data.val()
           const film_data = obj[Object.keys(obj)[0]]

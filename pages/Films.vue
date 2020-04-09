@@ -38,7 +38,7 @@
             v-for="(item, i) in filmsData"
             :key="i"
           >
-            <nuxt-link :to="{ name: 'filmDetails-id', params: {id: item.imdb_id}}">
+            <nuxt-link :to="{ name: filmRoute, params: {id: item.imdb_id}}">
               <div class="image">
                 <img :src="item.wallpaper" />
               </div>
@@ -147,6 +147,7 @@
   export default {
     data () {
       return {
+        filmRoute: '',
         swiperBanner: {
           speed: 800,
           loop: true,
@@ -183,10 +184,12 @@
       this.filmsListType = this.$route.name === 'movies' ? '電影' : '影集';
       const { filmsListType } = this;
       if (filmsListType === "電影") {
+        this.filmRoute = 'page-movies-id';
         this.$store.dispatch('loadedMoviesListBanners')
         this.$store.dispatch('loadedMovies')
         this.$store.dispatch('loadedAllMoviesKeys');
       }  else if (filmsListType === "影集") {
+        this.filmRoute = 'page-series-id';
         this.$store.dispatch('loadedSeriesListBanners');
         this.$store.dispatch('loadedSeries');
         this.$store.dispatch('loadedAllSeriesKeys');
