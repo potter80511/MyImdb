@@ -255,13 +255,14 @@
           cast: [],
           directors: [],
           ends: false,
+          et_id: "",
           favorite: false,
           imdb_id: "",
           my_rate: 0,
           name: "",
           page_banners: [],
           imdb_rates: 0,
-          related: "",
+          related_id: "",
           still: false,
           summary: "",
           trailer: "",
@@ -325,7 +326,7 @@
       switchSeasonHandler(target) {
         this.seasonShowTarget = target;
       },
-      checkItemsDataFactory(datas, filmDatas) {
+      checkItemsDataFactory(datas, filmDatasArray) {
         const result = datas.map((item) => (
             {
               ...item,
@@ -334,7 +335,7 @@
           )
         );
         result.forEach((item) => {
-          filmDatas.forEach((checkedItem) => {
+          filmDatasArray.forEach((checkedItem) => {
             if (checkedItem.id === item.id) {
               item.checked = true;
             }
@@ -359,7 +360,7 @@
       },
       getFilmData(val) {
         if (val) {
-          this.filmData = val //這頁整包電影資料
+          this.filmData = {...this.filmData, ...val} //這頁整包電影資料
           this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
 
           //是否顯示皇冠
