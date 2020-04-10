@@ -147,8 +147,8 @@
                   :entertainmentData="entertainmentDatas"
                   :areasData="areasData"
                   :categoriesData="categoriesData"
-                  :favoriteCheck="favoriteCheck"
-                  :endCheck="endCheck"
+                  :favoriteCheckProps="filmData.favorite"
+                  :endCheckProps="filmData.ends"
                   @add_film_submit="(newFilmData) => updateFilm(newFilmData)"
                 />
               </div>
@@ -254,11 +254,12 @@
           categories: [],
           cast: [],
           directors: [],
+          ends: false,
           favorite: false,
           imdb_id: "",
           my_rate: 0,
           name: "",
-          page_banners: {},
+          page_banners: [],
           imdb_rates: 0,
           related: "",
           still: false,
@@ -279,8 +280,6 @@
         sameDirectorData: [],
         showCrown: false,
         seasonShowTarget: "season1",
-        endCheck: false,
-        favoriteCheck: false,
       }
     },
     created() {
@@ -362,20 +361,6 @@
         if (val) {
           this.filmData = val //這頁整包電影資料
           this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
-
-          // 編輯modal是否完結
-          if (val.ends) {
-            this.endCheck = val.ends
-          } else {
-            this.endCheck = false
-          }
-
-          // 編輯modal是否為最愛
-          if (val.favorite) {
-            this.favoriteCheck = val.favorite
-          } else {
-            this.favoriteCheck = false
-          }
 
           //是否顯示皇冠
           const cateData = val.categories.map(item => (item.name));

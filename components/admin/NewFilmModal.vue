@@ -255,11 +255,11 @@
         type: Array,
         required: true,
       },
-      favoriteCheck: {
+      favoriteCheckProps: {
         type: Boolean,
         default: false,
       },
-      endCheck: {
+      endCheckProps: {
         type: Boolean,
         default: false,
       },
@@ -271,10 +271,24 @@
       return {
         action: '',
         isCheckedClass: 'is-checked',
+        favoriteCheck: false,
+        endCheck: false,
       }
     },
     created() {
       this.action = this.actionType === 'add' ? '新增' : '編輯';
+    },
+    watch: {
+      favoriteCheckProps (val) {
+        if (val) {
+          this.favoriteCheck = val;
+        }
+      },
+      endCheckProps (val) {
+        if (val) {
+          this.endCheck = val;
+        }
+      },
     },
     methods: {
       addCastHandler() {
