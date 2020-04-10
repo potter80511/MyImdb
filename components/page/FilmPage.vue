@@ -70,6 +70,16 @@
                   <router-link :to="'/series'" v-if="filmData.type === 'series'">影集</router-link>
                   <router-link :to="'/movies'" v-else-if="filmData.type === 'movies'">電影</router-link>
                 </div>
+                <div class="end label_data" v-if="filmData.type === 'series'">
+                  <span v-if="filmData.ends">
+                    已完結
+                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，共 <b>{{filmData.seasons.length}}</b> 季</span>
+                  </span>
+                  <span class="still" v-else>
+                    未完結
+                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，目前季數 <b>{{filmData.seasons.length}}</b> 季</span>
+                  </span>
+                </div>
                 <LabelData
                   v-if="filmData.area.length > 0"
                   className="area"
@@ -89,13 +99,13 @@
                   :multipleDatas="filmData.writers"
                 />
                 <LabelData
-                  v-if="filmData.categories.length > 0"
+                  v-if="filmData.categories && filmData.categories.length > 0"
                   className="categories"
                   title="種類"
                   :multipleDatas="filmData.categories"
                 />
                 <LabelData
-                  v-if="filmData.cast.length > 0"
+                  v-if="filmData.cast && filmData.cast.length > 0"
                   className="cast"
                   title="主演"
                   :multipleDatas="filmData.cast"
@@ -106,16 +116,6 @@
                   title="年份"
                   :singleData="filmData.year + ' 年'"
                 />
-                <div class="end" v-if="filmData.type === 'series'">
-                  <span v-if="filmData.ends">
-                    已完結
-                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，共 <b>{{filmData.seasons.length}}</b> 季</span>
-                  </span>
-                  <span class="still" v-else>
-                    未完結
-                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，目前季數 <b>{{filmData.seasons.length}}</b> 季</span>
-                  </span>
-                </div>
                 <div class="brief label_data" v-if="filmData.brief">
                   <b>簡述：</b>
                   <p>{{filmData.brief}}</p>
@@ -132,15 +132,24 @@
                 />
                   編輯影片資訊
                 </b-button>
-                <FilmModal
-                  :filmData="filmData"
-                  :areaDatas="areaDatas"
-                  :categoryNames="categoryNames"
-                  :endCheck="endCheck"
+                <NewFilmModal
+                  :newFilmData="filmData"
+                  actionType="edit"
+                  :filmsListType="filmsListType"
+                  :imdb_rates="String(filmData.imdb_rates)"
+                  :my_rate="String(filmData.my_rate)"
+                  :directorInputs="filmData.directors"
+                  :castInputs="filmData.cast"
+                  :writerInputs="filmData.writers"
+                  :pageBannersInputs="filmData.page_banners"
+                  :seasonsInputs="filmData.seasons"
+                  :relatedDatas="relatedDatas"
+                  :entertainmentData="entertainmentDatas"
+                  :areasData="areasData"
+                  :categoriesData="categoriesData"
                   :favoriteCheck="favoriteCheck"
-                  @endCheckHandler="(newEnds) => endCheckChange(newEnds)"
-                  @favoriteCheckHandler="(newFavorite) => favoriteCheckChange(newFavorite)"
-                  @categoiesCheckedHandler="(categories) => categoiesCheckChange(categories)"
+                  :endCheck="endCheck"
+                  @add_film_submit="(newFilmData) => updateFilm(newFilmData)"
                 />
               </div>
             </div>
@@ -221,14 +230,14 @@
   import { objToArray } from '~/plugins/helper';
   import BannerSlide from '~/components/BannerSlide';
   import RelatedFilmsSwiper from '~/components/relatedFilmSwiper/RelatedFilmsSwiper';
-  import FilmModal from '~/components/admin/FilmModal';
+  import NewFilmModal from '~/components/admin/NewFilmModal';
   import LabelData from '~/components/page/LabelData';
 
   export default {
     components: {
       BannerSlide,
       RelatedFilmsSwiper,
-      FilmModal,
+      NewFilmModal,
       LabelData,
     },
     props: {
@@ -261,92 +270,10 @@
           writers: [],
           year: 0
         },
-        areaDatas: [
-          '美國',
-          '英國',
-          '韓國',
-          '泰國',
-          '日本',
-          '印度',
-          '西班牙'
-        ],
-        categoryNames: [
-          {
-            id: 1,
-            name: '動作',
-            checked: false,
-          },
-          {
-            id: 2,
-            name: '犯罪',
-            checked: false,
-          },
-          {
-            id: 3,
-            name: '愛情',
-            checked: false,
-          },
-          {
-            id: 4,
-            name: '科幻',
-            checked: false,
-          },
-          {
-            id: 5,
-            name: '驚悚',
-            checked: false,
-          },
-          {
-            id: 6,
-            name: '恐怖',
-            checked: false,
-          },
-          {
-            id: 7,
-            name: '劇情',
-            checked: false,
-          },
-          {
-            id: 8,
-            name: '喜劇',
-            checked: false,
-          },
-          {
-            id: 9,
-            name: '家庭',
-            checked: false,
-          },
-          {
-            id: 10,
-            name: '戰爭',
-            checked: false,
-          },
-          {
-            id: 11,
-            name: '傳記',
-            checked: false,
-          },
-          {
-            id: 12,
-            name: '動畫',
-            checked: false,
-          },
-          {
-            id: 13,
-            name: '音樂',
-            checked: false,
-          },
-          {
-            id: 14,
-            name: '奇幻',
-            checked: false,
-          },
-          {
-            id: 15,
-            name: '溫馨',
-            checked: false,
-          },
-        ],
+        filmsListType: "",
+        areasData: [],
+        directorsData: [],
+        categoriesData: [],
         bannerData: [],
         relatedData: [],
         sameDirectorData: [],
@@ -358,6 +285,10 @@
     },
     created() {
       this.$store.dispatch('loadedMovieFilm', [this.filmType, this.$route.params.id])
+      this.$store.dispatch('loadedRelatedDatas');
+      this.$store.dispatch('loadedEntertainmentData');
+      this.$store.dispatch('loadedAreasData');
+      this.$store.dispatch('loadedCategoriesData');
     },
     computed: {
       isLogin() {
@@ -365,6 +296,18 @@
       },
       getFilmData() {
         return this.$store.state.currentMovieFilm //獲取電影資料
+      },
+      relatedDatas() {
+        return this.$store.state.relatedData
+      },
+      entertainmentDatas() {
+        return this.$store.state.entertainmentData
+      },
+      areasDataInDb() {
+        return this.$store.state.areasData
+      },
+      categoriesInDb() {
+        return this.$store.state.categoriesData
       },
     },
     methods: {
@@ -383,11 +326,42 @@
       switchSeasonHandler(target) {
         this.seasonShowTarget = target;
       },
+      checkItemsDataFactory(datas, filmDatas) {
+        const result = datas.map((item) => (
+            {
+              ...item,
+              checked: false,
+            }
+          )
+        );
+        result.forEach((item) => {
+          filmDatas.forEach((checkedItem) => {
+            if (checkedItem.id === item.id) {
+              item.checked = true;
+            }
+          });
+        });
+        return result;
+      },
+      updateFilm(newFilmData) {
+        console.log(newFilmData);
+      },
     },
     watch: {
+      categoriesInDb(datas) {
+        if (datas) {
+          this.categoriesData = this.checkItemsDataFactory(datas, this.filmData.categories);
+        }
+      },
+      areasDataInDb(datas) {
+        if (datas) {
+          this.areasData = this.checkItemsDataFactory(datas, this.filmData.area);
+        }
+      },
       getFilmData(val) {
         if (val) {
           this.filmData = val //這頁整包電影資料
+          this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
 
           // 編輯modal是否完結
           if (val.ends) {
@@ -401,13 +375,6 @@
             this.favoriteCheck = val.favorite
           } else {
             this.favoriteCheck = false
-          }
-
-
-          //輪播主圖資料
-          // console.log(val)
-          if(val.page_banners) {
-            this.bannerData = objToArray(val.page_banners)
           }
 
           //是否顯示皇冠

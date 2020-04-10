@@ -120,7 +120,10 @@
       </div>
     </div>
     <NewFilmModal
+      id="new_film"
+      className="new_film"
       :nextKey="nextKey"
+      actionType="add"
       :filmsListType="filmsListType"
       :relatedDatas="relatedDatas"
       :entertainmentData="entertainmentDatas"

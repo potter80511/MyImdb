@@ -1,9 +1,9 @@
 <template>
   <b-modal
-    id="new_film"
-    modal-class="new_film film_form_modal"
-    :title="`新增${filmsListType}`"
-    ok-title="新增"
+    :id="id"
+    :modal-class="`film_form_modal ${className}`"
+    :title="`${action}${filmsListType}`"
+    ok-title="送出"
     cancel-title="取消"
     @ok="add_film_submit"
   >
@@ -176,11 +176,48 @@
       SelectTool,
     },
     props: {
+      newFilmData: {
+        type: Object,
+        default: () => {
+          return {
+            brief: '',
+            imdb_id: '',
+            name: '',
+            my_rate: '',
+            related_id: '',
+            et_id: '',
+            summary: '',
+            trailer: '',
+            tw_name: '',
+            wallpaper: '',
+            year: '',
+          }
+        }
+      },
+      id: {
+        type: String,
+        default: 'film_modal',
+      },
+      className: {
+        type: String,
+      },
+      actionType: {
+        type: String,
+        required: true,
+      },
       nextKey: {
         type: Number,
       },
       filmsListType: {
         type: String,
+      },
+      imdb_rates: {
+        type: String,
+        default: '',
+      },
+      my_rate: {
+        type: String,
+        default: '',
       },
       relatedDatas: {
         type: Array,
@@ -194,9 +231,37 @@
         type: Array,
         required: true,
       },
+      directorInputs: {
+        type: Array,
+        default: () => [],
+      },
+      castInputs: {
+        type: Array,
+        default: () => [],
+      },
+      writerInputs: {
+        type: Array,
+        default: () => [],
+      },
+      pageBannersInputs: {
+        type: Array,
+        default: () => [],
+      },
+      seasonsInputs: {
+        type: Array,
+        default: () => [],
+      },
       categoriesData: {
         type: Array,
         required: true,
+      },
+      favoriteCheck: {
+        type: Boolean,
+        default: false,
+      },
+      endCheck: {
+        type: Boolean,
+        default: false,
       },
       add_film: {
         type: Function,
@@ -204,29 +269,12 @@
     },
     data () {
       return {
-        newFilmData: {
-          brief: '',
-          imdb_id: '',
-          name: '',
-          related_id: '',
-          et_id: '',
-          summary: '',
-          trailer: '',
-          tw_name: '',
-          wallpaper: '',
-          year: '',
-        },
-        favoriteCheck: false,
-        endCheck: false,
+        action: '',
         isCheckedClass: 'is-checked',
-        imdb_rates: '',
-        my_rate: '',
-        pageBannersInputs: [],
-        castInputs: [],
-        writerInputs: [],
-        directorInputs: [],
-        seasonsInputs: [],
       }
+    },
+    created() {
+      this.action = this.actionType === 'add' ? '新增' : '編輯';
     },
     methods: {
       addCastHandler() {
