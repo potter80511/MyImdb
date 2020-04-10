@@ -69,7 +69,8 @@
                   v-if="filmData.et_id"
                   className="entertainment"
                   title="製片商"
-                  :singleData="currentEtTwName"
+                  :singleData="currentEntertainment.tw_name"
+                  :singleObject="currentEntertainment"
                 />
                 <div class="type label_data">
                   <b>類型：</b>
@@ -296,7 +297,9 @@
         showCrown: false,
         seasonShowTarget: "season1",
         successTitle: '',
-        currentEtTwName: '',
+        currentEntertainment: {
+          tw_name: '',
+        },
       }
     },
     created() {
@@ -397,12 +400,19 @@
           this.areasData = this.checkItemsDataFactory(datas, this.filmData.area);
         }
       },
+      entertainmentDatas(datas) {
+        if (datas) {
+          const entertainmentDatas = this.$store.state.entertainmentData;
+          this.currentEntertainment = entertainmentDatas.find(item => (item.id === this.filmData.et_id));
+        }
+      },
       getFilmData(val) {
         if (val) {
           this.filmData = {...this.filmData, ...val} //這頁整包電影資料
           this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
 
-          this.currentEtTwName = this.entertainmentDatas.find(item => (item.id === this.filmData.et_id)).tw_name;
+
+
 
           //是否顯示皇冠
           const cateData = val.categories.map(item => (item.name));

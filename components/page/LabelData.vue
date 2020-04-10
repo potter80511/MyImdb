@@ -6,7 +6,7 @@
         {{item.name}}
       </span>
     </div>
-    <span v-else>{{singleData}}</span>
+    <span v-else>{{singleData}} <img v-if="singleObject" :src="singleObject.logo" /></span>
   </div>
 </template>
 
@@ -21,6 +21,9 @@
       },
       singleData: {
         type: String,
+      },
+      singleObject: {
+        type: Object,
       },
       multipleDatas: {
         type: Array,

@@ -75,6 +75,12 @@
             display: flex;
             flex-wrap: wrap;
           }
+          img {
+            display: inline-block;
+            max-height: 1.2em;
+            width: auto;
+            margin-left: 10px;
+          }
         }
         .multiple_items {
           span {
