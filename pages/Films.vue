@@ -140,7 +140,6 @@
 
 <script>
   import { rateStarWithEmpty } from '~/plugins/helper';
-  import { objToArray } from '~/plugins/helper';
   import * as firebase from 'firebase';
   import BannerSlide from '~/components/BannerSlide';
   import FilterTools from '~/components/FilterTools';

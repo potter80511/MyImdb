@@ -37,7 +37,7 @@
           :optionDatas="relatedDatas"
         />
         <SelectTool
-          title="影視發行"
+          title="製片商"
           className="film-enter"
           :data_id="newFilmData.et_id"
           v-model="newFilmData.et_id"
@@ -207,6 +207,7 @@
       },
       nextKey: {
         type: Number,
+        required: true,
       },
       filmsListType: {
         type: String,

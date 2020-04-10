@@ -65,6 +65,12 @@
                   </span>
                   <b>{{filmData.my_rate.toFixed(1)}} 分</b>
                 </div>
+                <LabelData
+                  v-if="filmData.et_id"
+                  className="entertainment"
+                  title="製片商"
+                  :singleData="currentEtTwName"
+                />
                 <div class="type label_data">
                   <b>類型：</b>
                   <router-link :to="'/series'" v-if="filmData.type === 'series'">影集</router-link>
@@ -135,6 +141,7 @@
                 <NewFilmModal
                   :newFilmData="filmData"
                   actionType="edit"
+                  :nextKey="filmData.current_key"
                   :filmsListType="filmsListType"
                   :imdb_rates="String(filmData.imdb_rates)"
                   :my_rate="String(filmData.my_rate)"
@@ -150,6 +157,10 @@
                   :favoriteCheckProps="filmData.favorite"
                   :endCheckProps="filmData.ends"
                   @add_film_submit="(newFilmData) => updateFilm(newFilmData)"
+                />
+                <SuccessModal
+                  :successTitle="successTitle"
+                  @okSubmit="() => reload()"
                 />
               </div>
             </div>
@@ -227,10 +238,11 @@
 
 <script>
   import { rateTenStar } from '~/plugins/helper';
-  import { objToArray } from '~/plugins/helper';
+  import * as firebase from 'firebase';
   import BannerSlide from '~/components/BannerSlide';
   import RelatedFilmsSwiper from '~/components/relatedFilmSwiper/RelatedFilmsSwiper';
   import NewFilmModal from '~/components/admin/NewFilmModal';
+  import SuccessModal from '~/components/admin/SuccessModal';
   import LabelData from '~/components/page/LabelData';
 
   export default {
@@ -238,6 +250,7 @@
       BannerSlide,
       RelatedFilmsSwiper,
       NewFilmModal,
+      SuccessModal,
       LabelData,
     },
     props: {
@@ -253,6 +266,7 @@
           brief: "",
           categories: [],
           cast: [],
+          current_key: 0,
           directors: [],
           ends: false,
           et_id: "",
@@ -281,6 +295,8 @@
         sameDirectorData: [],
         showCrown: false,
         seasonShowTarget: "season1",
+        successTitle: '',
+        currentEtTwName: '',
       }
     },
     created() {
@@ -343,8 +359,31 @@
         });
         return result;
       },
+      reload() {
+        location.reload();
+      },
       updateFilm(newFilmData) {
         console.log(newFilmData);
+        const {
+          type,
+          current_key
+        } = newFilmData;
+        const filmsListType = this.filmsListType;
+        console.log(type, current_key, filmsListType);
+
+        firebase.database().ref(`${type}/${current_key}`).update(
+          newFilmData
+        ).then(() => {
+          this.successTitle = `更新${filmsListType}成功`
+          this.$bvModal.show('success-modal')
+          setTimeout(() => {
+            location.reload();
+          }, 3000);
+        }).catch((error) => {
+          this.successTitle = `更新${filmsListType}失敗`
+          this.$bvModal.show('success-modal')
+          console.log(error)
+        });
       },
     },
     watch: {
@@ -362,6 +401,8 @@
         if (val) {
           this.filmData = {...this.filmData, ...val} //這頁整包電影資料
           this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
+
+          this.currentEtTwName = this.entertainmentDatas.find(item => (item.id === this.filmData.et_id)).tw_name;
 
           //是否顯示皇冠
           const cateData = val.categories.map(item => (item.name));
