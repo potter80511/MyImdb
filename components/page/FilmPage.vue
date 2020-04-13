@@ -3,169 +3,193 @@
     <BannerSlide
       :bannerData="bannerData"
     />
-    <div class="container">
+    <b-container>
       <div class="main">
-        <div class="row main_info">
-          <div class="row">
-            <div class="wallpaper col-md-4">
-              <div class="film_title mobile">
-                <h1>
-                  <div class="favorite_crown" v-if="filmData.imdb_rates >= 8">
-                    <font-awesome-icon icon="crown" />{{filmData.imdb_rates}}
-                  </div>
-                  {{filmData.name}}
-                </h1>
-                <h2 class="tw_name" v-if="filmData.tw_name">
-                  <b>中文片名：</b>
-                  <span>{{filmData.tw_name}}</span>
-                </h2>
+        <b-row class="main_info">
+          <b-col md="4" class="wallpaper">
+            <div class="film_title mobile">
+              <h1>
+                <div class="favorite_crown" v-if="filmData.imdb_rates >= 8">
+                  <font-awesome-icon icon="crown" />{{filmData.imdb_rates}}
+                </div>
+                {{filmData.name}}
+              </h1>
+              <h2 class="tw_name" v-if="filmData.tw_name">
+                <b>中文片名：</b>
+                <span>{{filmData.tw_name}}</span>
+              </h2>
+            </div>
+            <div class="image">
+              <div
+                class="isLoading"
+                v-show="isLoading"
+              >
+                <font-awesome-icon icon="spinner" spin/>
               </div>
               <img :src="filmData.wallpaper" />
             </div>
-            <div class="words col-md-8">
-              <div class="film_title desktop">
-                <h1>
-                  <div class="favorite_crown" v-if="showCrown">
-                    <font-awesome-icon icon="crown" />
-                  </div>
-                  {{filmData.name}}
-                </h1>
-                <h2 class="tw_name" v-if="filmData.tw_name">
-                  <b>中文片名：</b>
-                  <span>{{filmData.tw_name}}</span>
-                </h2>
+          </b-col>
+          <b-col md="8" class="words">
+            <div class="film_title desktop">
+              <div
+                class="isLoading"
+                v-show="isLoading"
+              >
+                <font-awesome-icon icon="spinner" spin/>
               </div>
-              <div class="film_info">
-                <div class="rates label_data">
-                  <b>IMDB 評分：</b>
-                  <span v-for="(star, j) in rateTenStar(filmData.imdb_rates)"
-                        :key="j">
-                    <font-awesome-icon v-if="star==='star'" icon="star" />
-                    <font-awesome-icon v-if="star==='half'" icon="star-half-alt" />
-                    <font-awesome-icon v-if="star==='empty'" :icon="['far', 'star']"/>
-                  </span>
-                  <b>{{filmData.imdb_rates.toFixed(1)}} 分</b>
-                  <a
-                    class="go_imdb"
-                    :href="`https://www.imdb.com/title/${filmData.imdb_id}`"
-                    target="_blank"
-                  >
-                    <font-awesome-icon icon="arrow-right" />
-                    <font-awesome-icon :icon="['fab', 'imdb']" />
-                  </a>
+              <h1>
+                <div class="favorite_crown" v-if="showCrown">
+                  <font-awesome-icon icon="crown" />
                 </div>
-                <div class="my_rate label_data" v-if="filmData.my_rate">
-                  <font-awesome-icon icon="check" />
-                  <b>我的評分：</b>
-                  <span v-for="(star, j) in rateTenStar(filmData.my_rate)"
-                          :key="j">
-                    <font-awesome-icon v-if="star==='star'" icon="star" />
-                    <font-awesome-icon v-if="star==='half'" icon="star-half-alt" />
-                    <font-awesome-icon v-if="star==='empty'" :icon="['far', 'star']"/>
-                  </span>
-                  <b>{{filmData.my_rate.toFixed(1)}} 分</b>
-                </div>
-                <LabelData
-                  v-if="filmData.et_id"
-                  className="entertainment"
-                  title="製片商"
-                  :singleData="currentEntertainment.tw_name"
-                  :singleObject="currentEntertainment"
-                />
-                <div class="type label_data">
-                  <b>類型：</b>
-                  <router-link :to="'/series'" v-if="filmData.type === 'series'">影集</router-link>
-                  <router-link :to="'/movies'" v-else-if="filmData.type === 'movies'">電影</router-link>
-                </div>
-                <div class="end label_data" v-if="filmData.type === 'series'">
-                  <span v-if="filmData.ends">
-                    已完結
-                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，共 <b>{{filmData.seasons.length}}</b> 季</span>
-                  </span>
-                  <span class="still" v-else>
-                    未完結
-                    <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，目前季數 <b>{{filmData.seasons.length}}</b> 季</span>
-                  </span>
-                </div>
-                <LabelData
-                  v-if="filmData.area.length > 0"
-                  className="area"
-                  title="地區"
-                  :multipleDatas="filmData.area"
-                />
-                <LabelData
-                  v-if="filmData.directors && filmData.directors.length > 0"
-                  className="directors"
-                  title="導演"
-                  :multipleDatas="filmData.directors"
-                />
-                <LabelData
-                  v-if="filmData.writers.length > 0"
-                  className="writers"
-                  title="編劇"
-                  :multipleDatas="filmData.writers"
-                />
-                <LabelData
-                  v-if="filmData.categories && filmData.categories.length > 0"
-                  className="categories"
-                  title="種類"
-                  :multipleDatas="filmData.categories"
-                />
-                <LabelData
-                  v-if="filmData.cast && filmData.cast.length > 0"
-                  className="cast"
-                  title="主演"
-                  :multipleDatas="filmData.cast"
-                />
-                <LabelData
-                  v-if="filmData.year"
-                  className="year"
-                  title="年份"
-                  :singleData="filmData.year + ' 年'"
-                />
-                <div class="brief label_data" v-if="filmData.brief">
-                  <b>簡述：</b>
-                  <p>{{filmData.brief}}</p>
-                </div>
-                <div class="favorite" v-if="filmData.favorite">
-                  <span v-if="filmData.type === 'movies'">最愛電影</span>
-                  <span v-else-if="filmData.type === 'series'">最愛影集</span>
-                </div>
-                <b-button
-                  id="show-btn"
-                  @click="$bvModal.show('film_modal')"
-                  v-if="isLogin">
-                  <font-awesome-icon icon="plus-circle"
-                />
-                  編輯影片資訊
-                </b-button>
-                <NewFilmModal
-                  :newFilmData="filmData"
-                  actionType="edit"
-                  :nextKey="filmData.current_key"
-                  :filmsListType="filmsListType"
-                  :imdb_rates="String(filmData.imdb_rates)"
-                  :my_rate="String(filmData.my_rate)"
-                  :directorInputs="filmData.directors"
-                  :castInputs="filmData.cast"
-                  :writerInputs="filmData.writers"
-                  :pageBannersInputs="filmData.page_banners"
-                  :seasonsInputs="filmData.seasons"
-                  :relatedDatas="relatedDatas"
-                  :entertainmentData="entertainmentDatas"
-                  :areasData="areasData"
-                  :categoriesData="categoriesData"
-                  :favoriteCheckProps="filmData.favorite"
-                  :endCheckProps="filmData.ends"
-                  @add_film_submit="(newFilmData) => updateFilm(newFilmData)"
-                />
-                <SuccessModal
-                  :successTitle="successTitle"
-                  @okSubmit="() => reload()"
-                />
-              </div>
+                {{filmData.name}}
+              </h1>
+              <h2 class="tw_name" v-if="filmData.tw_name">
+                <b>中文片名：</b>
+                <span>{{filmData.tw_name}}</span>
+              </h2>
             </div>
-          </div>
+            <div class="film_info">
+              <div
+                class="isLoading"
+                v-if="isLoading"
+              >
+                <font-awesome-icon icon="spinner" spin/>
+              </div>
+              <div class="rates label_data" v-show="filmData.imdb_rates > 0">
+                <b>IMDB 評分：</b>
+                <span v-for="(star, j) in rateTenStar(filmData.imdb_rates)"
+                      :key="j">
+                  <font-awesome-icon v-if="star==='star'" icon="star" />
+                  <font-awesome-icon v-if="star==='half'" icon="star-half-alt" />
+                  <font-awesome-icon v-if="star==='empty'" :icon="['far', 'star']"/>
+                </span>
+                <b>{{filmData.imdb_rates.toFixed(1)}} 分</b>
+                <a
+                  class="go_imdb"
+                  :href="`https://www.imdb.com/title/${filmData.imdb_id}`"
+                  target="_blank"
+                >
+                  <font-awesome-icon icon="arrow-right" />
+                  <font-awesome-icon :icon="['fab', 'imdb']" />
+                </a>
+              </div>
+              <div class="my_rate label_data" v-if="filmData.my_rate">
+                <font-awesome-icon icon="check" />
+                <b>我的評分：</b>
+                <span v-for="(star, j) in rateTenStar(filmData.my_rate)"
+                        :key="j">
+                  <font-awesome-icon v-if="star==='star'" icon="star" />
+                  <font-awesome-icon v-if="star==='half'" icon="star-half-alt" />
+                  <font-awesome-icon v-if="star==='empty'" :icon="['far', 'star']"/>
+                </span>
+                <b>{{filmData.my_rate.toFixed(1)}} 分</b>
+              </div>
+              <LabelData
+                v-if="filmData.et_id"
+                className="entertainment"
+                title="製片商"
+                :singleData="currentEntertainment.tw_name"
+                :singleObject="currentEntertainment"
+              />
+              <div class="type label_data" v-if="filmData.type">
+                <b>類型：</b>
+                <router-link :to="'/series'" v-if="filmData.type === 'series'">影集</router-link>
+                <router-link :to="'/movies'" v-else-if="filmData.type === 'movies'">電影</router-link>
+              </div>
+              <div class="end label_data" v-if="filmData.type === 'series'">
+                <span v-if="filmData.ends">
+                  已完結
+                  <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，共 <b>{{filmData.seasons.length}}</b> 季</span>
+                </span>
+                <span class="still" v-else>
+                  未完結
+                  <span class="total" v-if="filmData.seasons && filmData.seasons.length > 0">，目前季數 <b>{{filmData.seasons.length}}</b> 季</span>
+                </span>
+              </div>
+              <LabelData
+                v-if="filmData.area.length > 0"
+                className="area"
+                title="地區"
+                :multipleDatas="filmData.area"
+              />
+              <LabelData
+                v-if="filmData.directors && filmData.directors.length > 0"
+                className="directors"
+                title="導演"
+                :multipleDatas="filmData.directors"
+              />
+              <LabelData
+                v-if="filmData.writers.length > 0"
+                className="writers"
+                title="編劇"
+                :multipleDatas="filmData.writers"
+              />
+              <LabelData
+                v-if="filmData.categories && filmData.categories.length > 0"
+                className="categories"
+                title="種類"
+                :multipleDatas="filmData.categories"
+              />
+              <LabelData
+                v-if="filmData.cast && filmData.cast.length > 0"
+                className="cast"
+                title="主演"
+                :multipleDatas="filmData.cast"
+              />
+              <LabelData
+                v-if="filmData.year"
+                className="year"
+                title="年份"
+                :singleData="filmData.year + ' 年'"
+              />
+              <div class="brief label_data" v-if="filmData.brief">
+                <b>簡述：</b>
+                <p>{{filmData.brief}}</p>
+              </div>
+              <div class="favorite" v-if="filmData.favorite">
+                <span v-if="filmData.type === 'movies'">最愛電影</span>
+                <span v-else-if="filmData.type === 'series'">最愛影集</span>
+              </div>
+              <b-button
+                id="show-btn"
+                @click="$bvModal.show('film_modal')"
+                v-if="isLogin">
+                <font-awesome-icon icon="plus-circle"
+              />
+                編輯影片資訊
+              </b-button>
+              <NewFilmModal
+                :newFilmData="filmData"
+                actionType="edit"
+                :nextKey="filmData.current_key"
+                :filmsListType="filmsListType"
+                :imdb_rates="String(filmData.imdb_rates)"
+                :my_rate="String(filmData.my_rate)"
+                :directorInputs="filmData.directors"
+                :castInputs="filmData.cast"
+                :writerInputs="filmData.writers"
+                :pageBannersInputs="filmData.page_banners"
+                :seasonsInputs="filmData.seasons"
+                :relatedDatas="relatedDatas"
+                :entertainmentData="entertainmentDatas"
+                :areasData="areasData"
+                :categoriesData="categoriesData"
+                :favoriteCheckProps="filmData.favorite"
+                :endCheckProps="filmData.ends"
+                @add_film_submit="(newFilmData) => updateFilm(newFilmData)"
+              />
+              <SuccessModal
+                :successTitle="successTitle"
+                @okSubmit="() => reload()"
+              />
+            </div>
+          </b-col>
+        </b-row>
+        <div
+          class="isLoading"
+          v-show="isLoading"
+        >
+          <font-awesome-icon icon="spinner" spin/>
         </div>
         <div class="series_intro" v-if="filmData.type === 'series' && filmData.seasons">
           <div class="season_tag">
@@ -202,7 +226,7 @@
             </div>
           </div>
         </div>
-        <div class="main_intro" v-else>
+        <div class="main_intro" v-else-if="filmData.type === 'movies'">
           <div class="blocks">
             <h3><span class="circle"></span>劇情介紹</h3>
             <div v-html="filmData.summary"></div>
@@ -233,7 +257,7 @@
           </div>
         </div>
       </div>
-    </div>
+    </b-container>
   </div>
 </template>
 
@@ -300,6 +324,7 @@
         currentEntertainment: {
           tw_name: '',
         },
+        isLoading: true,
       }
     },
     created() {
@@ -408,11 +433,9 @@
       },
       getFilmData(val) {
         if (val) {
+          this.isLoading = false;
           this.filmData = {...this.filmData, ...val} //這頁整包電影資料
           this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
-
-
-
 
           //是否顯示皇冠
           const cateData = val.categories.map(item => (item.name));
