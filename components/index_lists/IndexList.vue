@@ -33,6 +33,7 @@
               :name="item.tw_name"
               :brief="item.brief"
               :id="item.id"
+              :type="type"
             />
           </div>
         </div>

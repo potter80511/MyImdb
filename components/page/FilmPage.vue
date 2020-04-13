@@ -10,7 +10,7 @@
             <div class="film_title mobile">
               <h1>
                 <div class="favorite_crown" v-if="filmData.imdb_rates >= 8">
-                  <font-awesome-icon icon="crown" />{{filmData.imdb_rates}}
+                  <font-awesome-icon icon="crown" />
                 </div>
                 {{filmData.name}}
               </h1>
