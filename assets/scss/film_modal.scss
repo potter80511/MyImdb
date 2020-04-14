@@ -1,7 +1,45 @@
+@import 'color.scss';
+
 .film_form_modal {
   .form_modal {
-    label {
-      margin: 0;
+    input, textarea {
+      background: $form-modal-input;
+      color: $text-dark-hover;
+      border: 1px solid $tool-border;
+      padding: 3px 6px;
+      transition: all .3s;
+      &:hover, &:focus {
+        border-color: $tool-border-hover;
+        background: $form-modal-input-hover;
+        color: $nav-link;
+      }
+      &:focus {
+        box-shadow: 0 0 6px rgba(240, 240, 240, .5);
+      }
+    }
+    .flex-group {
+      display: flex;
+      justify-content: space-between;
+      margin-bottom: 10px;
+      >div {
+        &:first-child {
+          margin-right: 15px;
+        }
+      }
+      label {
+        margin-bottom: 10px;
+      }
+      input {
+        width: 100%;;
+      }
+    }
+    .no_wrap {
+      label {
+        margin-bottom: 0;
+      }
+    }
+    .number-group {
+      display: flex;
     }
     .input-group, .group {
       display: flex;
@@ -19,10 +57,12 @@
         .group {
           display: flex;
           flex-wrap: wrap;
-          .check-group {
+          div.check-group {
             display: flex;
             width: calc(100%/7);
-            margin-bottom: 10px;
+            &:not(:last-child) {
+              margin-bottom: 10px;
+            }
           }
         }
       }
@@ -70,8 +110,9 @@
         border: 1px solid #111;
         border-radius: 2px;
         margin-right: 10px;
-        cursor: pointer;
-        transition: all .3s;
+        &:hover {
+          background: #333;
+        }
         &:before {
           content: '';
           display: block;
@@ -86,6 +127,9 @@
         &.is-checked {
           background: #333;
           border-color: #d0a554;
+          &:hover {
+            background: #555;
+          }
           &:before {
             opacity: 1;
           }

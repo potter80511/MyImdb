@@ -9,61 +9,92 @@
   >
     <div class="container">
       <div id="new_film_form" class="form_modal">
-        <SingleInput
-          title="劇名稱（原文）"
-          id="filmName"
-          :inputData="newFilmData.name"
-          v-model="newFilmData.name"
-        />
-        <SingleInput
-          title="劇名稱（中文）"
-          id="filmTwName"
-          :inputData="newFilmData.tw_name"
-          v-model="newFilmData.tw_name"
-        />
-        <div class="input-group" v-show="filmsListType === '影集'">
-          <span
-            :class="[endCheck ? isCheckedClass : '', 'endCheck-check label-check']"
-            @click="endCheckHandler"
-          >
-          </span>
-          <label>完結</label>
+        <div class="flex-group">
+          <SingleInput
+            title="劇名稱（原文）"
+            id="filmName"
+            :inputData="newFilmData.name"
+            v-model="newFilmData.name"
+          />
+          <SingleInput
+            title="劇名稱（中文）"
+            id="filmTwName"
+            :inputData="newFilmData.tw_name"
+            v-model="newFilmData.tw_name"
+          />
         </div>
-        <SelectTool
-          title="系列"
-          className="film-related"
-          :data_id="newFilmData.related_id"
-          v-model="newFilmData.related_id"
-          :optionDatas="relatedDatas"
-        />
-        <SelectTool
-          title="製片商"
-          className="film-enter"
-          :data_id="newFilmData.et_id"
-          v-model="newFilmData.et_id"
-          :optionDatas="entertainmentData"
-        />
-        <div class="input-group">
-          <span
-            :class="[favoriteCheck ? isCheckedClass : '', 'favorite-check label-check']"
-            @click="favoriteCheckHandler"
-          >
-          </span>
-          <label>最愛影劇</label>
+        <div class="flex-group">
+          <SingleInput
+            title="年份"
+            id="filmYear"
+            :inputData="newFilmData.year"
+            v-model="newFilmData.year"
+          />
+          <SingleInput
+            title="IMDB ID"
+            id="filmImdbId"
+            :inputData="newFilmData.imdb_id"
+            v-model="newFilmData.imdb_id"
+          />
+        </div>
+        <div class="flex-group number-group">
+          <SingleInput
+            title="IMDB 評分"
+            id="filmImdbRate"
+            inputType="number"
+            :inputData="imdb_rates"
+            v-model="imdb_rates"
+            :inputWrap="true"
+          />
+          <SingleInput
+            title="我的評分"
+            id="filmMyRate"
+            inputType="number"
+            :inputData="my_rate"
+            v-model="my_rate"
+            :inputWrap="true"
+          />
+        </div>
+        <div class="flex-group check-group no_wrap">
+          <div class="input-group" v-show="filmsListType === '影集'">
+            <span
+              :class="[endCheck ? isCheckedClass : '', 'endCheck-check label-check']"
+              @click="endCheckHandler"
+            >
+            </span>
+            <label>完結</label>
+          </div>
+          <div class="input-group">
+            <span
+              :class="[favoriteCheck ? isCheckedClass : '', 'favorite-check label-check']"
+              @click="favoriteCheckHandler"
+            >
+            </span>
+            <label>最愛影劇</label>
+          </div>
+        </div>
+        <div class="flex-group select-group no_wrap">
+          <SelectTool
+            title="系列"
+            className="film-related"
+            :data_id="newFilmData.related_id"
+            v-model="newFilmData.related_id"
+            :optionDatas="relatedDatas"
+          />
+          <SelectTool
+            title="製片商"
+            className="film-enter"
+            :data_id="newFilmData.et_id"
+            v-model="newFilmData.et_id"
+            :optionDatas="entertainmentData"
+          />
         </div>
         <SingleInput
-          title="IMDB 評分"
-          id="filmImdbRate"
-          inputType="number"
-          :inputData="imdb_rates"
-          v-model="imdb_rates"
-        />
-        <SingleInput
-          title="我的評分"
-          id="filmMyRate"
-          inputType="number"
-          :inputData="my_rate"
-          v-model="my_rate"
+          title="海報連結"
+          id="filmWallpaper"
+          :inputData="newFilmData.wallpaper"
+          v-model="newFilmData.wallpaper"
+          :inputWrap="true"
         />
         <InputMultiple
           dataType="banner"
@@ -73,30 +104,24 @@
           :addHandler="addPageBanner"
           :deleteHandler="deletePageBanner"
         />
+        <SingleInput
+          title="預告ID"
+          id="filmTrailer"
+          :inputData="newFilmData.trailer"
+          v-model="newFilmData.trailer"
+          v-show="filmsListType === '電影'"
+        />
         <CheckItems
           title="地區"
           className="film-area"
           :inputsData="areasData"
           @checkHandler="(inputsData) => areasCheckedHandler(inputsData)"
         />
-        <SingleInput
-          title="年份"
-          id="filmYear"
-          :inputData="newFilmData.year"
-          v-model="newFilmData.year"
-        />
         <CheckItems
           title="電影類型"
           className="film-categories"
           :inputsData="categoriesData"
           @checkHandler="(inputsData) => categoriesCheckedHandler(inputsData)"
-        />
-        <SingleInput
-          title="電影簡述"
-          id="filmBrief"
-          inputType="textarea"
-          :inputData="newFilmData.brief"
-          v-model="newFilmData.brief"
         />
         <InputMultiple
           dataType="people"
@@ -123,23 +148,13 @@
           :deleteHandler="deleteCastHandler"
         />
         <SingleInput
-          title="IMDB ID"
-          id="filmImdbId"
-          :inputData="newFilmData.imdb_id"
-          v-model="newFilmData.imdb_id"
-        />
-        <SingleInput
-          title="預告ID"
-          id="filmTrailer"
-          :inputData="newFilmData.trailer"
-          v-model="newFilmData.trailer"
-          v-show="filmsListType === '電影'"
-        />
-        <SingleInput
-          title="海報連結"
-          id="filmWallpaper"
-          :inputData="newFilmData.wallpaper"
-          v-model="newFilmData.wallpaper"
+          title="電影簡述"
+          id="filmBrief"
+          inputType="textarea"
+          :inputData="newFilmData.brief"
+          v-model="newFilmData.brief"
+          :inputWrap="true"
+          rows="3"
         />
         <SingleInput
           title="劇情大綱"
@@ -147,6 +162,8 @@
           inputType="textarea"
           :inputData="newFilmData.summary"
           v-model="newFilmData.summary"
+          :inputWrap="true"
+          rows="6"
         />
         <InputMultiple
           v-show="filmsListType === '影集'"
@@ -181,11 +198,11 @@
         default: () => {
           return {
             brief: '',
+            et_id: '',
             imdb_id: '',
             name: '',
             my_rate: '',
             related_id: '',
-            et_id: '',
             summary: '',
             trailer: '',
             tw_name: '',

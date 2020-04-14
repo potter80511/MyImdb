@@ -107,7 +107,7 @@
                 </span>
               </div>
               <LabelData
-                v-if="filmData.area.length > 0"
+                v-if="filmData.area && filmData.area.length > 0"
                 className="area"
                 title="地區"
                 :multipleDatas="filmData.area"
@@ -438,15 +438,17 @@
           this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
 
           //是否顯示皇冠
-          const cateData = val.categories.map(item => (item.name));
-          if (cateData.includes('動畫') && val.imdb_rates >= 7) {
-            this.showCrown = true;
-          } else if (cateData.includes('喜劇') && !cateData.includes('動畫')) {
-            this.showCrown = true;
-          } else if (cateData.includes('恐怖') && val.imdb_rates >= 6) {
-            this.showCrown = true;
-          } else if (val.imdb_rates >= 8) {
-            this.showCrown = true;
+          if (val.categories) {
+            const cateData = val.categories.map(item => (item.name));
+            if (cateData.includes('動畫') && val.imdb_rates >= 7) {
+              this.showCrown = true;
+            } else if (cateData.includes('喜劇') && !cateData.includes('動畫')) {
+              this.showCrown = true;
+            } else if (cateData.includes('恐怖') && val.imdb_rates >= 6) {
+              this.showCrown = true;
+            } else if (val.imdb_rates >= 8) {
+              this.showCrown = true;
+            }
           }
           //filmData.rates >= 8 || cateData.includes('恐怖') || cateData.includes('喜劇') && filmData.rates >= 6.5 || cateData.includes('動畫') && filmData.rates >= 7
 

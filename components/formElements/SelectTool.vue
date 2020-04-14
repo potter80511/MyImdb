@@ -1,5 +1,5 @@
 <template>
-  <div :class="`input-group select-tool ${className}`">
+  <div :class="['input-group', 'select-tool', className]">
     <label>{{title}}：</label>
     <div class="related-select">
       <select :value="data_id" @input="$emit('input', $event.target.value)">
@@ -21,6 +21,7 @@
     props: {
       className: {
         type: String,
+        default: '',
       },
       title: {
         type: String,
@@ -36,3 +37,14 @@
     },
   }
 </script>
+
+<style lang="scss" scoped>
+  .select-tool {
+    .related-select {
+      flex: 1;
+      select {
+        width: 100%;
+      }
+    }
+  }
+</style>

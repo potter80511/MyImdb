@@ -22,7 +22,7 @@ ul {
   padding: 0;
   list-style-type: none;
 }
-button {
+button, input, textarea {
   &:focus {
     outline: none;
   }
@@ -125,9 +125,10 @@ img {
     .modal-header, .modal-footer {
       border-color: #595959;
     }
-    .add_people_group {
+    .add_group {
       input {
         margin-right: 10px;
+        flex: 1;
       }
     }
     .input-group, .add_item_btn, .title {
