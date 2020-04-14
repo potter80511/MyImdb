@@ -85,7 +85,7 @@
                 <b>{{filmData.my_rate.toFixed(1)}} 分</b>
               </div>
               <LabelData
-                v-if="filmData.et_id && currentEntertainment"
+                v-if="filmData.et_id"
                 className="entertainment"
                 title="製片商"
                 :singleData="currentEntertainment.tw_name"
@@ -429,7 +429,7 @@
         if (datas) {
           const entertainmentDatas = this.$store.state.entertainmentData;
           this.currentEntertainment = entertainmentDatas.find(item => (
-            this.filmData.et_id ? item.id === this.filmData.et_id : false
+            this.filmData.et_id ? item.id === this.filmData.et_id : { tw_name: '' }
           ));
         }
       },
