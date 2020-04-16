@@ -11,3 +11,26 @@
     color: #888!important;
   }
 }
+.add_group {
+  p {
+    color: #888;
+    font-size: 15px;
+  }
+}
+.add_item_btn {
+  position: relative;
+  background: #474747;
+  padding: 5px 10px;
+  cursor: pointer;
+  .arrow {
+    position: absolute;
+    right: 10px;
+  }
+  &:hover {
+    background: #565656;
+    box-shadow: 3px 3px 5px rgba(0, 0, 0, 0.4);
+    svg {
+      color: #333;
+    }
+  }
+}
