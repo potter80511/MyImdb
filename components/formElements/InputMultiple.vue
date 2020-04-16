@@ -6,7 +6,7 @@
       <font-awesome-icon icon="caret-down" class="arrow" />
     </div>
     <div
-      :class="['toggle', toggleOn ? toggleClass : 'toggle_off']"
+      class="toggle"
       v-if="inputsData.length > 0"
     >
       <div
@@ -58,7 +58,7 @@
         </div>
       </div>
     </div>
-    <div :class="['toggle', toggleOn ? toggleClass : 'toggle_off']" v-else>
+    <div class="toggle" v-else>
       <p>尚無資料，請新增資料</p>
     </div>
   </div>
@@ -98,8 +98,14 @@
       }
     },
     methods: {
-      toggle() {
-        this.toggleOn = !this.toggleOn;
+      toggle(event) {
+        const target = event.target;
+        const content = target.nextElementSibling;
+        if (content.style.maxHeight) {
+          content.style.maxHeight = null;
+        } else {
+          content.style.maxHeight = content.scrollHeight + 'px';
+        }
       },
     },
   }
@@ -108,13 +114,8 @@
 <style lang="scss" scoped>
   .toggle {
     overflow: hidden;
-    transition: max-height 1s ease-in-out;
-    &.toggle_off {
-      max-height: 0;
-    }
-    &.toggle_show {
-      max-height: 1200px;
-    }
+    transition: max-height .3s ease-in-out;
+    max-height: 0;
   }
   @import "~/assets/scss/formElements/input_people.scss";
 </style>
