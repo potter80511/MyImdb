@@ -170,6 +170,7 @@
           dataType="seasons"
           title="新增季"
           :inputsData="seasonsInputs"
+          v-model="newFilmData.seasons"
           :addHandler="addSeasonsHandler"
           :deleteHandler="deleteSeasonHandler"
         />

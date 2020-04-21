@@ -1,16 +1,16 @@
 <template>
   <div :class="`add_group add_${dataType}_group` + ' ' + className">
-    <div class="add_item_btn" @click="toggle">
+    <div class="add_item_btn" @click="toggle($event)">
       <label>{{title}}</label>
-      <font-awesome-icon icon="plus" @click="addHandler" />
+      <font-awesome-icon icon="plus" @click.stop="addHandler" />
       <font-awesome-icon icon="caret-down" class="arrow" />
     </div>
     <div
       class="toggle"
-      v-if="inputsData.length > 0"
+      ref="toggle"
+      v-if="inputsData.length > 0 && dataType === 'people' || dataType === 'banner'"
     >
       <div
-        v-show="dataType === 'people' || dataType === 'banner'"
         class="input-people-input-group input-group"
         v-for="(input, i) in inputsData"
         :key="className + '_' +i"
@@ -27,8 +27,13 @@
         />
         <font-awesome-icon icon="times" @click="deleteHandler(i)" />
       </div>
+    </div>
+    <div
+      class="toggle"
+      ref="toggle"
+      v-else-if="inputsData.length > 0 && dataType === 'seasons'"
+    >
       <div
-        v-show="dataType === 'seasons'"
         class="seasons_group input-group"
         v-for="(item, i) in inputsData"
         :key="'season_' + i">
@@ -58,7 +63,7 @@
         </div>
       </div>
     </div>
-    <div class="toggle" v-else>
+    <div class="toggle" v-else-if="inputsData.length === 0">
       <p>尚無資料，請新增資料</p>
     </div>
   </div>
@@ -97,12 +102,19 @@
         toggleClass: 'toggle_show'
       }
     },
+    watch: {
+      inputsData(to, from) {
+        this.$nextTick(() => {
+          this.$refs.toggle.style.maxHeight = this.$refs.toggle.scrollHeight + 'px';
+        });
+      }
+    },
     methods: {
       toggle(event) {
         const target = event.target;
         const content = target.nextElementSibling;
-        if (content.style.maxHeight) {
-          content.style.maxHeight = null;
+        if (content.style.maxHeight && content.style.maxHeight !== '0px') {
+          content.style.maxHeight = '0';
         } else {
           content.style.maxHeight = content.scrollHeight + 'px';
         }
@@ -114,7 +126,7 @@
 <style lang="scss" scoped>
   .toggle {
     overflow: hidden;
-    transition: max-height .3s ease-in-out;
+    transition: all .3s ease-in-out;
     max-height: 0;
   }
   @import "~/assets/scss/formElements/input_people.scss";
