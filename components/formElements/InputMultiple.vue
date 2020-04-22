@@ -41,25 +41,27 @@
           <h3>第 {{i+1}} 季</h3>
           <font-awesome-icon icon="times" @click="deleteHandler(i)" />
         </div>
-        <div class="input-group">
+        <div class="input-group wrap">
           <label>季名稱：</label>
           <input
             :id="`seasonSummary${i}`"
-            type="textarea"
+            type="text"
             v-model="item.name"
           />
         </div>
-        <div class="input-group">
-          <label>年份：</label>
-          <input :id="`seasonYear${i}`" type="text" v-model="item.year" />
+        <div class="flex-group">
+          <div class="input-group wrap">
+            <label>年份：</label>
+            <input :id="`seasonYear${i}`" type="text" v-model="item.year" />
+          </div>
+          <div class="input-group wrap">
+            <label>預告：</label>
+            <input :id="`seasonTrailer${i}`" type="text" v-model="item.trailer" />
+          </div>
         </div>
-        <div class="input-group">
-          <label>預告：</label>
-          <input :id="`seasonTrailer${i}`" type="text" v-model="item.trailer" />
-        </div>
-        <div class="input-group">
+        <div class="input-group wrap">
           <label>劇情大綱：</label>
-          <input :id="`seasonSummary${i}`" type="textarea" v-model="item.sum" />
+          <textarea :id="`seasonSummary${i}`" v-model="item.sum" rows="6" />
         </div>
       </div>
     </div>

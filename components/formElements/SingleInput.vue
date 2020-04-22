@@ -74,8 +74,5 @@
     label {
       margin-bottom: 10px;
     }
-    input, textarea {
-      width: 100%;
-    }
   }
 </style>

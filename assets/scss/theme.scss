@@ -130,6 +130,35 @@ img {
         margin-right: 10px;
         flex: 1;
       }
+      div.seasons_group {
+        padding: 10px 0 15px;
+        &:not(:last-child) {
+          border-bottom: 1px solid #555;
+        }
+        .title {
+          margin-bottom: 10px;
+          h3 {
+            font-size: 24px;
+            color: #ccc;
+            padding-left: 18px;
+            position: relative;
+            &:before {
+              content: '';
+              position: absolute;
+              left: 0;
+              top: 50%;
+              transform: translateY(-50%);
+              width: 8px;
+              height: 8px;
+              background: $confort-blue-hover;
+            }
+          }
+        }
+        input {
+          margin: 0;
+          flex: auto;
+        }
+      }
     }
     .input-group, .add_item_btn, .title {
       svg {
