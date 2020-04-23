@@ -28,13 +28,13 @@
       BackToTop() {
         let four = 0;
         const ForScrollBy = (e) => {
-          if(window.pageYOffset <= 0){
+          if (window.pageYOffset <= 0) {
             clearInterval(four);
-          }else{
-            window.scrollBy(0,-30);
+          } else {
+            window.scrollBy(0, -30);
           }
         }
-        four = setInterval(ForScrollBy,0.5);
+        four = setInterval(ForScrollBy, 6);
       }
     }
   };
