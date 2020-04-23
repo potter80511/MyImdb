@@ -3,26 +3,27 @@
     <div
       class="isLoading"
       v-show="isLoading"
+      :style="{height: bannerDefaultHeight + 'vw'}"
     >
       <font-awesome-icon icon="spinner" spin/>
     </div>
     <div
       v-swiper:swiperBannerBg="swiperBanner"
-      v-if="bannerData.length > 0 && background === true"
+      v-if="bannerData.length > 0 && background"
     >
       <div class="swiper-wrapper">
         <div
           class="swiper-slide"
           v-for="(item, i) in bannerData"
           :key="i"
-          :style="{backgroundImage: 'url(' + item.url + ')', height: 50 + 'vw'}"
+          :style="{backgroundImage: 'url(' + item.url + ')', height: bannerDefaultHeight + 'vw'}"
         >
         </div>
       </div>
     </div>
     <div
       v-swiper:swiperBannerSlide="swiperBanner"
-      v-else-if="bannerData.length > 0"
+      v-else-if="bannerData.length > 0 && !background"
     >
       <div class="swiper-wrapper">
         <div
@@ -53,12 +54,17 @@
       bannerData: {
         type: Array,
       },
+      bannerDefaultHeight: {
+        type: Number,
+        default: 50,
+      },
       paginationOn: {
         type: Boolean,
-        default: false
+        default: false,
       },
       background: {
-        default: false
+        type: Boolean,
+        default: false,
       }
     },
     data() {

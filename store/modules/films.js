@@ -6,6 +6,7 @@ export default {
     series: [],
     moviesIsLoading: true,
     seriesIsLoading: true,
+    filmIsLoading: true,
     currentMovieFilm: null,
   },
   mutations: { //更改狀態
@@ -19,6 +20,7 @@ export default {
     },
     setCurrentMovieFilm(state, payload) {
       state.currentMovieFilm = payload
+      state.filmIsLoading = false
     },
   },
   actions: {

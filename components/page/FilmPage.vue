@@ -1,7 +1,9 @@
 <template>
   <div class="film_details">
     <BannerSlide
-      :bannerData="bannerData"
+      :bannerData="filmData.page_banners"
+      :isLoading="isLoading"
+      :bannerDefaultHeight="30"
     />
     <b-container>
       <div class="main">
@@ -335,6 +337,9 @@
       this.$store.dispatch('loadedCategoriesData');
     },
     computed: {
+      isLoading() {
+        return this.$store.state.filmIsLoading;
+      },
       isLogin() {
         return this.$store.state.isLogin;
       },

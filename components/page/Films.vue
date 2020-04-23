@@ -295,7 +295,6 @@
         return []
       },
       listBannersIsLoading() {
-        const { filmsListType } = this;
         return this.$store.state.listBannersIsLoading;
       },
       relatedDatas() {
