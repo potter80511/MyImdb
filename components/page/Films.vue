@@ -186,12 +186,12 @@
       this.filmsListType = this.$route.name === 'movies' ? '電影' : '影集';
       const { filmsListType } = this;
       if (filmsListType === "電影") {
-        this.filmRoute = 'page-movies-id';
+        this.filmRoute = 'movies-id';
         this.$store.dispatch('loadedMoviesListBanners')
         this.$store.dispatch('loadedMovies')
         this.$store.dispatch('loadedAllMoviesKeys');
       }  else if (filmsListType === "影集") {
-        this.filmRoute = 'page-series-id';
+        this.filmRoute = 'series-id';
         this.$store.dispatch('loadedSeriesListBanners');
         this.$store.dispatch('loadedSeries');
         this.$store.dispatch('loadedAllSeriesKeys');

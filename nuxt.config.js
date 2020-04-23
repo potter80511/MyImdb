@@ -2,10 +2,10 @@
 export default {
   mode: 'universal',
   router: {
-    extendRoutes (routes) {
-      routes.push({name: 'movies', path: '/movies', component: '~/pages/Films.vue'})
-      routes.push({name: 'series', path: '/series', component: '~/pages/Films.vue'})
-    }
+    // extendRoutes (routes) {
+    //   routes.push({name: 'movies', path: '/movies', component: '~/pages/Films.vue'})
+    //   routes.push({name: 'series', path: '/series', component: '~/pages/Films.vue'})
+    // }
   },
   /*
   ** Headers of the page
