@@ -65,7 +65,7 @@
         </div>
       </div>
     </div>
-    <div class="toggle" v-else-if="inputsData.length === 0">
+    <div ref="toggle" class="toggle" v-else-if="inputsData.length === 0">
       <p>尚無資料，請新增資料</p>
     </div>
   </div>
