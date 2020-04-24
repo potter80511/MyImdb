@@ -8,7 +8,7 @@
     <div
       class="toggle"
       ref="toggle"
-      v-if="inputsData.length > 0 && dataType === 'people' || dataType === 'banner'"
+      v-if="inputsData.length > 0 && (dataType === 'people' || dataType === 'banner')"
     >
       <div
         class="input-people-input-group input-group"
