@@ -1,6 +1,20 @@
 @import 'color.scss';
+@import 'custom_animation.scss';
 
 .film_details {
+  .loadingBlock {
+    width: 100%;
+    background: #555;
+    animation: twinkle 1.3s ease-in-out;
+    animation-iteration-count: infinite;
+    &.title {
+      height: 28px;
+      margin-bottom: 15px;
+    }
+    &.content {
+      height: 150px!important;
+    }
+  }
   >.container {
     padding-top: 50px;
     padding-bottom: 50px;
@@ -17,6 +31,9 @@
       margin-bottom: 50px;
       border-bottom: 1px solid #818181;
       .film_title {
+        .loadingBlock {
+          height: 48px;
+        }
         @media (max-width: 767px) {
           &.desktop {
             display: none;
@@ -62,6 +79,13 @@
         padding-top: 20px;
         border-top: 1px dashed #818181;
         width: 100%;
+        div.loadingBlock {
+          height: 1.5em;
+          margin-bottom: 15px;
+          &.content {
+            margin-bottom: 50px;
+          }
+        }
       }
       .words {
         position: relative;
@@ -331,6 +355,10 @@
     .main {
       .main_info {
         .wallpaper {
+          .loadingBlock {
+            min-width: 248px;
+            min-height: 340px;
+          }
           .image {
             min-width: 248px;
             min-height: 340px;

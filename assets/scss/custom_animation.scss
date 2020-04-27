@@ -20,3 +20,18 @@ $slide-content-height: 230px;
 .slide-down {
   animation: slide-down 0.3s linear both;
 }
+
+@keyframes twinkle {
+  0% {
+    opacity: .2;
+  }
+  50% {
+    opacity: .7;
+  }
+  100% {
+    opacity: .2;
+  }
+}
+.twinkle {
+  animation: twinkle 0.3s ease-in-out;
+}

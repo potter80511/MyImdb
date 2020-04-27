@@ -2,7 +2,6 @@
   <div class="film_details">
     <BannerSlide
       :bannerData="filmData.page_banners"
-      :isLoading="isLoading"
       :bannerDefaultHeight="30"
     />
     <b-container>
@@ -21,24 +20,14 @@
                 <span>{{filmData.tw_name}}</span>
               </h2>
             </div>
-            <div class="image">
-              <div
-                class="isLoading"
-                v-show="isLoading"
-              >
-                <font-awesome-icon icon="spinner" spin/>
-              </div>
+            <div class="loadingBlock" v-if="isLoading"></div>
+            <div class="image" v-if="filmData.wallpaper">
               <img :src="filmData.wallpaper" />
             </div>
           </b-col>
           <b-col md="8" class="words">
             <div class="film_title desktop">
-              <div
-                class="isLoading"
-                v-show="isLoading"
-              >
-                <font-awesome-icon icon="spinner" spin/>
-              </div>
+              <div class="loadingBlock" v-if="isLoading"></div>
               <h1>
                 <div class="favorite_crown" v-if="showCrown">
                   <font-awesome-icon icon="crown" />
@@ -51,12 +40,9 @@
               </h2>
             </div>
             <div class="film_info">
-              <div
-                class="isLoading"
-                v-if="isLoading"
-              >
-                <font-awesome-icon icon="spinner" spin/>
-              </div>
+              <div class="loadingBlock" v-if="isLoading"></div>
+              <div class="loadingBlock" v-if="isLoading"></div>
+              <div class="loadingBlock content" v-if="isLoading"></div>
               <div class="rates label_data" v-show="filmData.imdb_rates > 0">
                 <b>IMDB 評分：</b>
                 <span v-for="(star, j) in rateTenStar(filmData.imdb_rates)"
@@ -187,12 +173,8 @@
             </div>
           </b-col>
         </b-row>
-        <div
-          class="isLoading"
-          v-show="isLoading"
-        >
-          <font-awesome-icon icon="spinner" spin/>
-        </div>
+        <div class="loadingBlock title" v-if="isLoading"></div>
+        <div class="loadingBlock content" v-if="isLoading"></div>
         <div class="series_intro" v-if="filmData.type === 'series' && filmData.seasons">
           <div class="season_tag">
             <a
