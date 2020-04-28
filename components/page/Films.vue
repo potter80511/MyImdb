@@ -10,9 +10,12 @@
         <FilterTools
           :sortBy="sortBy"
           v-model="sortBy"
+          :currentSelectedArea="currentSelectedArea"
+          :currentSelectedCategory="currentSelectedCategory"
+          :filterAreas="areasDataInDb"
+          :filterCates="categoriesInDb"
           :filterAreaMethod="filterAreaMethod"
           :filterCategory="filterCategory"
-          :filterYearMethod="filterYearMethod"
         />
         <div class="section-header">
           <h2>
@@ -165,8 +168,8 @@
         },
         filmsListType: '',
         directorData: [],
-        // currentSelectedArea: '全部',
-        // currentSelectedCategory: '00',
+        currentSelectedArea: '',
+        currentSelectedCategory: '',
         // currentSelectedYear: '全部',
         sortBy: 'imdbRates',
         maxKey: 0,
@@ -226,11 +229,33 @@
           })
         }
 
-        return(data)
-
-        // const currentSelectedArea = this.currentSelectedArea;
-        // const currentSelectedCategory = this.currentSelectedCategory;
+        const {
+          currentSelectedArea,
+          currentSelectedCategory,
+        } = this;
         // const currentSelectedYear = this.currentSelectedYear;
+
+        if (currentSelectedArea && currentSelectedCategory) { // 如果都不是選全部
+          const filteredData = data.filter(f => {
+            return f.area.find(item => item.id === currentSelectedArea);
+          }).filter(f => {
+            return f.categories.find(item => item.id === currentSelectedCategory);
+          })
+          console.log(filteredData)
+          return filteredData
+        } else if (currentSelectedArea) { // 如果都不是選全部
+          const filteredData = data.filter(f => {
+            return f.area.find(item => item.id === currentSelectedArea);
+          })
+          console.log(filteredData)
+          return filteredData
+        } else if (currentSelectedCategory) { // 如果都不是選全部
+          const filteredData = data.filter(f => {
+            return f.categories.find(item => item.id === currentSelectedCategory);
+          })
+          console.log(filteredData)
+          return filteredData
+        }
 
         // if(currentSelectedArea !== '全部' && currentSelectedCategory !== '00' && currentSelectedYear !== '全部' ) { // 如果都不是選全部
         //   const filteredData = data.filter(f => {
@@ -284,6 +309,7 @@
         // } else {
         //   return data
         // }
+        return(data)
       },
       bannerData() {
         const routeType = this.$route.name
@@ -361,9 +387,8 @@
         // console.log(objToArray(obj),'obj')
         return objToArray(obj)
       },
-      filterAreaMethod(name) {
-        this.currentSelectedArea = name
-        // console.log(data)
+      filterAreaMethod(id) {
+        this.currentSelectedArea = id
       },
       filterCategory(key) {
         this.currentSelectedCategory = key

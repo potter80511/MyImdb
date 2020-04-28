@@ -7,8 +7,11 @@
           <font-awesome-icon icon="angle-double-right" />
         </div>
         <div class="contents">
+          <span>
+            <span :class="{'active': currentSelectedArea === ''}" @click="filterAreaMethod('')">全部</span>
+          </span>
           <span v-for="filterArea in filterAreas" :key="filterArea.index">
-            <span :class="{'active': currentSelectedArea === filterArea.keyName}" @click="filterAreaMethod(filterArea.keyName)">{{ filterArea.keyName }}</span>
+            <span :class="{'active': currentSelectedArea === filterArea.id}" @click="filterAreaMethod(filterArea.id)">{{ filterArea.name }}</span>
           </span>
         </div>
       </div>
@@ -18,8 +21,11 @@
           <font-awesome-icon icon="angle-double-right" />
         </div>
         <div class="contents">
+          <span>
+            <span :class="{'active': currentSelectedCategory === ''}" @click="filterCategory('')">全部</span>
+          </span>
           <span v-for="filterCate in filterCates" :key="filterCate.id">
-            <span :class="{'active': currentSelectedCategory === filterCate.key}" @click="filterCategory(filterCate.key)">{{ filterCate.keyName }}</span>
+            <span :class="{'active': currentSelectedCategory === filterCate.id}" @click="filterCategory(filterCate.id)">{{ filterCate.name }}</span>
           </span>
         </div>
       </div>
@@ -78,6 +84,12 @@
 <script>
   export default {
     props: {
+      filterAreas: {
+        type: Array,
+      },
+      filterCates: {
+        type: Array,
+      },
       currentSelectedArea: {
         type: String,
       },
@@ -102,100 +114,6 @@
     },
     data() {
       return {
-        filterAreas: [
-          {
-            keyName: '全部',
-            key: '00'
-          },
-          {
-            keyName: '美國',
-            key: '01'
-          },
-          {
-            keyName: '英國',
-          },
-          {
-            keyName: '韓國',
-          },
-          {
-            keyName: '泰國',
-          },
-          {
-            keyName: '日本',
-          },
-          {
-            keyName: '印度',
-          },
-          {
-            keyName: '西班牙',
-          },
-        ],
-        filterCates: [
-          {
-            keyName: '全部',
-            key: '00'
-          },
-          {
-            keyName: '動作',
-            key: '01'
-          },
-          {
-            keyName: '犯罪',
-            key: '02'
-          },
-          {
-            keyName: '愛情',
-            key: '03'
-          },
-          {
-            keyName: '科幻',
-            key: '04'
-          },
-          {
-            keyName: '驚悚',
-            key: '05'
-          },
-          {
-            keyName: '恐怖',
-            key: '06'
-          },
-          {
-            keyName: '劇情',
-            key: '07'
-          },
-          {
-            keyName: '喜劇',
-            key: '08'
-          },
-          {
-            keyName: '家庭',
-            key: '09'
-          },
-          {
-            keyName: '戰爭',
-            key: '10'
-          },
-          {
-            keyName: '傳記',
-            key: '11'
-          },
-          {
-            keyName: '動畫',
-            key: '12'
-          },
-          {
-            keyName: '音樂',
-            key: '13'
-          },
-          {
-            keyName: '奇幻',
-            key: '14'
-          },
-          {
-            keyName: '溫馨',
-            key: '15'
-          },
-        ],
         filterYears: [
           '全部',
           2019,
