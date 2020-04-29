@@ -12,10 +12,13 @@
           v-model="sortBy"
           :currentSelectedArea="currentSelectedArea"
           :currentSelectedCategory="currentSelectedCategory"
+          :currentSelectedProd="currentSelectedProd"
           :filterAreas="areasDataInDb"
           :filterCates="categoriesInDb"
+          :filterProd="entertainmentDatas"
           :filterAreaMethod="filterAreaMethod"
           :filterCategory="filterCategory"
+          :filterProdMethod="filterProdMethod"
         />
         <div class="section-header">
           <h2>
@@ -170,7 +173,7 @@
         directorData: [],
         currentSelectedArea: '',
         currentSelectedCategory: '',
-        // currentSelectedYear: '全部',
+        currentSelectedProd: '',
         sortBy: 'imdbRates',
         maxKey: 0,
         nextKey: 0,
@@ -232,83 +235,55 @@
         const {
           currentSelectedArea,
           currentSelectedCategory,
+          currentSelectedProd,
         } = this;
-        // const currentSelectedYear = this.currentSelectedYear;
 
-        if (currentSelectedArea && currentSelectedCategory) { // 如果都不是選全部
+        if (currentSelectedArea && currentSelectedCategory && currentSelectedProd) { // 如果都不是選全部
+          const filteredData = data.filter(f => {
+            return f.area.find(item => item.id === currentSelectedArea);
+          }).filter(f => {
+            return f.categories.find(item => item.id === currentSelectedCategory);
+          }).filter(f => {
+            return f.et_id === currentSelectedProd;
+          })
+          return filteredData
+        } else if (!currentSelectedProd && currentSelectedArea && currentSelectedCategory) { // 如果只選區域跟種類
           const filteredData = data.filter(f => {
             return f.area.find(item => item.id === currentSelectedArea);
           }).filter(f => {
             return f.categories.find(item => item.id === currentSelectedCategory);
           })
-          console.log(filteredData)
           return filteredData
-        } else if (currentSelectedArea) { // 如果都不是選全部
+        } else if (!currentSelectedArea && currentSelectedCategory && currentSelectedProd) { // 如果只選製片商跟種類
+          const filteredData = data.filter(f => {
+            return f.categories.find(item => item.id === currentSelectedCategory);
+          }).filter(f => {
+            return f.et_id === currentSelectedProd;
+          })
+          return filteredData
+        } else if (!currentSelectedCategory && currentSelectedArea && currentSelectedProd) { // 如果只選區域跟製片商
+          const filteredData = data.filter(f => {
+            return f.area.find(item => item.id === currentSelectedArea);
+          }).filter(f => {
+            return f.et_id === currentSelectedProd;
+          })
+          return filteredData
+        } else if (currentSelectedArea) { // 如果只選區域
           const filteredData = data.filter(f => {
             return f.area.find(item => item.id === currentSelectedArea);
           })
-          console.log(filteredData)
           return filteredData
-        } else if (currentSelectedCategory) { // 如果都不是選全部
+        } else if (currentSelectedCategory) { // 如果只選種類
           const filteredData = data.filter(f => {
             return f.categories.find(item => item.id === currentSelectedCategory);
           })
-          console.log(filteredData)
+          return filteredData
+        } else if (currentSelectedProd) { // 如果只選製片商
+          const filteredData = data.filter(f => {
+            return f.et_id === currentSelectedProd;
+          })
           return filteredData
         }
-
-        // if(currentSelectedArea !== '全部' && currentSelectedCategory !== '00' && currentSelectedYear !== '全部' ) { // 如果都不是選全部
-        //   const filteredData = data.filter(f => {
-        //     return f.area.search(currentSelectedArea) !== -1
-        //   }).filter(c => {
-        //     const categoriesKey = Object.keys(c.categories || {})
-        //     return categoriesKey.includes(currentSelectedCategory)
-        //   }).filter(y => {
-        //     return y.year === currentSelectedYear
-        //   })
-        //   return filteredData
-        // } else if(currentSelectedArea === '全部' && currentSelectedCategory !== '00' && currentSelectedYear !== '全部') {
-        //   const filteredData = data.filter(c => {
-        //     const categoriesKey = Object.keys(c.categories || {})
-        //     return categoriesKey.includes(currentSelectedCategory)
-        //   }).filter(y => {
-        //     return y.year === currentSelectedYear
-        //   })
-        //   return filteredData
-        // } else if (currentSelectedArea !== '全部' && currentSelectedCategory === '00' && currentSelectedYear !== '全部') {
-        //   const filteredData = data.filter(f => {
-        //     return f.area.search(currentSelectedArea) !== -1
-        //   }).filter(y => {
-        //     return y.year === currentSelectedYear
-        //   })
-        //   return filteredData
-        // } else if (currentSelectedArea !== '全部' && currentSelectedCategory !== '00' && currentSelectedYear === '全部') {
-        //   const filteredData = data.filter(f => {
-        //     return f.area.search(currentSelectedArea) !== -1
-        //   }).filter(c => {
-        //     const categoriesKey = Object.keys(c.categories || {})
-        //     return categoriesKey.includes(currentSelectedCategory)
-        //   })
-        //   return filteredData
-        // } else if (currentSelectedArea !== '全部' && currentSelectedCategory === '00' && currentSelectedYear === '全部' ) {
-        //   const filteredData = data.filter(f => {
-        //     return f.area.search(currentSelectedArea) !== -1
-        //   })
-        //   return filteredData
-        // } else if (currentSelectedArea === '全部' && currentSelectedCategory !== '00' && currentSelectedYear === '全部' ) {
-        //   const filteredData = data.filter(c => {
-        //     const categoriesKey = Object.keys(c.categories || {})
-        //     return categoriesKey.includes(currentSelectedCategory)
-        //   })
-        //   return filteredData
-        // } else if (currentSelectedArea === '全部' && currentSelectedCategory === '00' && currentSelectedYear !== '全部' ) {
-        //   const filteredData = data.filter(y => {
-        //     return y.year === currentSelectedYear
-        //   })
-        //   return filteredData
-        // } else {
-        //   return data
-        // }
         return(data)
       },
       bannerData() {
@@ -383,18 +358,14 @@
       rateStarWithEmpty(rates) {
         return rateStarWithEmpty(rates)
       },
-      objToArray(obj) {
-        // console.log(objToArray(obj),'obj')
-        return objToArray(obj)
-      },
       filterAreaMethod(id) {
         this.currentSelectedArea = id
       },
-      filterCategory(key) {
-        this.currentSelectedCategory = key
+      filterCategory(id) {
+        this.currentSelectedCategory = id
       },
-      filterYearMethod(key) {
-        this.currentSelectedYear = key
+      filterProdMethod(id) {
+        this.currentSelectedProd = id
       },
       add_film(newFilmData) {
         const {

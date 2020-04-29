@@ -31,12 +31,15 @@
       </div>
       <div class="conditions">
         <div class="label">
-          <span>年份</span>
+          <span>發行商</span>
           <font-awesome-icon icon="angle-double-right" />
         </div>
         <div class="contents">
-          <span v-for="filterYear in filterYears" :key="filterYear.index">
-            <span :class="{'active': currentSelectedYear === filterYear}" @click="filterYearMethod(filterYear)">{{ filterYear }}</span>
+          <span>
+            <span :class="{'active': currentSelectedProd === ''}" @click="filterProdMethod('')">全部</span>
+          </span>
+          <span v-for="prod in filterProd" :key="prod.id">
+            <span :class="{'active': currentSelectedProd === prod.id}" @click="filterProdMethod(prod.id)">{{ prod.tw_name }}</span>
           </span>
         </div>
       </div>
@@ -56,17 +59,17 @@
       <div class="filter_content">
         <ul id="area" class="mobile_contents">
           <li v-for="filterArea in filterAreas" :key="filterArea.index">
-            <span :class="{'active': currentSelectedArea === filterArea.keyName}" @click="filterAreaMethod(filterArea.keyName)">{{ filterArea.keyName }}</span>
+            <span :class="{'active': currentSelectedArea === filterArea.id}" @click="filterAreaMethod(filterArea.id)">{{ filterArea.name }}</span>
           </li>
         </ul>
         <ul id="cate" class="mobile_contents">
           <li v-for="filterCate in filterCates" :key="filterCate.id">
-            <span :class="{'active': currentSelectedCategory === filterCate.key}" @click="filterCategory(filterCate.key)">{{ filterCate.keyName }}</span>
+            <span :class="{'active': currentSelectedCategory === filterCate.id}" @click="filterCategory(filterCate.id)">{{ filterCate.name }}</span>
           </li>
         </ul>
-        <ul id="year" class="mobile_contents">
-          <li v-for="filterYear in filterYears" :key="filterYear.index">
-            <span :class="{'active': currentSelectedYear === filterYear}" @click="filterYearMethod(filterYear)">{{ filterYear }}</span>
+        <ul id="prod" class="mobile_contents">
+          <li v-for="prod in filterProd" :key="prod.id">
+            <span :class="{'active': currentSelectedProd === filterProd}" @click="filterProdMethod(prod.id)">{{ prod.tw_name }}</span>
           </li>
         </ul>
       </div>
@@ -90,14 +93,17 @@
       filterCates: {
         type: Array,
       },
+      filterProd: {
+        type: Array,
+      },
       currentSelectedArea: {
         type: String,
       },
       currentSelectedCategory: {
         type: String,
       },
-      currentSelectedYear: {
-        type: [Number, String,]
+      currentSelectedProd: {
+        type: String,
       },
       sortBy: {
         type: String,
@@ -108,23 +114,12 @@
       filterCategory: {
         type: Function,
       },
-      filterYearMethod: {
+      filterProdMethod: {
         type: Function,
       },
     },
     data() {
       return {
-        filterYears: [
-          '全部',
-          2019,
-          2018,
-          2017,
-          2016,
-          2015,
-          2014,
-          2013,
-          1994,
-        ],
         filterTypes: [
           {
             id: "area",
@@ -135,8 +130,8 @@
             type: '種類',
           },
           {
-            id: "year",
-            type: '年份',
+            id: "prod",
+            type: '製片商',
           },
         ],
       }
