@@ -71,6 +71,15 @@
                   </span>
                   <b v-if="item.my_rate">{{item.my_rate.toFixed(1)}}</b>
                 </div>
+                <div class="writers items" v-if="item.writers && item.writers.length > 0">
+                  <b>原作：</b>
+                  <div>
+                    <span v-for="(w, i) in item.writers"
+                      :key="i">
+                    {{w.name}}
+                    </span>
+                  </div>
+                </div>
                 <div class="area items" v-if="item.area && item.area.length > 0">
                   <b>地區：</b>
                   <div>
@@ -98,10 +107,10 @@
                     </span>
                   </div>
                 </div>
-                <div class="writers items" v-if="item.writers && item.writers.length > 0">
+                <div class="creators items" v-if="item.creators && item.creators.length > 0">
                   <b>編劇：</b>
                   <div>
-                    <span v-for="(w, i) in item.writers"
+                    <span v-for="(w, i) in item.creators"
                       :key="i">
                     {{w.name}}
                     </span>

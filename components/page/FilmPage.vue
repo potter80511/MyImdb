@@ -107,10 +107,16 @@
                 :multipleDatas="filmData.directors"
               />
               <LabelData
-                v-if="filmData.writers.length > 0"
+                v-if="filmData.writers && filmData.writers.length > 0"
                 className="writers"
-                title="編劇"
+                title="小說原作"
                 :multipleDatas="filmData.writers"
+              />
+              <LabelData
+                v-if="filmData.creators && filmData.creators.length > 0"
+                className="creators"
+                title="編劇"
+                :multipleDatas="filmData.creators"
               />
               <LabelData
                 v-if="filmData.categories && filmData.categories.length > 0"
@@ -273,6 +279,7 @@
         filmData: {
           area: "",
           brief: "",
+          creators: [],
           categories: [],
           cast: [],
           current_key: 0,

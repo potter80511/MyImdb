@@ -134,6 +134,14 @@
         <InputMultiple
           dataType="people"
           title="編劇"
+          className="creators"
+          :inputsData="creatorInputs"
+          :addHandler="addCreatorHandler"
+          :deleteHandler="deleteCreatorHandler"
+        />
+        <InputMultiple
+          dataType="people"
+          title="小說原創"
           className="writers"
           :inputsData="writerInputs"
           :addHandler="addWriterHandler"
@@ -258,6 +266,10 @@
         type: Array,
         default: () => [],
       },
+      creatorInputs: {
+        type: Array,
+        default: () => [],
+      },
       writerInputs: {
         type: Array,
         default: () => [],
@@ -326,6 +338,14 @@
         const pageBannersInputs = this.pageBannersInputs;
         deleteInputHandler(pageBannersInputs, inputIndex)
       },
+      addCreatorHandler() {
+        const creatorInputs = this.creatorInputs;
+        addInputHandler(creatorInputs)
+      },
+      deleteCreatorHandler(inputIndex) {
+        const creatorInputs = this.creatorInputs;
+        deleteInputHandler(creatorInputs, inputIndex)
+      },
       addWriterHandler() {
         const writerInputs = this.writerInputs;
         addInputHandler(writerInputs)
@@ -379,6 +399,7 @@
           my_rate,
           pageBannersInputs,
           directorInputs,
+          creatorInputs,
           writerInputs,
           castInputs,
           areasData,
@@ -397,6 +418,8 @@
         // directors result  導演的結果
         const directors = inputPeaple(directorInputs);
         // cast writers  編劇的結果
+        const creators = inputPeaple(creatorInputs);
+        // cast writers  小說原創的結果
         const writers = inputPeaple(writerInputs);
         // cast result  演員的結果
         const cast = inputPeaple(castInputs);
@@ -414,6 +437,7 @@
           cast,
           page_banners,
           directors,
+          creators,
           writers,
           seasons: seasonsInputs,
           type,
