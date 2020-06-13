@@ -98,16 +98,16 @@
                     </span>
                   </div>
                 </div>
-                <div class="director items" v-if="item.director && item.director.length > 0">
+                <div class="director items" v-if="item.directors && item.directors.length > 0 && $route.path === '/movies'">
                   <b>導演：</b>
                   <div>
-                    <span v-for="(d, i) in item.director"
+                    <span v-for="(d, i) in item.directors"
                       :key="i">
                     {{d.name}}
                     </span>
                   </div>
                 </div>
-                <div class="creators items" v-if="item.creators && item.creators.length > 0">
+                <div class="creators items" v-if="item.creators && item.creators.length > 0 && $route.path === '/series'">
                   <b>編劇：</b>
                   <div>
                     <span v-for="(w, i) in item.creators"

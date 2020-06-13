@@ -161,6 +161,7 @@
                 :my_rate="String(filmData.my_rate)"
                 :directorInputs="filmData.directors"
                 :castInputs="filmData.cast"
+                :creatorInputs="filmData.creators"
                 :writerInputs="filmData.writers"
                 :pageBannersInputs="filmData.page_banners"
                 :seasonsInputs="filmData.seasons"
