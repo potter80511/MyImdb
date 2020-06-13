@@ -236,14 +236,14 @@
               />
             </div>
           </div>
-          <div class="blocks related" v-if="sameDirectorData.length > 0">
-            <h3><span class="circle"></span>{{filmData.director}} 執導相關作品</h3>
-            <div class="content">
-              <RelatedFilmsSwiper
-                :relatedData="sameDirectorData"
-                :blockClass="'related'"
-              />
-            </div>
+          <div class="content">
+            <RelatedFilmsSwiper
+              v-if="sameDirectorData.length > 0"
+              :relatedData="sameDirectorData"
+              :blockClass="'related'"
+              :title="`${filmData.directors[0].name} 執導相關作品`"
+              :filmType="filmType"
+            />
           </div>
         </div>
       </div>
@@ -324,6 +324,7 @@
       this.$store.dispatch('loadedEntertainmentData');
       this.$store.dispatch('loadedAreasData');
       this.$store.dispatch('loadedCategoriesData');
+      this.$store.dispatch('loadedMovies');
     },
     computed: {
       isLoading() {
@@ -464,13 +465,15 @@
           });
 
           //相關續作資料
-          const directorRelated = val.director
-          const filterDirectorData = data.filter((rel) => {
-            return rel.director && rel.director === directorRelated && rel.name !== val.name;
-          });
-          this.sameDirectorData = filterDirectorData.sort((a,b) => {
-            return b.year - a.year;
-          });
+          if (val.directors.length === 1) {
+            const directorRelatedId = val.directors[0].id
+            const filterDirectorData = data.filter((rel) => {
+              return rel.directors.findIndex(d => d.id === directorRelatedId) > -1
+            }).filter(film => film.current_key !== val.current_key);
+            this.sameDirectorData = filterDirectorData.sort((a,b) => {
+              return b.year - a.year;
+            });
+          }
         }
       },
     }
