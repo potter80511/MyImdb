@@ -228,21 +228,21 @@
               <iframe class="embed-responsive-item" :src="`https://www.youtube.com/embed/${filmData.trailer}`" allowfullscreen></iframe>
             </div>
           </div>
-          <RelatedFilmsSwiper
-            v-if="relatedData.length > 0"
-            :relatedData="relatedData"
-            :blockClass="'related'"
-            :title="`${relatedDataTitle} 系列`"
-            :filmType="filmType"
-          />
-          <RelatedFilmsSwiper
-            v-if="sameDirectorData.length > 0"
-            :relatedData="sameDirectorData"
-            :blockClass="'related'"
-            :title="`${filmData.directors[0].name} 執導相關作品`"
-            :filmType="filmType"
-          />
         </div>
+        <RelatedFilmsSwiper
+          v-if="relatedData.length > 0"
+          :relatedData="relatedData"
+          :blockClass="'related'"
+          :title="`${relatedDataTitle} 系列`"
+          :filmType="filmType"
+        />
+        <RelatedFilmsSwiper
+          v-if="sameDirectorData.length > 0"
+          :relatedData="sameDirectorData"
+          :blockClass="'related'"
+          :title="`${filmData.directors[0].name} 執導相關作品`"
+          :filmType="filmType"
+        />
       </div>
     </b-container>
   </div>
@@ -321,7 +321,7 @@
       this.$store.dispatch('loadedEntertainmentData');
       this.$store.dispatch('loadedAreasData');
       this.$store.dispatch('loadedCategoriesData');
-      this.$store.dispatch('loadedMovies');
+      this.filmType === 'movies' ? this.$store.dispatch('loadedMovies') : this.$store.dispatch('loadedSeries');
     },
     computed: {
       isLoading() {
@@ -453,12 +453,12 @@
             this.seasons = val.seasons;
           }
 
-          const data = this.$store.state.movies;
+          // const data = this.$store.state.movies;
 
           //相關續作資料
           if (val.directors && val.directors.length === 1) { // 同導演
             const directorRelatedId = val.directors[0].id
-            if (this.filmsListType === '電影') {
+            if (this.filmType === 'movies') {
               const filterDirectorData = this.$store.getters.relatedMoviesSwiperData('SameDirector',
                 {
                   dId: directorRelatedId,
@@ -471,8 +471,18 @@
             }
           }
           if (val.related_id) { // 同系列
-            if (this.filmsListType === '電影') {
+            if (this.filmType === 'movies') {
               const filterRelatedData = this.$store.getters.relatedMoviesSwiperData('RelatedSeries',
+                {
+                  id: val.related_id,
+                  currentKey: val.current_key,
+                }
+              );
+              this.relatedData = filterRelatedData.sort((a,b) => {
+                return b.year - a.year;
+              });
+            } else {
+              const filterRelatedData = this.$store.getters.relatedSeriesSwiperData('RelatedSeries',
                 {
                   id: val.related_id,
                   currentKey: val.current_key,
