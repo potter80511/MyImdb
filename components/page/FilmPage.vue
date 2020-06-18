@@ -161,6 +161,7 @@
                 :my_rate="String(filmData.my_rate)"
                 :directorInputs="filmData.directors"
                 :castInputs="filmData.cast"
+                :creatorInputs="filmData.creators"
                 :writerInputs="filmData.writers"
                 :pageBannersInputs="filmData.page_banners"
                 :seasonsInputs="filmData.seasons"
@@ -207,7 +208,7 @@
                   <p>尚無劇情介紹</p>
                 </div>
               </div>
-              <div class="blocks" v-show="item.trailer !== ''">
+              <div class="blocks" v-if="item.trailer !== ''">
                 <h3><span class="circle"></span>預告</h3>
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe class="embed-responsive-item" :src="`https://www.youtube.com/embed/${item.trailer}`" allowfullscreen></iframe>
@@ -227,25 +228,21 @@
               <iframe class="embed-responsive-item" :src="`https://www.youtube.com/embed/${filmData.trailer}`" allowfullscreen></iframe>
             </div>
           </div>
-          <div class="blocks related" v-if="relatedData.length > 0">
-            <h3><span class="circle"></span>{{filmData.related}} 系列</h3>
-            <div class="content">
-              <RelatedFilmsSwiper
-                :relatedData="relatedData"
-                :blockClass="'related'"
-              />
-            </div>
-          </div>
-          <div class="blocks related" v-if="sameDirectorData.length > 0">
-            <h3><span class="circle"></span>{{filmData.director}} 執導相關作品</h3>
-            <div class="content">
-              <RelatedFilmsSwiper
-                :relatedData="sameDirectorData"
-                :blockClass="'related'"
-              />
-            </div>
-          </div>
         </div>
+        <RelatedFilmsSwiper
+          v-if="relatedData.length > 0"
+          :relatedData="relatedData"
+          :blockClass="'related'"
+          :title="`${relatedDataTitle} 系列`"
+          :filmType="filmType"
+        />
+        <RelatedFilmsSwiper
+          v-if="sameDirectorData.length > 0"
+          :relatedData="sameDirectorData"
+          :blockClass="'related'"
+          :title="`${filmData.directors[0].name} 執導相關作品`"
+          :filmType="filmType"
+        />
       </div>
     </b-container>
   </div>
@@ -308,6 +305,7 @@
         categoriesData: [],
         bannerData: [],
         relatedData: [],
+        relatedDataTitle: '',
         sameDirectorData: [],
         showCrown: false,
         seasonShowTarget: "season1",
@@ -315,7 +313,6 @@
         currentEntertainment: {
           tw_name: '',
         },
-        isLoading: true,
       }
     },
     created() {
@@ -324,6 +321,7 @@
       this.$store.dispatch('loadedEntertainmentData');
       this.$store.dispatch('loadedAreasData');
       this.$store.dispatch('loadedCategoriesData');
+      this.filmType === 'movies' ? this.$store.dispatch('loadedMovies') : this.$store.dispatch('loadedSeries');
     },
     computed: {
       isLoading() {
@@ -338,6 +336,9 @@
       relatedDatas() {
         return this.$store.state.relatedData
       },
+      // relatedDataTitle() {
+      //   return this.$store.getters.relatedDataTitle;
+      // },
       entertainmentDatas() {
         return this.$store.state.entertainmentData
       },
@@ -429,7 +430,6 @@
       },
       getFilmData(val) {
         if (val) {
-          this.isLoading = false;
           this.filmData = {...this.filmData, ...val} //這頁整包電影資料
           this.filmsListType = this.filmData.type === 'movies' ? '電影' : '影集';
 
@@ -453,25 +453,50 @@
             this.seasons = val.seasons;
           }
 
-          const data = this.$store.state.movies;
-          //相關續作資料
-          const dataRelated = val.related
-          const filterData = data.filter((rel) => {
-            return rel.related && rel.related === dataRelated && rel.name !== val.name;
-          });
-          this.relatedData = filterData.sort((a,b) => {
-            return a.year - b.year;
-          });
+          // const data = this.$store.state.movies;
 
           //相關續作資料
-          const directorRelated = val.director
-          const filterDirectorData = data.filter((rel) => {
-            return rel.director && rel.director === directorRelated && rel.name !== val.name;
-          });
-          this.sameDirectorData = filterDirectorData.sort((a,b) => {
-            return b.year - a.year;
-          });
+          if (val.directors && val.directors.length === 1) { // 同導演
+            const directorRelatedId = val.directors[0].id
+            if (this.filmType === 'movies') {
+              const filterDirectorData = this.$store.getters.relatedMoviesSwiperData('SameDirector',
+                {
+                  dId: directorRelatedId,
+                  currentKey: val.current_key,
+                },
+              );
+              this.sameDirectorData = filterDirectorData.sort((a,b) => {
+                return b.year - a.year;
+              });
+            }
+          }
+          if (val.related_id) { // 同系列
+            if (this.filmType === 'movies') {
+              const filterRelatedData = this.$store.getters.relatedMoviesSwiperData('RelatedSeries',
+                {
+                  id: val.related_id,
+                  currentKey: val.current_key,
+                }
+              );
+              this.relatedData = filterRelatedData.sort((a,b) => {
+                return b.year - a.year;
+              });
+            } else {
+              const filterRelatedData = this.$store.getters.relatedSeriesSwiperData('RelatedSeries',
+                {
+                  id: val.related_id,
+                  currentKey: val.current_key,
+                }
+              );
+              this.relatedData = filterRelatedData.sort((a,b) => {
+                return b.year - a.year;
+              });
+            }
+          }
         }
+      },
+      relatedDatas(datas) {
+        this.relatedDataTitle = datas.find(rd => rd.id === this.filmData.related_id) ? datas.find(rd => rd.id === this.filmData.related_id).tw_name : '';
       },
     }
   }
