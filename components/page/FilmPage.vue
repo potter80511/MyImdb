@@ -208,7 +208,7 @@
                   <p>尚無劇情介紹</p>
                 </div>
               </div>
-              <div class="blocks" v-show="item.trailer !== ''">
+              <div class="blocks" v-if="item.trailer !== ''">
                 <h3><span class="circle"></span>預告</h3>
                 <div class="embed-responsive embed-responsive-16by9">
                   <iframe class="embed-responsive-item" :src="`https://www.youtube.com/embed/${item.trailer}`" allowfullscreen></iframe>
