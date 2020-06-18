@@ -456,33 +456,37 @@
           const data = this.$store.state.movies;
 
           //相關續作資料
-          if (val.directors.length === 1) { // 同導演
+          if (val.directors && val.directors.length === 1) { // 同導演
             const directorRelatedId = val.directors[0].id
-            const filterDirectorData = this.$store.getters.relatedMoviesSwiperData('SameDirector',
-              {
-                dId: directorRelatedId,
-                currentKey: val.current_key,
-              },
-            );
-            this.sameDirectorData = filterDirectorData.sort((a,b) => {
-              return b.year - a.year;
-            });
+            if (this.filmsListType === '電影') {
+              const filterDirectorData = this.$store.getters.relatedMoviesSwiperData('SameDirector',
+                {
+                  dId: directorRelatedId,
+                  currentKey: val.current_key,
+                },
+              );
+              this.sameDirectorData = filterDirectorData.sort((a,b) => {
+                return b.year - a.year;
+              });
+            }
           }
           if (val.related_id) { // 同系列
-            const filterRelatedData = this.$store.getters.relatedMoviesSwiperData('RelatedSeries',
-              {
-                id: val.related_id,
-                currentKey: val.current_key,
-              }
-            );
-            this.relatedData = filterRelatedData.sort((a,b) => {
-              return b.year - a.year;
-            });
+            if (this.filmsListType === '電影') {
+              const filterRelatedData = this.$store.getters.relatedMoviesSwiperData('RelatedSeries',
+                {
+                  id: val.related_id,
+                  currentKey: val.current_key,
+                }
+              );
+              this.relatedData = filterRelatedData.sort((a,b) => {
+                return b.year - a.year;
+              });
+            }
           }
         }
       },
       relatedDatas(datas) {
-        this.relatedDataTitle = datas.find(rd => rd.id === this.filmData.related_id).tw_name
+        this.relatedDataTitle = datas.find(rd => rd.id === this.filmData.related_id) ? datas.find(rd => rd.id === this.filmData.related_id).tw_name : '';
       },
     }
   }
