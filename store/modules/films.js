@@ -67,5 +67,20 @@ export default {
       });
       return filterData;
     },
+    relatedMoviesSwiperData: (state) => (filterType, param) => {
+      console.log(filterType)
+      switch (filterType) {
+        case 'RelatedSeries':
+          const filterData = state.movies.filter(item => {
+            return item.related_id === param.id;
+          }).filter(film => film.current_key !== param.currentKey);
+          return filterData;
+        case 'SameDirector':
+          const filterSameDirectorData = state.movies.filter(item => {
+            return item.directors[0].id === param.dId;
+          }).filter(film => film.current_key !== param.currentKey);
+          return filterSameDirectorData;
+      }
+    },
   }
 }
