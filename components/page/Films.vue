@@ -376,7 +376,7 @@
       filterProdMethod(id) {
         this.currentSelectedProd = id
       },
-      add_film(newFilmData) {
+      async add_film(newFilmData) {
         const {
           nextKey,
           filmsListType,
@@ -384,23 +384,26 @@
         const routeType = this.$route.name
         console.log(newFilmData, routeType, filmsListType)
 
-        firebase.database().ref(`${routeType}/${nextKey}`).set(
-          newFilmData
-        ).then(() => {
-          this.successTitle = `新增${filmsListType}成功`
-          this.$bvModal.show('success-modal')
-          setTimeout(() => {
-            location.reload();
-          }, 3000);
-        }).catch((error) => {
-          this.successTitle = `新增${filmsListType}失敗`
-          this.$bvModal.show('success-modal')
-          console.log(error)
-        });
+        await firebase.database().ref(`${routeType}/${nextKey}`).set(newFilmData);
+        this.updateFilms(this.$route.name);
       },
-      reload() {
-        location.reload();
-      }
+      async updateFilms(type) {
+        if (type === 'movies') {
+          await this.$store.dispatch('loadedMovies');
+          this.filmData = this.$store.state.movies.filter(item => item !== null).sort((a,b) => {
+            return this.sortBy === 'imdbRates' ? b.imdb_rates - a.imdb_rates : b.my_rate - a.my_rate;
+          })
+          await this.$store.dispatch('loadedAllMoviesKeys');
+          this.allFilmsKeys = this.$store.state.allMoviesKeys;
+        } else {
+          await this.$store.dispatch('loadedSeries');
+          this.filmData = this.$store.state.series.filter(item => item !== null).sort((a,b) => {
+            return this.sortBy === 'imdbRates' ? b.imdb_rates - a.imdb_rates : b.my_rate - a.my_rate;
+          })
+          await this.$store.dispatch('loadedAllSeriesKeys');
+          this.allFilmsKeys = this.$store.state.allSeriesKeys;
+        }
+      },
     }
   };
 </script>
